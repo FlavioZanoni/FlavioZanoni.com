@@ -67,7 +67,7 @@
         grid-template-rows: repeat(${gridRows}, 1fr);
         `}
 >
-  {#each grid as cell, index}
+  {#each grid as cell}
     <div
       role={cell.title !== "" ? "button" : "cell"}
       class={`flex gap-2 items-center justify-center p-2`}
@@ -85,8 +85,11 @@
       }}
     >
       <div class="w-full h-full flex-col flex items-center justify-center">
-        <img src={cell.icon} alt={cell.title} />
-        <p>{cell.title}</p>
+        {#if cell.icon}
+          <img draggable="false" src={`/icons/${cell.icon}`} alt={cell.title} />
+        {/if}
+
+        <p class="truncate">{cell.title || "‎"}</p>
       </div>
     </div>
   {/each}

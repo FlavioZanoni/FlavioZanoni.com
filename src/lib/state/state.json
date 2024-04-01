@@ -6,8 +6,8 @@
           "x": 0,
           "y": 0
         },
-        "icon": "",
-        "title": "item1",
+        "icon": "document.png",
+        "title": "item1.txt",
         "action": ""
       }
     ]
