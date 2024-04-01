@@ -1,0 +1,44 @@
+---
+type Props = {
+  variant?: "primary" | "text" | "danger" | "secondary"
+  type?: "button" | "submit" | "reset"
+  text?: string
+  customCss?: string
+  id: string
+}
+
+const {
+  type = "button",
+  customCss = "",
+  variant = "primary",
+  text,
+  id,
+} = Astro.props as Props
+
+const defaultStyle =
+  "flex px-4 py-2 transition duration-200 ease-in-out items-center justify-center gap-2 first:border-r-0 border-x border-slate-900"
+let style: string
+
+switch (variant) {
+  case "primary":
+    style = "bg-transparent hover:bg-slate-300"
+    break
+  case "text":
+    style = ""
+    break
+  case "danger":
+    style = "bg-red-400 text-white"
+    break
+  case "secondary":
+    style = "bg-primary-10 text-white"
+    break
+  default:
+    style = "bg-primary-50"
+}
+---
+
+<button type={type} id={id} class:list={[defaultStyle, style, customCss]}>
+  <span id={`btnText-${id}`} class={customCss}>
+    {text ? text : <slot />}
+  </span>
+</button>
