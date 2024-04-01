@@ -7,7 +7,16 @@
           "y": 0
         },
         "icon": "",
-        "title:": "",
+        "title": "item1",
+        "action": ""
+      }
+    ]
+  },
+  "menuBar": {
+    "items": [
+      {
+        "icon": "",
+        "title": "item1",
         "action": ""
       }
     ]

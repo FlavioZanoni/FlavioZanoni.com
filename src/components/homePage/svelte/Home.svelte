@@ -1,6 +1,6 @@
 <script lang="ts">
+import { state } from "@homePage/svelte/store"
 import type { HomeGridItem } from "@lib/state/types"
-import { state } from "@svelte/store"
 import { onMount } from "svelte"
 const gridColumns = 16
 const gridRows = 9
@@ -21,18 +21,19 @@ const grid: HomeGridItem[] = Array.from(
   }
 )
 
-grid.forEach((cell) => {
+// populate grid with state
+grid.forEach((cell, index) => {
   const cellState = $state.homeGrid.items.find(
     (s) => s.pos.x === cell.pos.x && s.pos.y === cell.pos.y
   )
 
   if (cellState) {
-    cell = { ...cellState }
+    grid[index] = cellState
   }
 })
 
 onMount(() => {
-    console.log("mounted", $state)
+  console.log("mounted", $state)
 })
 
 </script>
@@ -44,10 +45,10 @@ onMount(() => {
     }
 >
     {#each grid as cell}
-        <div class="flex flex-col gap-2">
-            {cell.pos.x} {cell.pos.y}
+        <div class="flex flex-col gap-2 w-full h-full">
             <img src={cell.icon} alt={cell.title} />
             <p>{cell.title}</p>
+            {cell.pos.x} {cell.pos.y}
         </div>
     {/each}
 </div>

@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "IBM";
+    font-style: normal;
+    src: url(/fonts/IBM_VGA.woff) format("woff");
+  }
+}

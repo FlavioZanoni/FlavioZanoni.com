@@ -1,5 +1,7 @@
 ---
-import Home from "@svelte/Home.svelte"
+import Footer from "@homePage/Footer.astro"
+import Home from "@homePage/svelte/Home.svelte"
+
 import Layout from "../layouts/Layout.astro"
 ---
 
@@ -7,5 +9,5 @@ import Layout from "../layouts/Layout.astro"
   <main>
     <Home client:only />
   </main>
-  <footer></footer>
+  <Footer />
 </Layout>

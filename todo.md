@@ -11,7 +11,6 @@ TODO:
   - the virtual state should be saved in the local storage
   - the virtual state should be loaded from the local storage
 - windows:
-
   - the windows should be draggable and resizable
   - the windows should have a close/minimize/maximize button
   - the windows should have a title

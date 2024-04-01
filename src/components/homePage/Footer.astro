@@ -1,0 +1,21 @@
+---
+import { getState } from "@lib/state"
+const { menuBar } = getState()
+---
+
+<footer class="flex justify-between">
+  <section id="start">
+    <button> Menu </button>
+    {
+      menuBar.items.map((item) => {
+        return <button>{item.title}</button>
+      })
+    }
+  </section>
+
+  <section id="end">
+    <button> chevron up </button>
+
+    <div id="clock"></div>
+  </section>
+</footer>
