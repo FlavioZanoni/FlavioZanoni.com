@@ -1,24 +1,91 @@
 ---
 import { getState } from "@lib/state"
 import Button from "./Button.astro"
-const { menuBar } = getState()
+import Menu from "./Menu.astro"
+import ChevronMenu from "./ChevronMenu.astro"
+const { taskbar } = getState()
 ---
+
+<script>
+  const clock = document.getElementById("clock")
+  const updateClock = () => {
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, "0")
+    const minutes = String(now.getMinutes()).padStart(2, "0")
+    const seconds = String(now.getSeconds()).padStart(2, "0")
+    clock.innerHTML = `${hours}:${minutes}:${seconds}`
+  }
+  setInterval(updateClock, 1000)
+</script>
+
+<script>
+  const menu = document.getElementById("menu")
+  const menuBtn = document.getElementById("menuBtn")
+  menuBtn.addEventListener("click", () => {
+    menu.classList.toggle("hidden")
+  })
+
+  // render the menu position relative to its button
+  const menuBtnRect = menuBtn.getBoundingClientRect()
+  menu.style.left = `${menuBtnRect.left}px`
+  menu.style.bottom = `${menuBtnRect.bottom}px`
+
+  // close the menu when clicking outside of it
+  document.addEventListener("click", (event) => {
+    if (menu.classList.contains("hidden")) return
+
+    const target = event.target as Node
+    if (target !== menuBtn && !menu.contains(target)) {
+      menu.classList.add("hidden")
+    }
+  })
+</script>
+
+<script>
+  const chevronMenu = document.getElementById("chevronMenu")
+  const chevronButton = document.getElementById("chevronButon")
+  chevronButton.addEventListener("click", () => {
+    chevronMenu.classList.toggle("hidden")
+    chevronMenu.classList.add("flex")
+  })
+
+  const chevronButtonRect = chevronButton.getBoundingClientRect()
+  chevronMenu.style.left = `${chevronButtonRect.left - 90 + chevronButtonRect.width / 2}px` // 90 is half of the chevronMenu width
+  chevronMenu.style.bottom = `${chevronButtonRect.bottom + 10}px`
+
+  // close the menu when clicking outside of it
+  document.addEventListener("click", (event) => {
+    if (chevronMenu.classList.contains("hidden")) return
+
+    const target = event.target as Node
+    if (target !== chevronButton && !chevronMenu.contains(target)) {
+      chevronMenu.classList.add("hidden")
+    }
+  })
+</script>
 
 <footer
   class="flex h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900"
 >
   <section id="start" class="flex">
-    <Button id="menu">₪ Menu</Button>
+    <Button id="menuBtn">₪ Menu</Button>
     {
-      menuBar.items.map((item, index) => {
+      taskbar.items.map((item, index) => {
         return <Button id={index.toString()}>{item.title}</Button>
       })
     }
   </section>
 
-  <section id="end">
-    <Button id="chevron">^</Button>
+  <section id="end" class="flex flex-row">
+    <Button id="chevronButon">^</Button>
 
-    <div id="clock"></div>
+    <div
+      class="flex justify-center items-center w-[91px] border-x border-slate-900"
+    >
+      <p id="clock"></p>
+    </div>
   </section>
+
+  <Menu id="menu" />
+  <ChevronMenu id="chevronMenu" />
 </footer>

@@ -24,7 +24,6 @@
   )
 
   let grid = []
-
   $: {
     // populate grid with state
     grid = [
@@ -68,10 +67,9 @@
         grid-template-rows: repeat(${gridRows}, 1fr);
         `}
 >
-  {#each grid as cell}
+  {#each grid as cell, index}
     <div
-      role="button"
-      tabindex="0"
+      role={cell.title !== "" ? "button" : "cell"}
       class={`flex gap-2 items-center justify-center p-2`}
       style={`
           width: ${cellWidth}px;

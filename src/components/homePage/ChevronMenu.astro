@@ -1,0 +1,23 @@
+---
+import Github from "@assets/github.webp"
+import Linkedn from "@assets/linkedin.webp"
+import Image from "astro/components/Image.astro"
+
+type Props = {
+  id: string
+}
+
+const { id } = Astro.props as Props
+---
+
+<section
+  id={id}
+  class="flex-row gap-4 w-[180px] h-[100px] bg-slate-400 border border-slate-900 hidden absolute p-2"
+>
+  <a target="_blank" href="https://www.linkedin.com/in/flaviozanoni/">
+    <Image alt="Linkedn" src={Linkedn} width={20} height={20} />
+  </a>
+  <a target="_blank" href="https://github.com/FlavioZanoni">
+    <Image alt="github" src={Github} width={20} height={20} />
+  </a>
+</section>

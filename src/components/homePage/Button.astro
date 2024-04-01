@@ -38,7 +38,5 @@ switch (variant) {
 ---
 
 <button type={type} id={id} class:list={[defaultStyle, style, customCss]}>
-  <span id={`btnText-${id}`} class={customCss}>
-    {text ? text : <slot />}
-  </span>
+  {text ? text : <slot />}
 </button>

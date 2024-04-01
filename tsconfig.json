@@ -6,7 +6,8 @@
       "@components/*": ["./src/components/*"],
       "@homePage/*": ["src/components/homePage/*"],
       "@assets/*": ["./src/assets/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@assets": ["./src/assets"],
     }
   }
 }

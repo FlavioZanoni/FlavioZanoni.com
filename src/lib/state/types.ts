@@ -2,8 +2,8 @@ export type State = {
   homeGrid: {
     items: HomeGridItem[]
   }
-  menuBar: {
-    items: MenuItem[]
+  taskbar: {
+    items: taskbarItem[]
   }
 }
 
@@ -17,7 +17,7 @@ export type HomeGridItem = {
   action: string
 }
 
-export type MenuItem = {
+export type taskbarItem = {
   icon: string
   title: string
   action: string

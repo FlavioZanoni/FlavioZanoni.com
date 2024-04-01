@@ -1,0 +1,11 @@
+---
+type Props = {
+  id: string
+}
+
+const { id } = Astro.props as Props
+---
+
+<section id={id} class="w-[400px] h-[600px] bg-red-300 hidden absolute p-2">
+  <h1>menus</h1>
+</section>
