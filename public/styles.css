@@ -9,3 +9,9 @@
     src: url(/fonts/IBM_VGA.woff) format("woff");
   }
 }
+
+img {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

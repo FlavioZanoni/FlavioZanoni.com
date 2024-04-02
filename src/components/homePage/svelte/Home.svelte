@@ -1,5 +1,6 @@
 <script lang="ts">
   import { state } from "@homePage/svelte/store"
+  import { actionHandler } from "@lib/actionHandler"
   import type { HomeGridItem } from "@lib/state/types"
 
   const gridColumns = 16
@@ -23,7 +24,7 @@
     }
   )
 
-  let grid = []
+  let grid = [] as HomeGridItem[]
   $: {
     // populate grid with state
     grid = [
@@ -34,7 +35,7 @@
 
         return cellState ? cellState : cell
       }),
-    ]
+    ] as HomeGridItem[]
   }
 
   const onDrop = (e: DragEvent, current: HomeGridItem) => {
@@ -46,15 +47,29 @@
         (i) => i.pos.x === data.pos.x && i.pos.y === data.pos.y
       )
 
+      const itemToMove = prev.homeGrid.items.find(
+        (i) => i.pos.x === current.pos.x && i.pos.y === current.pos.y
+      )
+
       if (itemToUpdate) {
         itemToUpdate.pos = current.pos
       }
 
+      if (itemToMove) {
+        itemToMove.pos = data.pos
+      }
+
       const prevCopy = { ...prev }
 
-      prevCopy.homeGrid.items = prev.homeGrid.items.map((item) =>
-        item === itemToUpdate ? itemToUpdate : item
-      )
+      prevCopy.homeGrid.items = prev.homeGrid.items.map((item) => {
+        if (item === itemToUpdate) {
+          return itemToUpdate
+        }
+        if (itemToMove && item === itemToMove) {
+          return itemToMove
+        }
+        return item
+      })
 
       return prevCopy
     })
@@ -83,10 +98,20 @@
       on:dragover={(e) => {
         e.preventDefault()
       }}
+      on:dblclick={() => {
+        if (cell.action) {
+          actionHandler(cell.action)
+        }
+      }}
     >
-      <div class="w-full h-full flex-col flex items-center justify-center">
+      <div class="flex flex-col items-center justify-center">
         {#if cell.icon}
-          <img draggable="false" src={`/icons/${cell.icon}`} alt={cell.title} />
+          <img
+            class="w-[80%]"
+            draggable="false"
+            src={`/icons/${cell.icon}`}
+            alt={cell.title}
+          />
         {/if}
 
         <p class="truncate">{cell.title || "‎"}</p>
