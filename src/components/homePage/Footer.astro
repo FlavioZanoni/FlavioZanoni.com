@@ -28,7 +28,7 @@ const { taskbar } = getState()
   // render the menu position relative to its button
   const menuBtnRect = menuBtn.getBoundingClientRect()
   menu.style.left = `${menuBtnRect.left}px`
-  menu.style.bottom = `${menuBtnRect.bottom}px`
+  menu.style.bottom = `${menuBtnRect.bottom + 1}px` // 1 is for the border
 
   // close the menu when clicking outside of it
   document.addEventListener("click", (event) => {
@@ -65,10 +65,11 @@ const { taskbar } = getState()
 </script>
 
 <footer
-  class="flex h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900"
+  id="taskbar"
+  class="flex min-h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900"
 >
-  <section id="start" class="flex">
-    <Button id="menuBtn">₪ Menu</Button>
+  <section id="start" class="flex divide-x divide-slate-900 gap-1">
+    <Button variant="secondary" id="menuBtn">₪ Menu</Button>
     {
       taskbar.items.map((item, index) => {
         return <Button id={index.toString()}>{item.title}</Button>
@@ -76,12 +77,10 @@ const { taskbar } = getState()
     }
   </section>
 
-  <section id="end" class="flex flex-row">
-    <Button id="chevronButon">^</Button>
+  <section id="end" class="flex divide-x divide-slate-900 gap-1">
+    <Button id="chevronButon" customCss="pt-2">^</Button>
 
-    <div
-      class="flex justify-center items-center w-[91px] border-x border-slate-900"
-    >
+    <div class="flex justify-center items-center min-w-[91px]">
       <p id="clock"></p>
     </div>
   </section>

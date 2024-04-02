@@ -16,15 +16,16 @@ const {
 } = Astro.props as Props
 
 const defaultStyle =
-  "flex px-4 py-2 transition duration-200 ease-in-out items-center justify-center gap-2 first:border-r-0 border-x border-slate-900"
+  "flex flex-row items-center justify-center gap-2 text-center px-2"
 let style: string
 
 switch (variant) {
   case "primary":
     style = "bg-transparent hover:bg-slate-300"
     break
-  case "text":
-    style = ""
+  case "secondary":
+    style =
+      "bg-slate-300 border-2 border-b-slate-900 border-l-slate-900 border-t-slate-200 border-r-slate-200 text-black px-2 py-1 hover:bg-slate-200"
     break
   case "danger":
     style = "bg-red-400 text-white"

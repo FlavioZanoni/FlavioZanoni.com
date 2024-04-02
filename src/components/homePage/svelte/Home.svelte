@@ -3,10 +3,15 @@
   import { actionHandler } from "@lib/actionHandler"
   import type { HomeGridItem } from "@lib/state/types"
 
+  const taskbarRect = document
+    .getElementById("taskbar")
+    ?.getBoundingClientRect()
+
   const gridColumns = 16
   const gridRows = 9
   const cellWidth = window.innerWidth / gridColumns
-  const cellHeight = (window.innerHeight - 40) / gridRows
+  const cellHeight =
+    (window.innerHeight - (taskbarRect.height || 40)) / gridRows
 
   // populate grid items
   let gridItems: HomeGridItem[] = Array.from(

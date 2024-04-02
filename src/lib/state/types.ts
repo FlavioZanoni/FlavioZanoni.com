@@ -3,21 +3,21 @@ export type State = {
     items: HomeGridItem[]
   }
   taskbar: {
-    items: taskbarItem[]
+    items: defaultItem[]
+  }
+  menu: {
+    items: defaultItem[]
   }
 }
 
-export type HomeGridItem = {
+export interface HomeGridItem extends defaultItem {
   pos: {
     x: number
     y: number
   }
-  icon: string
-  title: string
-  action: string
 }
 
-export type taskbarItem = {
+export interface defaultItem {
   icon: string
   title: string
   action: string
