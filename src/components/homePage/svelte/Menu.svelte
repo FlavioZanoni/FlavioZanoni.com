@@ -34,7 +34,7 @@
       </h2>
     </div>
     <div class="flex flex-col w-full items-start">
-      {#each menu.items as item, index}
+      {#each menu.items as item, index (item.id)}
         <Button
           variant="secondary"
           customCss="w-full"

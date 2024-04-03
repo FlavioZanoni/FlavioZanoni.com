@@ -17,13 +17,23 @@
 
 <section {id} style="left: {left}; bottom: {bottom}; " class="absolute">
   <div
-    class="flex flex-row gap-4 w-[180px] h-[100px] bg-slate-400 border border-slate-900 p-2"
+    class="flex flex-row gap-3 w-[180px] h-[100px] bg-slate-400 border border-slate-900 p-2"
   >
     <a target="_blank" href="https://www.linkedin.com/in/flaviozanoni/">
-      <img alt="Linkedn" src={"/icons/linkedin.webp"} width={20} height={20} />
+      <enhanced:img
+        loading="lazy"
+        class="w-5"
+        src="@assets/linkedin.webp"
+        alt="Linkedin"
+      />
     </a>
     <a target="_blank" href="https://github.com/FlavioZanoni">
-      <img alt="github" src={"/icons/github.webp"} width={20} height={20} />
+      <enhanced:img
+        loading="lazy"
+        class="w-5"
+        src="@assets/github.webp"
+        alt="Github"
+      />
     </a>
   </div>
 </section>

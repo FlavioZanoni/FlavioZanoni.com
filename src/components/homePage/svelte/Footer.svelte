@@ -5,6 +5,7 @@
   import ChevronMenu from "./ChevronMenu.svelte"
   import Menu from "./Menu.svelte"
 
+  let clock = "00:00:00"
   let showMenu = false
   let showChevronMenu = false
 
@@ -12,14 +13,14 @@
   desktopStore.subscribe((state) => (taskbar = state.taskbar))
 
   const updateClock = () => {
-    const clock = document.getElementById("clock")
-
     const now = new Date()
     const hours = String(now.getHours()).padStart(2, "0")
     const minutes = String(now.getMinutes()).padStart(2, "0")
     const seconds = String(now.getSeconds()).padStart(2, "0")
-    clock.innerHTML = `${hours}:${minutes}:${seconds}`
+    clock = `${hours}:${minutes}:${seconds}`
   }
+
+  updateClock()
   setInterval(updateClock, 1000)
 
   const handleClickOutsideMenu = (e) => {
@@ -76,7 +77,7 @@
       id="menuBtn">₪ Menu</Button
     >
 
-    {#each taskbar.items as item}
+    {#each taskbar.items as item (item.id)}
       <Button
         id={item.id}
         on:click={() => {
@@ -113,7 +114,7 @@
     >
 
     <div class="flex justify-center items-center min-w-[91px]">
-      <p id="clock"></p>
+      <p id="clock">{clock}</p>
     </div>
   </section>
 
