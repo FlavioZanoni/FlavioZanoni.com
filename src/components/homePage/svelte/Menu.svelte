@@ -19,8 +19,6 @@
     const menuBtnRect = menuBtn.getBoundingClientRect()
     left = `${menuBtnRect.left}px`
     bottom = `${window.innerHeight - menuBtnRect.bottom + menuBtnRect.height + 1}px` // 1 is for the border
-
-    console.log({ left, bottom })
   })
 </script>
 

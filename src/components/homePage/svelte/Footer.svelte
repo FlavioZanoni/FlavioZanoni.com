@@ -21,6 +21,46 @@
     clock.innerHTML = `${hours}:${minutes}:${seconds}`
   }
   setInterval(updateClock, 1000)
+
+  const handleClickOutsideMenu = (e) => {
+    const menu = document.getElementById("menu")
+    if (!menu) return
+
+    if (showMenu && !menu.contains(e.target) && e.target.id !== "menuBtn") {
+      showMenu = false
+    }
+  }
+
+  const handleClickOutsideChevron = (e) => {
+    const chevronMenu = document.getElementById("chevronMenu")
+    if (!chevronMenu) return
+
+    if (
+      showChevronMenu &&
+      !chevronMenu.contains(e.target) &&
+      e.target.id !== "chevronButon"
+    ) {
+      showChevronMenu = false
+    }
+  }
+
+  let hasMenuListener = false
+  let hasChevronListener = false
+  $: {
+    if (showMenu) {
+      hasMenuListener = true
+      window.addEventListener("click", handleClickOutsideMenu)
+    } else if (hasMenuListener) {
+      window.removeEventListener("click", handleClickOutsideMenu)
+    }
+
+    if (showChevronMenu) {
+      hasChevronListener = true
+      window.addEventListener("click", handleClickOutsideChevron)
+    } else if (hasChevronListener) {
+      window.removeEventListener("click", handleClickOutsideChevron)
+    }
+  }
 </script>
 
 <footer
@@ -40,13 +80,10 @@
       <Button
         id={item.id}
         on:click={() => {
-          console.log({ item })
           desktopStore.update((state) => {
             const itemIndex = state.openApps.findIndex(
               (app) => app.id === item.id
             )
-
-            console.log({ itemIndex })
 
             if (itemIndex === -1) {
               state.openApps.push({
