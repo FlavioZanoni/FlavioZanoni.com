@@ -114,9 +114,28 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
-  class="absolute z-10"
-  style="left: {x}px; top: {y}px; width: {width}px; height: {height}px; "
+  class="absolute"
+  style="left: {x}px; top: {y}px; width: {width}px; height: {height}px; z-index: {isFocused
+    ? 50
+    : 10};"
+  on:click={() => {
+    desktopStore.update((state) => {
+      state.openApps = state.openApps.map((app) => {
+        if (app.id === id) {
+          app.isFocused = true
+        } else {
+          app.isFocused = false
+        }
+
+        return app
+      })
+
+      return state
+    })
+  }}
 >
   <div
     class="flex flex-col border-2 border-slate-900 min-h-[40px] min-w-[100px]"
