@@ -15,6 +15,7 @@
   let defaultHeight = 150
   const defaultX = window.innerWidth / 2 - defaultWidth / 2
   const defaultY = window.innerHeight / 2 - defaultHeight / 2
+  let resizeUnMaximize = false
 
   let width = defaultWidth
   let height = defaultHeight
@@ -32,7 +33,12 @@
       x = 0
       y = 0
       width = window.innerWidth
-      height = window.innerHeight
+      height =
+        window.innerHeight - document.getElementById("taskbar").clientHeight
+    } else if (resizeUnMaximize) {
+      x = 0
+      y = 0
+      resizeUnMaximize = false
     } else {
       width = defaultWidth
       height = defaultHeight
@@ -75,6 +81,26 @@
   }
 
   function handleMousemoveDrag(event: MouseEvent) {
+    desktopStore.update((state) => {
+      if (!isMaximized) return state
+      resizeUnMaximize = true
+      const thisApp = state.openApps.find((app) => app.id === id)
+      thisApp.isMaximized = false
+
+      state.openApps = state.openApps.map((app) => {
+        if (app.id === id) {
+          return thisApp
+        }
+
+        return app
+      })
+
+      x = 0
+      y = 0
+
+      return state
+    })
+
     const dx = event.clientX - startDragX
     const dy = event.clientY - startDragY
 
@@ -103,7 +129,7 @@
       on:mousedown={handleMousedown}
     >
       <h1>{title}</h1>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center px-1">
         <button
           on:click={() => {
             desktopStore.update((state) => {
@@ -143,10 +169,20 @@
               return state
             })
           }}
+          class={!isMaximized ? "mb-1" : "mb-[1px]"}
         >
-          ▫
+          {isMaximized ? "▫" : "□"}
         </button>
-        <button> X </button>
+        <button
+          on:click={() => {
+            desktopStore.update((state) => {
+              state.openApps = state.openApps.filter((app) => app.id !== id)
+              return state
+            })
+          }}
+        >
+          X
+        </button>
       </div>
     </div>
 
@@ -158,7 +194,7 @@
       <div
         role="toolbar"
         tabindex="0"
-        class="w-10 h-full flex justify-end items-end hover:cursor-nw-resize"
+        class="w-10 h-full flex justify-end items-end hover:cursor-nw-resize text-gray-500"
         on:mousedown={handleMousedownDrag}
         on:mouseup={handleMouseupDrag}
       >
@@ -174,22 +210,22 @@
           <g
             ><g
               ><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M195.2,127.5c0,14,11.4,25.4,25.4,25.4s25.4-11.4,25.4-25.4c0-14-11.4-25.4-25.4-25.4S195.2,113.5,195.2,127.5z"
               /><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M195.2,210c0,14,11.4,25.4,25.4,25.4S246,224.1,246,210l0,0c0-14-11.4-25.4-25.4-25.4S195.2,196,195.2,210z"
               /><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M104.2,210c0,14,11.4,25.4,25.4,25.4c14,0,25.4-11.4,25.4-25.4c0-14-11.4-25.4-25.4-25.4C115.5,184.6,104.2,196,104.2,210L104.2,210z"
               /><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M104.2,127.5c0,14,11.4,25.4,25.4,25.4c14,0,25.4-11.4,25.4-25.4c0-14-11.4-25.4-25.4-25.4C115.5,102.1,104.2,113.5,104.2,127.5L104.2,127.5z"
               /><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M195.2,46c0,14,11.4,25.4,25.4,25.4S246,60,246,46s-11.4-25.4-25.4-25.4S195.2,32,195.2,46z"
               /><path
-                fill="#475569"
+                fill="#6b7280"
                 d="M10,210c0,14,11.4,25.4,25.4,25.4s25.4-11.4,25.4-25.4c0-14-11.4-25.4-25.4-25.4S10,196,10,210L10,210z"
               /></g
             ></g
