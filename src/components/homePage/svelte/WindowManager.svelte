@@ -13,13 +13,11 @@
         desktopStore.update((state) => {
           const thisApp = state.openApps.find((item) => item.id === app.id)
 
-          const newState = { ...state }
-
-          newState.taskbar.items.push({
+          state.taskbar.items.push({
             ...thisApp,
           })
 
-          return newState
+          return state
         })
       }
     })

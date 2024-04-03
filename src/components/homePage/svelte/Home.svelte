@@ -10,7 +10,7 @@
   const gridRows = 9
   const cellWidth = window.innerWidth / gridColumns
   const cellHeight =
-    (window.innerHeight - (taskbarRect.height || 40)) / gridRows
+    (window.innerHeight - (taskbarRect?.height || 40)) / gridRows
 
   // populate grid items
   let gridItems: HomeGridItem[] = Array.from(
@@ -111,11 +111,11 @@
         console.log(cell)
         if (cell.title === "") return
 
-        desktopStore.update((prev) => {
-          let { pos, ...currItem } = prev.homeGrid.items.find(
+        desktopStore.update((state) => {
+          let { pos, ...currItem } = state.homeGrid.items.find(
             (item) => item.id === cell.id
           )
-          const newState = { ...prev }
+
           const newItem = {
             ...currItem,
             isOpen: true,
@@ -123,9 +123,9 @@
             isMaximized: false,
             isFocused: true,
           }
-          newState.openApps.push(newItem)
+          state.openApps.push(newItem)
 
-          return newState
+          return state
         })
       }}
     >

@@ -111,18 +111,16 @@
               thisApp.isMinimized = !thisApp.isMinimized
 
               console.log(thisApp)
-              const newState = {
-                ...state,
-                openApps: state.openApps.map((app) => {
-                  if (app.id === id) {
-                    return thisApp
-                  }
 
-                  return app
-                }),
-              }
+              state.openApps = state.openApps.map((app) => {
+                if (app.id === id) {
+                  return thisApp
+                }
 
-              return newState
+                return app
+              })
+
+              return state
             })
           }}
         >
@@ -134,19 +132,15 @@
               const thisApp = state.openApps.find((app) => app.id === id)
               thisApp.isMaximized = !thisApp.isMaximized
 
-              console.log(thisApp)
-              const newState = {
-                ...state,
-                openApps: state.openApps.map((app) => {
-                  if (app.id === id) {
-                    return thisApp
-                  }
+              state.openApps = state.openApps.map((app) => {
+                if (app.id === id) {
+                  return thisApp
+                }
 
-                  return app
-                }),
-              }
+                return app
+              })
 
-              return newState
+              return state
             })
           }}
         >

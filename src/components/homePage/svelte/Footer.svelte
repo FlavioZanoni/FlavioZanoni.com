@@ -1,15 +1,19 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
   import type { DesktopStore } from "@lib/store/types"
-  import Button from "./Button.astro"
-  import ChevronMenu from "./ChevronMenu.astro"
-  import Menu from "./Menu.astro"
+  import Button from "./Button.svelte"
+  import ChevronMenu from "./ChevronMenu.svelte"
+  import Menu from "./Menu.svelte"
+
+  let showMenu = false
+  let showChevronMenu = false
 
   let taskbar: DesktopStore["taskbar"]
   desktopStore.subscribe((state) => (taskbar = state.taskbar))
 
-  const clock = document.getElementById("clock")
   const updateClock = () => {
+    const clock = document.getElementById("clock")
+
     const now = new Date()
     const hours = String(now.getHours()).padStart(2, "0")
     const minutes = String(now.getMinutes()).padStart(2, "0")
@@ -17,46 +21,6 @@
     clock.innerHTML = `${hours}:${minutes}:${seconds}`
   }
   setInterval(updateClock, 1000)
-  const menu = document.getElementById("menu")
-  const menuBtn = document.getElementById("menuBtn")
-  menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("hidden")
-  })
-
-  // render the menu position relative to its button
-  const menuBtnRect = menuBtn.getBoundingClientRect()
-  menu.style.left = `${menuBtnRect.left}px`
-  menu.style.bottom = `${menuBtnRect.bottom + 1}px` // 1 is for the border
-
-  // close the menu when clicking outside of it
-  document.addEventListener("click", (event) => {
-    if (menu.classList.contains("hidden")) return
-
-    const target = event.target as Node
-    if (target !== menuBtn && !menu.contains(target)) {
-      menu.classList.add("hidden")
-    }
-  })
-  const chevronMenu = document.getElementById("chevronMenu")
-  const chevronButton = document.getElementById("chevronButon")
-  chevronButton.addEventListener("click", () => {
-    chevronMenu.classList.toggle("hidden")
-    chevronMenu.classList.add("flex")
-  })
-
-  const chevronButtonRect = chevronButton.getBoundingClientRect()
-  chevronMenu.style.left = `${chevronButtonRect.left - 90 + chevronButtonRect.width / 2}px` // 90 is half of the chevronMenu width
-  chevronMenu.style.bottom = `${chevronButtonRect.bottom + 10}px`
-
-  // close the menu when clicking outside of it
-  document.addEventListener("click", (event) => {
-    if (chevronMenu.classList.contains("hidden")) return
-
-    const target = event.target as Node
-    if (target !== chevronButton && !chevronMenu.contains(target)) {
-      chevronMenu.classList.add("hidden")
-    }
-  })
 </script>
 
 <footer
@@ -64,21 +28,63 @@
   class="flex min-h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900"
 >
   <section id="start" class="flex divide-x divide-slate-900 gap-1">
-    <Button variant="secondary" id="menuBtn">₪ Menu</Button>
+    <Button
+      on:click={() => {
+        showMenu = !showMenu
+      }}
+      variant="secondary"
+      id="menuBtn">₪ Menu</Button
+    >
 
     {#each taskbar.items as item}
-      <Button id={item.id}>{item.title}</Button>
+      <Button
+        id={item.id}
+        on:click={() => {
+          console.log({ item })
+          desktopStore.update((state) => {
+            const itemIndex = state.openApps.findIndex(
+              (app) => app.id === item.id
+            )
+
+            console.log({ itemIndex })
+
+            if (itemIndex === -1) {
+              state.openApps.push({
+                ...item,
+                isMinimized: false,
+                isMaximized: false,
+                isFocused: true,
+              })
+            } else {
+              state.openApps[itemIndex].isMinimized = false
+            }
+
+            return state
+          })
+        }}>{item.title}</Button
+      >
     {/each}
   </section>
 
   <section id="end" class="flex divide-x divide-slate-900 gap-1">
-    <Button id="chevronButon" customCss="pt-2">^</Button>
+    <Button
+      on:click={() => {
+        showChevronMenu = !showChevronMenu
+      }}
+      id="chevronButon"
+      customCss="pt-2">^</Button
+    >
 
     <div class="flex justify-center items-center min-w-[91px]">
       <p id="clock"></p>
     </div>
   </section>
 
-  <Menu id="menu" />
-  <ChevronMenu id="chevronMenu" />
+  {#if showMenu}
+    <Menu id="menu" />
+  {/if}
+
+  {#if showChevronMenu}
+    <ChevronMenu id="chevronMenu" />
+  {/if}
 </footer>
