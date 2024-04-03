@@ -1,16 +1,13 @@
----
-import { desktopStore } from "@lib/store"
-import Button from "./Button.astro"
-import Menu from "./Menu.astro"
-import ChevronMenu from "./ChevronMenu.astro"
+<script lang="ts">
+  import { desktopStore } from "@lib/store"
+  import type { DesktopStore } from "@lib/store/types"
+  import Button from "./Button.astro"
+  import ChevronMenu from "./ChevronMenu.astro"
+  import Menu from "./Menu.astro"
 
-let taskbar
-desktopStore.subscribe((value) => {
-  taskbar = value.taskbar
-})
----
+  let taskbar: DesktopStore["taskbar"]
+  desktopStore.subscribe((state) => (taskbar = state.taskbar))
 
-<script>
   const clock = document.getElementById("clock")
   const updateClock = () => {
     const now = new Date()
@@ -20,9 +17,6 @@ desktopStore.subscribe((value) => {
     clock.innerHTML = `${hours}:${minutes}:${seconds}`
   }
   setInterval(updateClock, 1000)
-</script>
-
-<script>
   const menu = document.getElementById("menu")
   const menuBtn = document.getElementById("menuBtn")
   menuBtn.addEventListener("click", () => {
@@ -43,9 +37,6 @@ desktopStore.subscribe((value) => {
       menu.classList.add("hidden")
     }
   })
-</script>
-
-<script>
   const chevronMenu = document.getElementById("chevronMenu")
   const chevronButton = document.getElementById("chevronButon")
   chevronButton.addEventListener("click", () => {
@@ -74,11 +65,10 @@ desktopStore.subscribe((value) => {
 >
   <section id="start" class="flex divide-x divide-slate-900 gap-1">
     <Button variant="secondary" id="menuBtn">₪ Menu</Button>
-    {
-      taskbar.items.map((item, index) => {
-        return <Button id={index.toString()}>{item.title}</Button>
-      })
-    }
+
+    {#each taskbar.items as item}
+      <Button id={item.id}>{item.title}</Button>
+    {/each}
   </section>
 
   <section id="end" class="flex divide-x divide-slate-900 gap-1">

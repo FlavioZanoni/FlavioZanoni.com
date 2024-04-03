@@ -1,4 +1,4 @@
-export type State = {
+export type DesktopStore = {
   homeGrid: {
     items: HomeGridItem[]
   }
@@ -8,6 +8,7 @@ export type State = {
   menu: {
     items: defaultItem[]
   }
+  openApps: OpenApp[]
 }
 
 export interface HomeGridItem extends defaultItem {
@@ -18,7 +19,16 @@ export interface HomeGridItem extends defaultItem {
 }
 
 export interface defaultItem {
+  id: string
   icon: string
   title: string
-  action: string
+  type: "folder" | "app" | "empty"
+  link: string
+  isOpen: boolean
+}
+
+export interface OpenApp extends defaultItem {
+  isMaximized: boolean
+  isMinimized: boolean
+  isFocused: boolean
 }

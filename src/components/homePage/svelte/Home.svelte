@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { state } from "@homePage/svelte/store"
-  import { actionHandler } from "@lib/actionHandler"
-  import type { HomeGridItem } from "@lib/state/types"
+  import { desktopStore } from "@lib/store"
+  import type { HomeGridItem } from "@lib/store/types"
 
   const taskbarRect = document
     .getElementById("taskbar")
@@ -21,10 +20,15 @@
       const y = Math.floor(i / gridColumns)
 
       return {
+        id: "-1",
         pos: { x, y },
         icon: "",
         title: "",
-        action: "",
+        link: "",
+        type: "empty",
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false,
       }
     }
   )
@@ -34,7 +38,7 @@
     // populate grid with state
     grid = [
       ...gridItems.map((cell) => {
-        const cellState = $state.homeGrid.items.find(
+        const cellState = $desktopStore.homeGrid.items.find(
           (s) => s.pos.x === cell.pos.x && s.pos.y === cell.pos.y
         )
 
@@ -47,13 +51,13 @@
     e.preventDefault()
     const data = JSON.parse(e.dataTransfer.getData("text/plain"))
 
-    state.update((prev) => {
+    desktopStore.update((prev) => {
       const itemToUpdate = prev.homeGrid.items.find(
-        (i) => i.pos.x === data.pos.x && i.pos.y === data.pos.y
+        (item) => item.id === data.id
       )
 
       const itemToMove = prev.homeGrid.items.find(
-        (i) => i.pos.x === current.pos.x && i.pos.y === current.pos.y
+        (item) => item.id === current.id
       )
 
       if (itemToUpdate) {
@@ -104,9 +108,25 @@
         e.preventDefault()
       }}
       on:dblclick={() => {
-        if (cell.action) {
-          actionHandler(cell.action)
-        }
+        console.log(cell)
+        if (cell.title === "") return
+
+        desktopStore.update((prev) => {
+          let { pos, ...currItem } = prev.homeGrid.items.find(
+            (item) => item.id === cell.id
+          )
+          const newState = { ...prev }
+          const newItem = {
+            ...currItem,
+            isOpen: true,
+            isMinimized: false,
+            isMaximized: false,
+            isFocused: true,
+          }
+          newState.openApps.push(newItem)
+
+          return newState
+        })
       }}
     >
       <div class="flex flex-col items-center justify-center">

@@ -1,7 +1,11 @@
 ---
 import Button from "@homePage/Button.astro"
-import { getState } from "@lib/state"
-const { menu } = getState()
+import { desktopStore } from "@lib/store"
+import type { DesktopStore } from "@lib/store/types"
+let menu: DesktopStore["menu"]
+desktopStore.subscribe((state) => {
+  menu = state.menu
+})
 
 type Props = {
   id: string

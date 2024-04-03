@@ -7,7 +7,7 @@
       "@homePage/*": ["src/components/homePage/*"],
       "@assets/*": ["./src/assets/*"],
       "@lib/*": ["./src/lib/*"],
-      "@assets": ["./src/assets"],
+      "@assets": ["./src/assets/*"]
     }
   }
 }

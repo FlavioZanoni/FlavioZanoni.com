@@ -2,41 +2,53 @@
   "homeGrid": {
     "items": [
       {
+        "id": "1",
         "pos": {
           "x": 0,
           "y": 0
         },
         "icon": "trash.png",
         "title": "Trash bin",
-        "action": ""
+        "type": "folder",
+        "link": "/trash",
+        "isOpen": false
       },
-
       {
+        "id": "2",
         "pos": {
           "x": 0,
           "y": 1
         },
         "icon": "document.png",
         "title": "item01.txt",
-        "action": ""
+        "type": "app",
+        "link": "/hello",
+        "isOpen": false
       }
     ]
   },
   "taskbar": {
     "items": [
       {
+        "id": "3",
         "icon": "",
         "title": "item1",
-        "action": ""
+        "type": "app",
+        "link": "/",
+        "isOpen": false
       }
     ]
   },
+  "openApps": [],
   "menu": {
     "items": [
       {
+        "id": "4",
         "title": "item1",
-        "action": "",
-        "icon": ""
+        "icon": "",
+        "link": "/hello",
+        "type": "app",
+        "isOpen": false
       }
     ]
   }

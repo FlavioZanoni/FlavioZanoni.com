@@ -1,13 +1,23 @@
 ---
 import Footer from "@homePage/Footer.astro"
 import Home from "@homePage/svelte/Home.svelte"
+import WindowManager from "@homePage/svelte/WindowManager.svelte"
 
 import Layout from "../layouts/Layout.astro"
 ---
+
+<script>
+  import { desktopStore } from "@lib/store"
+  if (localStorage.getItem("desktopStore")) {
+    desktopStore.update(JSON.parse(localStorage.getItem("desktopStore")))
+  } // this will be part of a loading sequence
+</script>
 
 <Layout title="Welcome to Astro.">
   <main>
     <Home client:only />
   </main>
   <Footer />
+
+  <WindowManager client:only />
 </Layout>
