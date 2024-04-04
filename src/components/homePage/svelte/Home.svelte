@@ -1,5 +1,6 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
+  import { openApp } from "@lib/store/desktopStoreUtils"
   import type { HomeGridItem } from "@lib/store/types"
 
   const taskbarRect = document
@@ -51,26 +52,22 @@
     e.preventDefault()
     const data = JSON.parse(e.dataTransfer.getData("text/plain"))
 
-    desktopStore.update((prev) => {
-      const itemToUpdate = prev.homeGrid.items.find(
+    desktopStore.update((state) => {
+      const itemToUpdate = state.homeGrid.items.find(
         (item) => item.id === data.id
       )
-
-      const itemToMove = prev.homeGrid.items.find(
+      const itemToMove = state.homeGrid.items.find(
         (item) => item.id === current.id
       )
 
       if (itemToUpdate) {
         itemToUpdate.pos = current.pos
       }
-
       if (itemToMove) {
         itemToMove.pos = data.pos
       }
 
-      const prevCopy = { ...prev }
-
-      prevCopy.homeGrid.items = prev.homeGrid.items.map((item) => {
+      state.homeGrid.items = state.homeGrid.items.map((item) => {
         if (item === itemToUpdate) {
           return itemToUpdate
         }
@@ -79,8 +76,7 @@
         }
         return item
       })
-
-      return prevCopy
+      return state
     })
   }
 </script>
@@ -108,25 +104,8 @@
         e.preventDefault()
       }}
       on:dblclick={() => {
-        console.log(cell)
         if (cell.title === "") return
-
-        desktopStore.update((state) => {
-          let { pos, ...currItem } = state.homeGrid.items.find(
-            (item) => item.id === cell.id
-          )
-
-          const newItem = {
-            ...currItem,
-            isOpen: true,
-            isMinimized: false,
-            isMaximized: false,
-            isFocused: true,
-          }
-          state.openApps.push(newItem)
-
-          return state
-        })
+        openApp(cell.id, "desktop")
       }}
     >
       <div class="flex flex-col items-center justify-center">

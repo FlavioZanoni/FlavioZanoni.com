@@ -11,12 +11,14 @@
     store.forEach((app) => {
       if (app.isMinimized) {
         desktopStore.update((state) => {
-          const thisApp = state.openApps.find((item) => item.id === app.id)
+          if (state.taskbar.openApps.find((item) => item.uuid === app.uuid)) {
+            return state
+          }
 
-          state.taskbar.items.push({
+          const thisApp = state.openApps.find((item) => item.uuid === app.uuid)
+          state.taskbar.openApps.push({
             ...thisApp,
           })
-
           return state
         })
       }
@@ -24,7 +26,7 @@
   }
 </script>
 
-{#each store as app (app.id)}
+{#each store as app (app.uuid)}
   {#if app.isOpen && !app.isMinimized}
     <Window {...app} />
   {/if}

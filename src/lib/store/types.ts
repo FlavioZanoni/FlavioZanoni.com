@@ -3,22 +3,30 @@ export type DesktopStore = {
     items: HomeGridItem[]
   }
   taskbar: {
-    items: defaultItem[]
+    items: DefaultItem[]
+    openApps: OpenApp[]
   }
   menu: {
-    items: defaultItem[]
+    items: DefaultItem[]
   }
   openApps: OpenApp[]
 }
 
-export interface HomeGridItem extends defaultItem {
-  pos: {
-    x: number
-    y: number
-  }
+export type Position = {
+  x: number
+  y: number
 }
 
-export interface defaultItem {
+export type Size = {
+  width: number
+  height: number
+}
+
+export interface HomeGridItem extends DefaultItem {
+  pos: Position
+}
+
+export interface DefaultItem {
   id: string
   icon: string
   title: string
@@ -27,8 +35,11 @@ export interface defaultItem {
   isOpen: boolean
 }
 
-export interface OpenApp extends defaultItem {
+export interface OpenApp extends DefaultItem {
+  uuid: string
   isMaximized: boolean
   isMinimized: boolean
   isFocused: boolean
+  lastPos?: Position
+  lastSize?: Size
 }

@@ -1,21 +1,31 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
+  import {
+    closeApp,
+    focusApp,
+    maximizeApp,
+    minimizeApp,
+  } from "@lib/store/desktopStoreUtils"
 
   export let icon: string
-  export let id: string
+  export let uuid: string
   export let isFocused: boolean
   export let isMaximized: boolean
-  export let isMinimized: boolean
-  export let isOpen: boolean
   export let link: string
   export let title: string
   export let type: "folder" | "app" | "empty"
+  export let lastPos: { x: number; y: number } | undefined = undefined
+  export let lastSize: { width: number; height: number } | undefined = undefined
 
   let defaultWidth = 250
   let defaultHeight = 150
   const defaultX = window.innerWidth / 2 - defaultWidth / 2
   const defaultY = window.innerHeight / 2 - defaultHeight / 2
-  let resizeUnMaximize = false
+
+  let previousWidth = defaultWidth
+  let previousHeight = defaultHeight
+  let previousX = defaultX
+  let previousY = defaultY
 
   let width = defaultWidth
   let height = defaultHeight
@@ -24,9 +34,11 @@
 
   let x = window.innerWidth / 2 - width / 2
   let y = window.innerHeight / 2 - height / 2
+  let dx = 0
+  let dy = 0
 
   let startX: number, startY: number, startLeft: number, startTop: number
-  let startDragX: number, startDragY: number
+  let startResizeX: number, startResizeY: number
 
   $: {
     if (isMaximized) {
@@ -35,15 +47,11 @@
       width = window.innerWidth
       height =
         window.innerHeight - document.getElementById("taskbar").clientHeight
-    } else if (resizeUnMaximize) {
-      x = 0
-      y = 0
-      resizeUnMaximize = false
     } else {
-      width = defaultWidth
-      height = defaultHeight
-      x = defaultX
-      y = defaultY
+      width = lastSize?.width || defaultWidth
+      height = lastSize?.height || defaultHeight
+      x = lastPos?.x || defaultX
+      y = lastPos?.y || defaultY
     }
   }
 
@@ -65,52 +73,65 @@
   }
 
   function handleMouseup() {
-    window.removeEventListener("mousemove", handleMousemove)
-    window.removeEventListener("mouseup", handleMouseup)
-  }
-
-  function handleMousedownDrag(event: MouseEvent) {
-    event.stopPropagation()
-    startDragX = event.clientX
-    startDragY = event.clientY
-    startWidth = width
-    startHeight = height
-
-    window.addEventListener("mousemove", handleMousemoveDrag)
-    window.addEventListener("mouseup", handleMouseupDrag)
-  }
-
-  function handleMousemoveDrag(event: MouseEvent) {
+    // Update the last position and size of the app
     desktopStore.update((state) => {
-      if (!isMaximized) return state
-      resizeUnMaximize = true
-      const thisApp = state.openApps.find((app) => app.id === id)
-      thisApp.isMaximized = false
+      const thisApp = state.openApps.find((app) => app.uuid === uuid)
+      thisApp.lastSize = { width, height }
+      thisApp.lastPos = { x, y }
 
       state.openApps = state.openApps.map((app) => {
-        if (app.id === id) {
+        if (app.uuid === uuid) {
           return thisApp
         }
 
         return app
       })
 
-      x = 0
-      y = 0
-
       return state
     })
 
-    const dx = event.clientX - startDragX
-    const dy = event.clientY - startDragY
+    window.removeEventListener("mousemove", handleMousemove)
+    window.removeEventListener("mouseup", handleMouseup)
+  }
+
+  function handleMousedownResize(event: MouseEvent) {
+    event.stopPropagation()
+    startResizeX = event.clientX
+    startResizeY = event.clientY
+    startWidth = width
+    startHeight = height
+
+    window.addEventListener("mousemove", handleMousemoveResize)
+    window.addEventListener("mouseup", handleMouseupResize)
+  }
+
+  function handleMousemoveResize(event: MouseEvent) {
+    dx = event.clientX - startResizeX
+    dy = event.clientY - startResizeY
 
     width = startWidth + dx
     height = startHeight + dy
   }
 
-  function handleMouseupDrag() {
-    window.removeEventListener("mousemove", handleMousemoveDrag)
-    window.removeEventListener("mouseup", handleMouseupDrag)
+  function handleMouseupResize() {
+    desktopStore.update((state) => {
+      const thisApp = state.openApps.find((app) => app.uuid === uuid)
+      thisApp.lastPos = { x, y }
+      thisApp.lastSize = { width: startWidth + dx, height: startHeight + dy }
+
+      state.openApps = state.openApps.map((app) => {
+        if (app.uuid === uuid) {
+          return thisApp
+        }
+
+        return app
+      })
+
+      return state
+    })
+
+    window.removeEventListener("mousemove", handleMousemoveResize)
+    window.removeEventListener("mouseup", handleMouseupResize)
   }
 </script>
 
@@ -122,19 +143,7 @@
     ? 50
     : 10};"
   on:click={() => {
-    desktopStore.update((state) => {
-      state.openApps = state.openApps.map((app) => {
-        if (app.id === id) {
-          app.isFocused = true
-        } else {
-          app.isFocused = false
-        }
-
-        return app
-      })
-
-      return state
-    })
+    focusApp(uuid)
   }}
 >
   <div
@@ -147,46 +156,32 @@
       class="w-full h-5 flex justify-between items-center bg-slate-400"
       on:mousedown={handleMousedown}
     >
-      <h1>{title}</h1>
+      <h1 class="select-none px-1">{title}</h1>
       <div class="flex gap-2 items-center px-1">
         <button
           on:click={() => {
-            desktopStore.update((state) => {
-              const thisApp = state.openApps.find((app) => app.id === id)
-              thisApp.isMinimized = !thisApp.isMinimized
-
-              console.log(thisApp)
-
-              state.openApps = state.openApps.map((app) => {
-                if (app.id === id) {
-                  return thisApp
-                }
-
-                return app
-              })
-
-              return state
-            })
+            minimizeApp(uuid, { x, y }, { width, height })
           }}
         >
           -
         </button>
         <button
           on:click={() => {
-            desktopStore.update((state) => {
-              const thisApp = state.openApps.find((app) => app.id === id)
-              thisApp.isMaximized = !thisApp.isMaximized
+            if (!isMaximized) {
+              previousWidth = width
+              previousHeight = height
+              previousX = x
+              previousY = y
+            } // when minimizing, need the previous size and position to return to that state
 
-              state.openApps = state.openApps.map((app) => {
-                if (app.id === id) {
-                  return thisApp
-                }
-
-                return app
-              })
-
-              return state
-            })
+            maximizeApp(
+              uuid,
+              { x: previousX || x, y: previousY || y },
+              {
+                width: previousWidth || width,
+                height: previousHeight || height,
+              }
+            )
           }}
           class={!isMaximized ? "mb-1" : "mb-[1px]"}
         >
@@ -194,10 +189,7 @@
         </button>
         <button
           on:click={() => {
-            desktopStore.update((state) => {
-              state.openApps = state.openApps.filter((app) => app.id !== id)
-              return state
-            })
+            closeApp(uuid)
           }}
         >
           X
@@ -214,8 +206,8 @@
         role="toolbar"
         tabindex="0"
         class="w-10 h-full flex justify-end items-end hover:cursor-nw-resize text-gray-500"
-        on:mousedown={handleMousedownDrag}
-        on:mouseup={handleMouseupDrag}
+        on:mousedown={handleMousedownResize}
+        on:mouseup={handleMouseupResize}
       >
         <svg
           version="1.1"

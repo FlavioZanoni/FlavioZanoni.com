@@ -47,6 +47,7 @@
 
   let hasMenuListener = false
   let hasChevronListener = false
+
   $: {
     if (showMenu) {
       hasMenuListener = true
@@ -76,32 +77,43 @@
       variant="secondary"
       id="menuBtn">₪ Menu</Button
     >
-
-    {#each taskbar.items as item (item.id)}
-      <Button
-        id={item.id}
-        on:click={() => {
-          desktopStore.update((state) => {
-            const itemIndex = state.openApps.findIndex(
-              (app) => app.id === item.id
-            )
-
-            if (itemIndex === -1) {
+    {#if taskbar.items}
+      {#each taskbar.items as item}
+        <Button
+          id={item.id}
+          on:click={() => {
+            desktopStore.update((state) => {
               state.openApps.push({
                 ...item,
                 isMinimized: false,
                 isMaximized: false,
                 isFocused: true,
+                uuid: crypto.randomUUID(),
               })
-            } else {
-              state.openApps[itemIndex].isMinimized = false
-            }
+              return state
+            })
+          }}>{item.title}</Button
+        >
+      {/each}
+    {/if}
 
-            return state
-          })
-        }}>{item.title}</Button
-      >
-    {/each}
+    {#if taskbar.openApps}
+      {#each taskbar.openApps as item}
+        <Button
+          id={item.id}
+          on:click={() => {
+            desktopStore.update((state) => {
+              const itemIndex = state.openApps.findIndex(
+                (app) => app.uuid === item.uuid
+              )
+
+              state.openApps[itemIndex].isMinimized = false
+              return state
+            })
+          }}>{item.title}</Button
+        >
+      {/each}
+    {/if}
   </section>
 
   <section id="end" class="flex divide-x divide-slate-900 gap-1">

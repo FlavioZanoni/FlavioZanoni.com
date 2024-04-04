@@ -8,7 +8,7 @@
           "y": 0
         },
         "icon": "trash.png",
-        "title": "Trash bin",
+        "title": "Recycle bin",
         "type": "folder",
         "link": "/trash",
         "isOpen": false
@@ -24,6 +24,18 @@
         "type": "app",
         "link": "/hello",
         "isOpen": false
+      },
+      {
+        "id": "4",
+        "pos": {
+          "x": 0,
+          "y": 2
+        },
+        "icon": "browser.png",
+        "title": "Web Browser",
+        "type": "app",
+        "link": "https://duckduckgo.com/",
+        "isOpen": false
       }
     ]
   },
@@ -37,7 +49,8 @@
         "link": "/",
         "isOpen": false
       }
-    ]
+    ],
+    "openApps": []
   },
   "openApps": [],
   "menu": {

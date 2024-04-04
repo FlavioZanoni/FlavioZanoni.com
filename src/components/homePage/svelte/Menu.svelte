@@ -1,5 +1,6 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
+  import { openApp } from "@lib/store/desktopStoreUtils"
   import type { DesktopStore } from "@lib/store/types"
   import { onMount } from "svelte"
   import Button from "./Button.svelte"
@@ -40,27 +41,7 @@
           customCss="w-full"
           id={index.toString()}
           on:click={() => {
-            console.log({ item })
-            desktopStore.update((state) => {
-              const itemIndex = state.openApps.findIndex(
-                (app) => app.id === item.id
-              )
-
-              console.log({ itemIndex })
-
-              if (itemIndex === -1) {
-                state.openApps.push({
-                  ...item,
-                  isMinimized: false,
-                  isMaximized: false,
-                  isFocused: true,
-                })
-              } else {
-                state.openApps[itemIndex].isMinimized = false
-              }
-
-              return state
-            })
+            openApp(item.id, "menu")
           }}
         >
           {item.title}
