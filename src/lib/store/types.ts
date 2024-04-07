@@ -25,12 +25,15 @@ export interface HomeGridItem extends DefaultItem {
   pos: Position
 }
 
+export type ItemType = "folder" | "file" | "app" | "empty"
+
 export interface DefaultItem {
   id: string
   icon: string
   title: string
-  type: "folder" | "app" | "empty"
-  link: string
+  type: ItemType
+  link?: string
+  appName?: string
   isOpen: boolean
 }
 

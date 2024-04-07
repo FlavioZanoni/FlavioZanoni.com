@@ -90,7 +90,7 @@
   {#each grid as cell}
     <div
       role={cell.title !== "" ? "button" : "cell"}
-      class={`flex gap-2 items-center justify-center p-2`}
+      class={`flex gap-2 items-center justify-center p-2 select-none`}
       style={`
           width: ${cellWidth}px;
           height: ${cellHeight}px;

@@ -2,7 +2,7 @@
   "homeGrid": {
     "items": [
       {
-        "id": "1",
+        "id": "trash",
         "pos": {
           "x": 0,
           "y": 0
@@ -21,7 +21,7 @@
         },
         "icon": "document.png",
         "title": "item01.txt",
-        "type": "app",
+        "type": "file",
         "link": "/hello",
         "isOpen": false
       },
@@ -35,6 +35,18 @@
         "title": "Web Browser",
         "type": "app",
         "link": "https://duckduckgo.com/",
+        "isOpen": false
+      },
+      {
+        "id": "term",
+        "pos": {
+          "x": 0,
+          "y": 3
+        },
+        "icon": "term.png",
+        "title": "Terminal",
+        "type": "app",
+        "appName": "term",
         "isOpen": false
       }
     ]

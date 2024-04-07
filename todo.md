@@ -15,11 +15,11 @@ TODO:
 
 - windows:
 
-  - [ ] the windows should be draggable and resizable
-  - [ ] the windows should have a close/minimize/maximize button
-  - [ ] the windows should have a title
-  - [ ] the windows should have a z-index
-  - [ ] the windows should have a shadow
+  - [ x ] the windows should be draggable and resizable
+  - [ x ] the windows should have a close/minimize/maximize button
+  - [ x ] the windows should have a title
+  - [ x ] the windows should have a z-index
+  - [ x ] the windows should have a shadow
 
   - window content
     - the window component will be the multi-page handler, it can basically render anything, from astro islands to .md files

@@ -6,6 +6,8 @@
     maximizeApp,
     minimizeApp,
   } from "@lib/store/desktopStoreUtils"
+  import type { ItemType } from "@lib/store/types"
+  import WindowContent from "./WindowContent.svelte"
 
   export let icon: string
   export let uuid: string
@@ -13,12 +15,13 @@
   export let isMaximized: boolean
   export let link: string
   export let title: string
-  export let type: "folder" | "app" | "empty"
+  export let type: ItemType
   export let lastPos: { x: number; y: number } | undefined = undefined
   export let lastSize: { width: number; height: number } | undefined = undefined
+  export let appName: string | undefined = undefined
 
-  let defaultWidth = 250
-  let defaultHeight = 150
+  let defaultWidth = 550
+  let defaultHeight = 400
   const defaultX = window.innerWidth / 2 - defaultWidth / 2
   const defaultY = window.innerHeight / 2 - defaultHeight / 2
 
@@ -138,6 +141,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
+  id={`window-${uuid}`}
   class="absolute shadow-xl"
   style="left: {x}px; top: {y}px; width: {width}px; height: {height}px; z-index: {isFocused
     ? 50
@@ -153,7 +157,7 @@
     <div
       role="toolbar"
       tabindex="0"
-      class="w-full h-5 flex justify-between items-center bg-slate-400"
+      class="w-full h-5 flex justify-between items-center bg-slate-400 gap-4"
       on:mousedown={handleMousedown}
     >
       <div class="flex gap-1 items-center px-1">
@@ -205,7 +209,13 @@
     </div>
 
     <div class="w-full bg-white" style="height: calc({height}px - 40px);">
-      <iframe {title} class="w-full h-full" src={link} frameborder="0" />
+      {#if type === "app"}
+        <WindowContent {uuid} {appName} />
+      {:else}
+        <div>
+          <iframe {title} class="w-full h-full" src={link} frameborder="0" />
+        </div>
+      {/if}
     </div>
 
     <div class="w-full h-5 flex justify-end bg-slate-400">
