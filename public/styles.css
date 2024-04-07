@@ -15,3 +15,6 @@ img {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
+.xterm-viewport {
+  overflow-y: hidden !important;
+}

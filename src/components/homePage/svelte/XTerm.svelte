@@ -40,9 +40,10 @@
     term.loadAddon(fitAddon)
     term.options.cursorBlink = true
     term.onBell(() => {
-      console.log("Bell event triggered")
       playBeep()
     })
+    term.options.fontFamily = "IBM"
+    term.options.scrollback = 1000
 
     term.onData((data) => {
       switch (data) {
