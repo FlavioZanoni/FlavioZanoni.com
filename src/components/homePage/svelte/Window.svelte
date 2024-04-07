@@ -138,7 +138,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <section
-  class="absolute"
+  class="absolute shadow-xl"
   style="left: {x}px; top: {y}px; width: {width}px; height: {height}px; z-index: {isFocused
     ? 50
     : 10};"
@@ -156,8 +156,15 @@
       class="w-full h-5 flex justify-between items-center bg-slate-400"
       on:mousedown={handleMousedown}
     >
-      <h1 class="select-none px-1">{title}</h1>
-      <div class="flex gap-2 items-center px-1">
+      <div class="flex gap-1 items-center px-1">
+        <img
+          src={`icons/${icon}`}
+          alt={title}
+          class="w-4 h-4 border border-slate-500 p-[1px]"
+        />
+        <h1 class="select-none">{title}</h1>
+      </div>
+      <div class="flex gap-2 items-center px-1 select-none">
         <button
           on:click={() => {
             minimizeApp(uuid, { x, y }, { width, height })
@@ -198,7 +205,7 @@
     </div>
 
     <div class="w-full bg-white" style="height: calc({height}px - 40px);">
-      <iframe {title} class="w-full h-full" src={link} frameborder="0"></iframe>
+      <iframe {title} class="w-full h-full" src={link} frameborder="0" />
     </div>
 
     <div class="w-full h-5 flex justify-end bg-slate-400">

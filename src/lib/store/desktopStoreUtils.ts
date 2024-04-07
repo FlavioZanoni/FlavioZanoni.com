@@ -60,7 +60,6 @@ export const openApp = (
 
   desktopStore.update((state) => {
     state.openApps.push(item)
-    state.taskbar.openApps.push(item)
 
     return state
   })
@@ -69,9 +68,6 @@ export const openApp = (
 export const closeApp = (appUuid: string) => {
   desktopStore.update((state) => {
     state.openApps = state.openApps.filter((item) => item.uuid !== appUuid)
-    state.taskbar.openApps = state.taskbar.openApps.filter(
-      (item) => item.uuid !== appUuid
-    )
 
     return state
   })

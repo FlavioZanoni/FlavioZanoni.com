@@ -1,14 +1,8 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
   import { openApp } from "@lib/store/desktopStoreUtils"
-  import type { DesktopStore } from "@lib/store/types"
   import { onMount } from "svelte"
   import Button from "./Button.svelte"
-
-  let menu: DesktopStore["menu"]
-  desktopStore.subscribe((state) => {
-    menu = state.menu
-  })
 
   export let id: string
 
@@ -35,7 +29,7 @@
       </h2>
     </div>
     <div class="flex flex-col w-full items-start">
-      {#each menu.items as item, index (item.id)}
+      {#each $desktopStore.menu.items as item, index (item.id)}
         <Button
           variant="secondary"
           customCss="w-full"

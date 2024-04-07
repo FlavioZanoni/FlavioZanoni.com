@@ -4,7 +4,6 @@ export type DesktopStore = {
   }
   taskbar: {
     items: DefaultItem[]
-    openApps: OpenApp[]
   }
   menu: {
     items: DefaultItem[]

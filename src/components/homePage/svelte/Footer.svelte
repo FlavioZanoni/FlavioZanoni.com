@@ -1,6 +1,5 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
-  import type { DesktopStore } from "@lib/store/types"
   import Button from "./Button.svelte"
   import ChevronMenu from "./ChevronMenu.svelte"
   import Menu from "./Menu.svelte"
@@ -8,9 +7,6 @@
   let clock = "00:00:00"
   let showMenu = false
   let showChevronMenu = false
-
-  let taskbar: DesktopStore["taskbar"]
-  desktopStore.subscribe((state) => (taskbar = state.taskbar))
 
   const updateClock = () => {
     const now = new Date()
@@ -77,8 +73,8 @@
       variant="secondary"
       id="menuBtn">₪ Menu</Button
     >
-    {#if taskbar.items}
-      {#each taskbar.items as item}
+    {#if $desktopStore.taskbar.items}
+      {#each $desktopStore.taskbar.items as item}
         <Button
           id={item.id}
           on:click={() => {
@@ -88,6 +84,7 @@
                 isMinimized: false,
                 isMaximized: false,
                 isFocused: true,
+                isOpen: true,
                 uuid: crypto.randomUUID(),
               })
               return state
@@ -97,17 +94,18 @@
       {/each}
     {/if}
 
-    {#if taskbar.openApps}
-      {#each taskbar.openApps as item}
+    {#if $desktopStore.openApps}
+      {#each $desktopStore.openApps as item}
         <Button
           id={item.id}
           on:click={() => {
             desktopStore.update((state) => {
-              const itemIndex = state.openApps.findIndex(
+              const currentItem = state.openApps.findIndex(
                 (app) => app.uuid === item.uuid
               )
 
-              state.openApps[itemIndex].isMinimized = false
+              state.openApps[currentItem].isMinimized =
+                !state.openApps[currentItem].isMinimized
               return state
             })
           }}>{item.title}</Button
