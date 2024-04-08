@@ -85,6 +85,8 @@
   class="grid"
   style={`grid-template-columns: repeat(${gridColumns}, 1fr);
         grid-template-rows: repeat(${gridRows}, 1fr);
+        background-image: url(${$desktopStore.background.base64 ? `${$desktopStore.background.base64}` : `/backgrounds/${$desktopStore.background.fileName}`});
+        background-size: cover;
         `}
 >
   {#each grid as cell}

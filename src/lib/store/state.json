@@ -76,5 +76,9 @@
         "isOpen": false
       }
     ]
+  },
+  "background": {
+    "fileName": "xp.jpg",
+    "base64": ""
   }
 }

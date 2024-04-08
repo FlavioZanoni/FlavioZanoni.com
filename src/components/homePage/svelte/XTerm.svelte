@@ -43,7 +43,6 @@
       playBeep()
     })
     term.options.fontFamily = "IBM"
-    term.options.scrollback = 1000
 
     term.onData((data) => {
       switch (data) {
@@ -51,7 +50,12 @@
           const lastLine = term.buffer.active.getLine(
             term.buffer.active.cursorY
           )
-          termBackend.execCommand(lastLine.translateToString().trim())
+          const lastLineText = lastLine.translateToString().trim()
+          if (lastLineText === "") {
+            term.writeln("")
+            break
+          }
+          termBackend.execCommand(lastLineText)
           break
         case "\x7f":
           if (term.buffer.active.cursorX === 0) {

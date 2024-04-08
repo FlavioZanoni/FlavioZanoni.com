@@ -9,6 +9,10 @@ export type DesktopStore = {
     items: DefaultItem[]
   }
   openApps: OpenApp[]
+  background: {
+    fileName?: string
+    base64?: string
+  }
 }
 
 export type Position = {
