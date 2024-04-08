@@ -2,6 +2,12 @@
   import { desktopStore } from "@lib/store"
   import { openApp } from "@lib/store/desktopStoreUtils"
   import type { HomeGridItem } from "@lib/store/types"
+  import { onDestroy, onMount } from "svelte"
+  import ContextMenu from "./ContextMenu.svelte"
+
+  let showContextMenu = false
+  let contextMenuX = 0
+  let contextMenuY = 0
 
   const taskbarRect = document
     .getElementById("taskbar")
@@ -79,6 +85,29 @@
       return state
     })
   }
+
+  const handleContextMenu = (e: MouseEvent, cell: HomeGridItem) => {
+    e.preventDefault()
+    if (cell.type !== "empty") return
+
+    showContextMenu = true
+    contextMenuX = e.clientX
+    contextMenuY = e.clientY
+
+    console.log("context menu")
+  }
+
+  onMount(() => {
+    window.addEventListener("click", () => {
+      showContextMenu = false
+    })
+  })
+
+  onDestroy(() => {
+    window.removeEventListener("click", () => {
+      showContextMenu = false
+    })
+  })
 </script>
 
 <div
@@ -91,13 +120,13 @@
 >
   {#each grid as cell}
     <div
-      role={cell.title !== "" ? "button" : "cell"}
+      role={cell.type !== "empty" ? "button" : "cell"}
       class={`flex gap-2 items-center justify-center p-2 select-none`}
       style={`
           width: ${cellWidth}px;
           height: ${cellHeight}px;
           `}
-      draggable={cell.title !== ""}
+      draggable={cell.type !== "empty"}
       on:dragstart={(e) => {
         e.dataTransfer.setData("text/plain", JSON.stringify(cell))
       }}
@@ -106,9 +135,10 @@
         e.preventDefault()
       }}
       on:dblclick={() => {
-        if (cell.title === "") return
+        if (cell.type === "empty") return
         openApp(cell.id, "desktop")
       }}
+      on:contextmenu={(e) => handleContextMenu(e, cell)}
     >
       <div class="flex flex-col items-center justify-center">
         {#if cell.icon}
@@ -124,4 +154,8 @@
       </div>
     </div>
   {/each}
+
+  {#if showContextMenu}
+    <ContextMenu x={contextMenuX} y={contextMenuY} />
+  {/if}
 </div>

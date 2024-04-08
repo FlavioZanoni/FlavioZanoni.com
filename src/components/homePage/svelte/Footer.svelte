@@ -63,7 +63,7 @@
 
 <footer
   id="taskbar"
-  class="flex min-h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900"
+  class="flex min-h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900 select-none"
 >
   <section id="start" class="flex divide-x divide-slate-900 gap-1">
     <Button

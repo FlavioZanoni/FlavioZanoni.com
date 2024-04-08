@@ -1,5 +1,5 @@
 <script lang="ts">
-  import XTerm from "./XTerm.svelte"
+  import XTerm from "./applications/XTerm.svelte"
   export let appName: string
   export let uuid: string
 </script>
