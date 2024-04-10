@@ -1,6 +1,9 @@
 <script lang="ts">
   import { desktopStore } from "@lib/store"
-  import { openApp } from "@lib/store/desktopStoreUtils"
+  import {
+    openApp,
+    saveCurrentDesktopStore,
+  } from "@lib/store/desktopStoreUtils"
   import type { HomeGridItem } from "@lib/store/types"
   import { onDestroy, onMount } from "svelte"
   import ContextMenu from "./ContextMenu.svelte"
@@ -97,11 +100,48 @@
     console.log("context menu")
   }
 
+  function handleBeforeUnload(e) {
+    saveCurrentDesktopStore($desktopStore)
+    e.preventDefault()
+  }
+
+  let homeGrid: HTMLElement | null = null
   onMount(() => {
+    let store
+    try {
+      let storeLocal = localStorage.getItem("FZOSDesktopStore")
+      if (storeLocal) {
+        store = JSON.parse(storeLocal)
+      }
+    } catch (e) {
+      console.error("Error getting store from local storage", e)
+    }
+
+    if (store) {
+      desktopStore.set(store)
+    }
+
     window.addEventListener("click", () => {
       showContextMenu = false
     })
+
+    // handle background
+    homeGrid = document.getElementById("home-grid")
+    window.addEventListener("beforeunload", handleBeforeUnload)
   })
+
+  $: {
+    if (homeGrid) {
+      if ($desktopStore.background.base64) {
+        homeGrid.style.backgroundImage = `url(${$desktopStore.background.base64})`
+      } else if ($desktopStore.background.fileName) {
+        homeGrid.style.backgroundImage = `url(/backgrounds/${$desktopStore.background.fileName})`
+      } else if ($desktopStore.background.color) {
+        homeGrid.style.backgroundColor = $desktopStore.background.color
+        homeGrid.style.backgroundImage = null
+      }
+    }
+  }
 
   onDestroy(() => {
     window.removeEventListener("click", () => {
@@ -111,12 +151,10 @@
 </script>
 
 <div
-  class="grid"
+  id="home-grid"
+  class="grid bg-cover"
   style={`grid-template-columns: repeat(${gridColumns}, 1fr);
-        grid-template-rows: repeat(${gridRows}, 1fr);
-        background-image: url(${$desktopStore.background.base64 ? `${$desktopStore.background.base64}` : `/backgrounds/${$desktopStore.background.fileName}`});
-        background-size: cover;
-        `}
+          grid-template-rows: repeat(${gridRows}, 1fr);`}
 >
   {#each grid as cell}
     <div

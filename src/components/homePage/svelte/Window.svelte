@@ -6,18 +6,18 @@
     maximizeApp,
     minimizeApp,
   } from "@lib/store/desktopStoreUtils"
-  import type { ItemType } from "@lib/store/types"
+  import type { ItemType, Position, Size } from "@lib/store/types"
   import WindowContent from "./WindowContent.svelte"
 
   export let icon: string
   export let uuid: string
   export let isFocused: boolean
   export let isMaximized: boolean
-  export let link: string
+  export let link: string | undefined = undefined
   export let title: string
   export let type: ItemType
-  export let lastPos: { x: number; y: number } | undefined = undefined
-  export let lastSize: { width: number; height: number } | undefined = undefined
+  export let lastPos: Position | undefined = undefined
+  export let lastSize: Size | undefined = undefined
   export let appName: string | undefined = undefined
 
   let defaultWidth = 550

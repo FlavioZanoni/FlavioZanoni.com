@@ -18,8 +18,8 @@ export const exportCurrentDesktopStore = () => {
   URL.revokeObjectURL(url)
 }
 
-export const saveCurrentDesktopStore = () => {
-  localStorage.setItem("state", JSON.stringify(desktopStore))
+export const saveCurrentDesktopStore = (state: DesktopStore) => {
+  localStorage.setItem("FZOSDesktopStore", JSON.stringify(state))
 }
 
 export const openApp = (

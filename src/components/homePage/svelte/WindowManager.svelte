@@ -3,8 +3,8 @@
   import Window from "./Window.svelte"
 </script>
 
-{#each $desktopStore.openApps as app (app.uuid)}
-  {#if app.isOpen && !app.isMinimized}
+{#each $desktopStore.openApps as { isOpen, ...app } (app.uuid)}
+  {#if isOpen && !app.isMinimized}
     <Window {...app} />
   {/if}
 {/each}

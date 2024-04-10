@@ -12,6 +12,11 @@ export type DesktopStore = {
   background: {
     fileName?: string
     base64?: string
+    color?: string
+    userImages: {
+      fileName: string
+      base64: string
+    }[]
   }
 }
 
