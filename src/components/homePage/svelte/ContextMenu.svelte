@@ -1,23 +1,18 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
+  import { osStore } from "@lib/store"
   import Button from "./Button.svelte"
 
   export let x: number = 0
   export let y: number = 0
 
   const handleBackground = () => {
-    desktopStore.update((state) => {
-      state.openApps.push({
-        id: "contextMenu",
+    osStore.update((state) => {
+      state.enviroment.openApps.push({
+        iNode: "4",
         uuid: crypto.randomUUID().toString(),
-        title: "Background",
         isFocused: true,
         isMinimized: false,
         isMaximized: false,
-        isOpen: true,
-        icon: "document.png", //TODO: create default icon
-        type: "app",
-        appName: "background",
       })
 
       return state

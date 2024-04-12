@@ -1,16 +1,17 @@
 ---
 import Footer from "@homePage/svelte/Footer.svelte"
 import Home from "@homePage/svelte/Home.svelte"
-import WindowManager from "@homePage/svelte/WindowManager.svelte"
+import WindowManager from "@homePage/svelte/window/WindowManager.svelte"
 import "@xterm/xterm/css/xterm.css"
 import Layout from "../layouts/Layout.astro"
 ---
 
 <script>
-  import { desktopStore } from "@lib/store"
-  if (localStorage.getItem("desktopStore")) {
-    desktopStore.update(JSON.parse(localStorage.getItem("desktopStore")))
-  } // this will be part of a loading sequence
+  /*   import { osStore } from "@lib/store"
+
+  if (localStorage.getItem("FZOSStore")) {
+    osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
+  } // this will be part of a loading sequence */
 </script>
 
 <Layout title="Welcome to Astro.">
@@ -21,4 +22,3 @@ import Layout from "../layouts/Layout.astro"
 
   <WindowManager client:only />
 </Layout>
-

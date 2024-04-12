@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
+  import { osStore } from "@lib/store"
+  import type { Position, Size } from "@lib/store/types"
   import {
     closeApp,
     focusApp,
     maximizeApp,
     minimizeApp,
-  } from "@lib/store/desktopStoreUtils"
-  import type { ItemType, Position, Size } from "@lib/store/types"
+  } from "@lib/utils/enviromentUtils"
+  import { getItemByINode } from "@lib/utils/fileSystemUtils"
   import WindowContent from "./WindowContent.svelte"
 
-  export let icon: string
+  export let iNode: string
   export let uuid: string
   export let isFocused: boolean
   export let isMaximized: boolean
-  export let link: string | undefined = undefined
-  export let title: string
-  export let type: ItemType
   export let lastPos: Position | undefined = undefined
   export let lastSize: Size | undefined = undefined
-  export let appName: string | undefined = undefined
+
+  const item = getItemByINode(iNode)
+  const isApp = "type" in item
 
   let defaultWidth = 550
   let defaultHeight = 400
@@ -77,12 +77,14 @@
 
   function handleMouseup() {
     // Update the last position and size of the app
-    desktopStore.update((state) => {
-      const thisApp = state.openApps.find((app) => app.uuid === uuid)
+    osStore.update((state) => {
+      let openApps = state.enviroment.openApps
+
+      const thisApp = openApps.find((app) => app.uuid === uuid)
       thisApp.lastSize = { width, height }
       thisApp.lastPos = { x, y }
 
-      state.openApps = state.openApps.map((app) => {
+      openApps = openApps.map((app) => {
         if (app.uuid === uuid) {
           return thisApp
         }
@@ -117,12 +119,13 @@
   }
 
   function handleMouseupResize() {
-    desktopStore.update((state) => {
-      const thisApp = state.openApps.find((app) => app.uuid === uuid)
+    osStore.update((state) => {
+      let openApps = state.enviroment.openApps
+      const thisApp = openApps.find((app) => app.uuid === uuid)
       thisApp.lastPos = { x, y }
       thisApp.lastSize = { width: startWidth + dx, height: startHeight + dy }
 
-      state.openApps = state.openApps.map((app) => {
+      openApps = openApps.map((app) => {
         if (app.uuid === uuid) {
           return thisApp
         }
@@ -162,11 +165,11 @@
     >
       <div class="flex gap-1 items-center px-1">
         <img
-          src={`icons/${icon}`}
-          alt={title}
+          src={`icons/${isApp ? item.icon : "directory.png"}`}
+          alt={item.name}
           class="w-4 h-4 border border-slate-500 p-[1px]"
         />
-        <h1 class="select-none">{title}</h1>
+        <h1 class="select-none">{item.name}</h1>
       </div>
       <div class="flex gap-2 items-center px-1 select-none">
         <button
@@ -209,13 +212,13 @@
     </div>
 
     <div class="w-full bg-white" style="height: calc({height}px - 40px);">
-      {#if type === "app"}
-        <WindowContent {uuid} {appName} />
-      {:else}
-        <div>
-          <iframe {title} class="w-full h-full" src={link} frameborder="0" />
-        </div>
-      {/if}
+      <WindowContent
+        {uuid}
+        {isApp}
+        appName={isApp && item.appName}
+        link={isApp && item.link}
+        title={item.name}
+      />
     </div>
 
     <div class="w-full h-5 flex justify-end bg-slate-400">

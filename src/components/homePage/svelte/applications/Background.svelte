@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
+  import { osStore } from "@lib/store"
 
   const handleColor = (color: string) => {
-    console.log("Color clicked", color)
-
-    desktopStore.update((state) => {
-      state.background.color = color
-      state.background.base64 = null
-      state.background.fileName = null
+    osStore.update((state) => {
+      let background = state.enviroment.background
+      background.color = color
+      background.base64 = null
+      background.fileName = null
       return state
     })
   }
 
   const handleDefaultImages = (fileName: string) => {
-    desktopStore.update((state) => {
-      state.background.color = null
-      state.background.base64 = null
-      state.background.fileName = fileName
+    osStore.update((state) => {
+      let background = state.enviroment.background
+      background.color = null
+      background.base64 = null
+      background.fileName = fileName
       return state
     })
   }
@@ -29,12 +29,13 @@
     reader.onload = (e) => {
       const base64 = e.target.result as string
 
-      desktopStore.update((state) => {
-        state.background.color = null
-        state.background.base64 = base64
-        state.background.fileName = null
+      osStore.update((state) => {
+        let background = state.enviroment.background
+        background.color = null
+        background.base64 = base64
+        background.fileName = null
 
-        state.background.userImages.push({
+        background.userImages.push({
           base64,
           fileName: file.name,
         })
@@ -46,10 +47,11 @@
   }
 
   const handleInMemoryImage = (base64: string) => {
-    desktopStore.update((state) => {
-      state.background.color = null
-      state.background.base64 = base64
-      state.background.fileName = null
+    osStore.update((state) => {
+      let background = state.enviroment.background
+      background.color = null
+      background.base64 = base64
+      background.fileName = null
       return state
     })
   }
@@ -155,11 +157,11 @@
     </div>
 
     <div>
-      {#if $desktopStore.background.userImages.length > 0}
+      {#if $osStore.enviroment.background.userImages.length > 0}
         <div class="flex flex-col gap-2">
           <h2 class="text-xl font-medium">Your images:</h2>
           <div class="flex flex-wrap gap-4">
-            {#each $desktopStore.background.userImages as image}
+            {#each $osStore.enviroment.background.userImages as image}
               <button on:click={() => handleInMemoryImage(image.base64)}>
                 <img
                   src={image.base64}

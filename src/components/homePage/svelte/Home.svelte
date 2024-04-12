@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
+  import { osStore } from "@lib/store"
+  import type { HomeGridItem, OSStore } from "@lib/store/types"
+  import { openApp } from "@lib/utils/enviromentUtils"
   import {
-    openApp,
-    saveCurrentDesktopStore,
-  } from "@lib/store/desktopStoreUtils"
-  import type { HomeGridItem } from "@lib/store/types"
+    getItemsInArrayByINode,
+    type GetItemsInArrayByINode,
+  } from "@lib/utils/fileSystemUtils"
+  import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
   import ContextMenu from "./ContextMenu.svelte"
 
@@ -16,8 +18,8 @@
     .getElementById("taskbar")
     ?.getBoundingClientRect()
 
-  const gridColumns = 16
-  const gridRows = 9
+  let gridColumns = 16
+  let gridRows = 9
   const cellWidth = window.innerWidth / gridColumns
   const cellHeight =
     (window.innerHeight - (taskbarRect?.height || 40)) / gridRows
@@ -30,43 +32,44 @@
       const y = Math.floor(i / gridColumns)
 
       return {
-        id: "-1",
+        iNode: null,
         pos: { x, y },
-        icon: "",
-        title: "",
-        link: "",
         type: "empty",
-        isOpen: false,
-        isMinimized: false,
-        isMaximized: false,
       }
     }
   )
 
   let grid = [] as HomeGridItem[]
+  let itemsByINode: GetItemsInArrayByINode
   $: {
     // populate grid with state
     grid = [
       ...gridItems.map((cell) => {
-        const cellState = $desktopStore.homeGrid.items.find(
+        const cellState = $osStore.enviroment.homeGrid.items.find(
           (s) => s.pos.x === cell.pos.x && s.pos.y === cell.pos.y
         )
 
         return cellState ? cellState : cell
       }),
     ] as HomeGridItem[]
+
+    itemsByINode = getItemsInArrayByINode(grid.filter((cell) => cell.iNode))
   }
 
   const onDrop = (e: DragEvent, current: HomeGridItem) => {
     e.preventDefault()
-    const data = JSON.parse(e.dataTransfer.getData("text/plain"))
+    const data = JSON.parse(
+      e.dataTransfer.getData("text/plain")
+    ) as HomeGridItem
 
-    desktopStore.update((state) => {
-      const itemToUpdate = state.homeGrid.items.find(
-        (item) => item.id === data.id
+    osStore.update((state) => {
+      const homeGrid = state.enviroment.homeGrid
+
+      const itemToUpdate = homeGrid.items.find(
+        (item) => item.iNode === data.iNode
       )
-      const itemToMove = state.homeGrid.items.find(
-        (item) => item.id === current.id
+      const itemToMove = homeGrid.items.find(
+        (item) => item.iNode === current.iNode
       )
 
       if (itemToUpdate) {
@@ -76,7 +79,7 @@
         itemToMove.pos = data.pos
       }
 
-      state.homeGrid.items = state.homeGrid.items.map((item) => {
+      homeGrid.items = homeGrid.items.map((item) => {
         if (item === itemToUpdate) {
           return itemToUpdate
         }
@@ -96,20 +99,18 @@
     showContextMenu = true
     contextMenuX = e.clientX
     contextMenuY = e.clientY
-
-    console.log("context menu")
   }
 
-  function handleBeforeUnload(e) {
-    saveCurrentDesktopStore($desktopStore)
+  function handleBeforeUnload(e: MouseEvent) {
+    saveCurrentOSStore($osStore)
     e.preventDefault()
   }
 
   let homeGrid: HTMLElement | null = null
   onMount(() => {
-    let store
+    let store: OSStore | null = null
     try {
-      let storeLocal = localStorage.getItem("FZOSDesktopStore")
+      let storeLocal = localStorage.getItem("FZOSStore")
       if (storeLocal) {
         store = JSON.parse(storeLocal)
       }
@@ -118,26 +119,26 @@
     }
 
     if (store) {
-      desktopStore.set(store)
+      osStore.set(store)
     }
 
     window.addEventListener("click", () => {
       showContextMenu = false
     })
 
-    // handle background
     homeGrid = document.getElementById("home-grid")
-    window.addEventListener("beforeunload", handleBeforeUnload)
+    //window.addEventListener("beforeunload", handleBeforeUnload)
   })
 
   $: {
     if (homeGrid) {
-      if ($desktopStore.background.base64) {
-        homeGrid.style.backgroundImage = `url(${$desktopStore.background.base64})`
-      } else if ($desktopStore.background.fileName) {
-        homeGrid.style.backgroundImage = `url(/backgrounds/${$desktopStore.background.fileName})`
-      } else if ($desktopStore.background.color) {
-        homeGrid.style.backgroundColor = $desktopStore.background.color
+      const background = $osStore.enviroment.background
+      if (background.base64) {
+        homeGrid.style.backgroundImage = `url(${background.base64})`
+      } else if (background.fileName) {
+        homeGrid.style.backgroundImage = `url(backgrounds/${background.fileName})`
+      } else if (background.color) {
+        homeGrid.style.backgroundColor = background.color
         homeGrid.style.backgroundImage = null
       }
     }
@@ -157,38 +158,36 @@
           grid-template-rows: repeat(${gridRows}, 1fr);`}
 >
   {#each grid as cell}
+    {@const currentItem = itemsByINode[cell.iNode]}
+    {@const isFile = currentItem && "icon" in currentItem}
     <div
       role={cell.type !== "empty" ? "button" : "cell"}
       class={`flex gap-2 items-center justify-center p-2 select-none`}
-      style={`
-          width: ${cellWidth}px;
-          height: ${cellHeight}px;
-          `}
+      style={`width: ${cellWidth}px; height: ${cellHeight}px;`}
       draggable={cell.type !== "empty"}
+      on:dblclick={() => {
+        if (cell.type === "empty") return
+        openApp(cell.iNode)
+      }}
       on:dragstart={(e) => {
         e.dataTransfer.setData("text/plain", JSON.stringify(cell))
       }}
-      on:drop={(e) => onDrop(e, cell)}
       on:dragover={(e) => {
         e.preventDefault()
       }}
-      on:dblclick={() => {
-        if (cell.type === "empty") return
-        openApp(cell.id, "desktop")
-      }}
+      on:drop={(e) => onDrop(e, cell)}
       on:contextmenu={(e) => handleContextMenu(e, cell)}
     >
       <div class="flex flex-col items-center justify-center">
-        {#if cell.icon}
+        {#if cell.type !== "empty"}
           <img
             class="w-[80%]"
             draggable="false"
-            src={`/icons/${cell.icon}`}
-            alt={cell.title}
+            src={`/icons/${isFile ? currentItem.icon : "directory.png"}`}
+            alt={currentItem.name}
           />
+          <p class="truncate">{currentItem.name || "‎"}</p>
         {/if}
-
-        <p class="truncate">{cell.title || "‎"}</p>
       </div>
     </div>
   {/each}

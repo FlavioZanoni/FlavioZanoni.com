@@ -1,9 +1,9 @@
 import jsonState from "@lib/store/state.json"
 import { writable } from "svelte/store"
-import type { DesktopStore } from "./types"
+import type { OSStore } from "./types"
 
-export const desktopStore = writable<DesktopStore>(jsonState as DesktopStore)
+export const osStore = writable<OSStore>(jsonState as unknown as OSStore)
 
-desktopStore.subscribe((value) => {
+osStore.subscribe((value) => {
   console.log(value)
 })

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
-  import { openApp } from "@lib/store/desktopStoreUtils"
+  import { osStore } from "@lib/store"
+  import { openApp } from "@lib/utils/enviromentUtils"
+  import { getItemsInArrayByINode } from "@lib/utils/fileSystemUtils"
   import { onMount } from "svelte"
   import Button from "./Button.svelte"
 
@@ -8,6 +9,8 @@
 
   let left = "0px"
   let bottom = "0px"
+
+  const itemsByINode = getItemsInArrayByINode($osStore.enviroment.menu.items)
 
   onMount(() => {
     const menuBtn = document.getElementById("menuBtn")
@@ -29,16 +32,17 @@
       </h2>
     </div>
     <div class="flex flex-col w-full items-start">
-      {#each $desktopStore.menu.items as item, index (item.id)}
+      {#each $osStore.enviroment.menu.items as item, index (item.iNode)}
+        {@const currentItem = itemsByINode[item.iNode]}
         <Button
           variant="secondary"
           customCss="w-full"
           id={index.toString()}
           on:click={() => {
-            openApp(item.id, "menu")
+            openApp(item.iNode)
           }}
         >
-          {item.title}
+          {currentItem.name}
         </Button>
       {/each}
     </div>

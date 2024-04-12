@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { desktopStore } from "@lib/store"
+  import { osStore } from "@lib/store"
+  import {
+    getItemsInArrayByINode,
+    type GetItemsInArrayByINode,
+  } from "@lib/utils/fileSystemUtils"
   import Button from "./Button.svelte"
   import ChevronMenu from "./ChevronMenu.svelte"
   import Menu from "./Menu.svelte"
@@ -15,7 +19,6 @@
     const seconds = String(now.getSeconds()).padStart(2, "0")
     clock = `${hours}:${minutes}:${seconds}`
   }
-
   updateClock()
   setInterval(updateClock, 1000)
 
@@ -43,6 +46,14 @@
 
   let hasMenuListener = false
   let hasChevronListener = false
+
+  let taskBarItemsByINode: GetItemsInArrayByINode
+  let openAppsByINode: GetItemsInArrayByINode
+  $: {
+    const env = $osStore.enviroment
+    openAppsByINode = getItemsInArrayByINode(env.openApps)
+    taskBarItemsByINode = getItemsInArrayByINode(env.taskbar.items)
+  }
 
   $: {
     if (showMenu) {
@@ -73,42 +84,43 @@
       variant="secondary"
       id="menuBtn">₪ Menu</Button
     >
-    {#if $desktopStore.taskbar.items}
-      {#each $desktopStore.taskbar.items as item}
+    {#if $osStore.enviroment.taskbar.items}
+      {#each $osStore.enviroment.taskbar.items as item (item.iNode)}
+        {@const currentItem = taskBarItemsByINode[item.iNode]}
         <Button
-          id={item.id}
+          id={item.iNode}
           on:click={() => {
-            desktopStore.update((state) => {
-              state.openApps.push({
-                ...item,
+            osStore.update((state) => {
+              state.enviroment.openApps.push({
+                iNode: item.iNode,
                 isMinimized: false,
                 isMaximized: false,
                 isFocused: true,
-                isOpen: true,
                 uuid: crypto.randomUUID(),
               })
               return state
             })
-          }}>{item.title}</Button
+          }}>{currentItem.name}</Button
         >
       {/each}
     {/if}
 
-    {#if $desktopStore.openApps}
-      {#each $desktopStore.openApps as item}
+    {#if $osStore.enviroment.openApps}
+      {#each $osStore.enviroment.openApps as item}
+        {@const currentItem = openAppsByINode[item.iNode]}
         <Button
-          id={item.id}
+          id={item.uuid}
           on:click={() => {
-            desktopStore.update((state) => {
-              const currentItem = state.openApps.findIndex(
+            osStore.update((state) => {
+              const currentItem = state.enviroment.openApps.findIndex(
                 (app) => app.uuid === item.uuid
               )
 
-              state.openApps[currentItem].isMinimized =
-                !state.openApps[currentItem].isMinimized
+              state.enviroment.openApps[currentItem].isMinimized =
+                !state.enviroment.openApps[currentItem].isMinimized
               return state
             })
-          }}>{item.title}</Button
+          }}>{currentItem.name}</Button
         >
       {/each}
     {/if}

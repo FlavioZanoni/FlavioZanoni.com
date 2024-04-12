@@ -1,86 +1,131 @@
 {
-  "homeGrid": {
-    "items": [
-      {
-        "id": "trash",
-        "pos": {
-          "x": 0,
-          "y": 0
+  "enviroment": {
+    "homeGrid": {
+      "items": [
+        {
+          "iNode": "5",
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
         },
-        "icon": "trash.png",
-        "title": "Recycle bin",
-        "type": "folder",
-        "link": "/trash",
-        "isOpen": false
-      },
-      {
-        "id": "2",
-        "pos": {
-          "x": 0,
-          "y": 1
-        },
-        "icon": "document.png",
-        "title": "item01.txt",
-        "type": "file",
-        "link": "/hello",
-        "isOpen": false
-      },
-      {
-        "id": "4",
-        "pos": {
-          "x": 0,
-          "y": 2
-        },
-        "icon": "browser.png",
-        "title": "Web Browser",
-        "type": "app",
-        "link": "https://duckduckgo.com/",
-        "isOpen": false
-      },
-      {
-        "id": "term",
-        "pos": {
-          "x": 0,
-          "y": 3
-        },
-        "icon": "term.png",
-        "title": "Terminal",
-        "type": "app",
-        "appName": "term",
-        "isOpen": false
+        {
+          "iNode": "3",
+          "pos": {
+            "x": 0,
+            "y": 1
+          }
+        }
+      ],
+      "size": {
+        "rows": 9,
+        "cols": 16
       }
-    ]
-  },
-  "taskbar": {
-    "items": [
-      {
-        "id": "3",
-        "icon": "",
-        "title": "item1",
-        "type": "app",
-        "link": "/",
-        "isOpen": false
-      }
-    ],
+    },
+    "taskbar": {
+      "items": [
+        {
+          "iNode": "3"
+        }
+      ]
+    },
+    "menu": {
+      "items": [
+        {
+          "iNode": "3"
+        }
+      ]
+    },
+    "background": {
+      "color": "",
+      "fileName": "Bliss.webp",
+      "base64": "",
+      "userImages": []
+    },
     "openApps": []
   },
-  "openApps": [],
-  "menu": {
-    "items": [
-      {
-        "id": "4",
-        "title": "item1",
-        "icon": "",
-        "link": "/hello",
-        "type": "app",
-        "isOpen": false
+
+  "fileSystem": {
+    "iNodes": {
+      "1": {
+        "type": "directory",
+        "blocks": [
+          {
+            "name": "Desktop",
+            "iNode": "2"
+          }
+        ]
+      },
+      "2": {
+        "type": "directory",
+        "blocks": [
+          {
+            "name": "item01.txt",
+            "iNode": "3"
+          },
+          {
+            "name": "term.txt",
+            "iNode": "5"
+          }
+        ]
+      },
+      "3": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "files",
+            "name": "item1"
+          }
+        ]
+      },
+      "4": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "background"
+          }
+        ]
+      },
+      "5": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "term"
+          }
+        ]
       }
-    ]
-  },
-  "background": {
-    "color": "",
-    "fileName": "Bliss.wepb",
-    "base64": "",
-    "userImages": []
+    },
+    "disk": {
+      "apps": {
+        "term": {
+          "name": "Terminal",
+          "icon": "term.png",
+          "type": "app",
+          "appName": "term"
+        },
+        "background": {
+          "name": "Background",
+          "icon": "document.png",
+          "type": "app",
+          "appName": "background"
+        },
+        "trash": {
+          "name": "Background",
+          "icon": "document.png",
+          "type": "app",
+          "appName": "background"
+        }
+      },
+      "files": {
+        "item1": {
+          "icon": "document.png",
+          "name": "item01.txt",
+          "type": "file",
+          "link": "/hello"
+        }
+      }
+    }
   }
 }
