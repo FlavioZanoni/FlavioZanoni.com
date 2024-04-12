@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Term } from "@lib/term"
+  import { Term } from "@lib/terminal"
   import { FitAddon } from "@xterm/addon-fit"
   import { Terminal } from "@xterm/xterm"
   import { onDestroy, onMount } from "svelte"

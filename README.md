@@ -1,54 +1,25 @@
-# Astro Starter Kit: Basics
+# FZOS
 
-```sh
-npm create astro@latest -- --template basics
+## Motivation
+
+Need a website to be my resume and portifolio, allways wanted to make a game portifolio, but it does not match with all the tecnologies that I work on, so why not make a old OS like website with folders and files that link to my projects and resume, as well as games if I want to make any
+
+## Disclaimer
+
+```plaintext
+This project is being developed only for fun, I, generally, in the first iteration of the feature, will not be using the best practices nor the most optimized code, but i will be refactoring the code in the next iterations as I see fit, every feature can change at anytime and change any other parts of the code.
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Description
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- This project is an "operation system", designed to host my projects, resume, and a playground for me to test new technologies and ideas.
+- The base of the project is made with [Astro](https://astro.build) witch will permit me try out any framework that i want to test, like React, Preact, Svelte, etc.
+- The core "OS" part of the project is made with [Svelte](https://svelte.dev) just because i wanted to learn it, and i think it's a great framework.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## Forks and PRs
 
-## 🚀 Project Structure
+- I will generally do not accept PRs, but if you want to fork it, feel free to do so.
 
-Inside of your Astro project, you'll see the following folders and files:
+## License
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- This project is under the MIT License, feel free to use it as you want.

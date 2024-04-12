@@ -1,5 +1,3 @@
-Motive: Need a website to be my resume and portifolio, allways wanted to make a game portifolio, but it does not match with all the tecnologies that I work on, so why not make a old OS like website with folders and files that link to my projects and resume, as well as games if I want to make any
-
 TODO:
 
 - homescreen:
@@ -10,8 +8,8 @@ TODO:
 - virtual state:
 
   - [ x ] the virtual state should have the default state and can be modified on the fly by the user (he can make watherver he wants, (move and delete files))
-  - the virtual state should be saved in the local storage
-  - the virtual state should be loaded from the local storage
+  - [ x ] the virtual state should be saved in the local storage
+  - [ x ] the virtual state should be loaded from the local storage
 
 - windows:
 
