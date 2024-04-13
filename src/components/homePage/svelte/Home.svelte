@@ -180,13 +180,18 @@
     >
       <div class="flex flex-col items-center justify-center">
         {#if cell.type !== "empty"}
+          {@const name = isFile
+            ? currentItem.name + (currentItem.ext ? `.${currentItem.ext}` : "")
+            : currentItem.name}
           <img
             class="w-[80%]"
             draggable="false"
             src={`/icons/${isFile ? currentItem.icon : "directory.png"}`}
             alt={currentItem.name}
           />
-          <p class="truncate">{currentItem.name || "‎"}</p>
+          <p class="truncate">
+            {name || "‎"}
+          </p>
         {/if}
       </div>
     </div>

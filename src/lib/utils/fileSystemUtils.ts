@@ -11,6 +11,11 @@ import type {
 function isFileBlock(block: FileBlock | DirectoryBlock): block is FileBlock {
   return "location" in block
 }
+function isDirectoryBlockArray(
+  blocks: FileBlock[] | DirectoryBlock[]
+): blocks is DirectoryBlock[] {
+  return blocks.length === 0 || "iNode" in blocks[0]
+}
 
 export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
   let disk: Disk
@@ -49,4 +54,45 @@ export const getItemsInArrayByINode = (
   })
 
   return items
+}
+
+export const createFile = (name: string, parent: string) => {
+  osStore.update((state) => {
+    const { disk, iNodes } = state.fileSystem
+    const iNode = Object.keys(iNodes).length + 1
+    const [fileName, ext] = name.split(".")
+
+    const parentINode = iNodes[parent]
+    if (!parentINode) {
+      throw new Error("Parent not found")
+    }
+    if (isDirectoryBlockArray(parentINode.blocks)) {
+      parentINode.blocks.push({
+        name,
+        iNode: iNode.toString(),
+      })
+    } else {
+      throw new Error("Parent is not a directory")
+    }
+
+    iNodes[iNode] = {
+      type: "file",
+      blocks: [
+        {
+          name,
+          location: "files",
+        },
+      ],
+    }
+
+    disk.files[fileName] = {
+      name: fileName,
+      type: "file",
+      content: "",
+      icon: "document.png",
+      ext,
+    }
+
+    return state
+  })
 }

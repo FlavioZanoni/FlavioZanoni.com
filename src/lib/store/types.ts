@@ -36,18 +36,20 @@ export interface FileSystem {
 
 export interface INode {
   [key: string]: {
-    type: "directory" | "file"
+    type: ItemType
     blocks: FileBlock[] | DirectoryBlock[]
   }
 }
 
-export type FileBlock = {
-  location: string
+type Block = {
   name: string
 }
 
-export type DirectoryBlock = {
-  name: string
+export interface FileBlock extends Block {
+  location: "apps" | "files"
+}
+
+export interface DirectoryBlock extends Block {
   iNode: string
 }
 
@@ -80,8 +82,10 @@ export interface DefaultItem {
   icon: string
   name: string
   type: ItemType
+  ext?: string
   link?: string
   appName?: string
+  content?: string
 }
 
 export interface OpenApp {

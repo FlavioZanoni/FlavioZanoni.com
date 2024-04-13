@@ -44,7 +44,6 @@
     },
     "openApps": []
   },
-
   "fileSystem": {
     "iNodes": {
       "1": {
@@ -112,18 +111,19 @@
           "appName": "background"
         },
         "trash": {
-          "name": "Background",
-          "icon": "document.png",
+          "name": "Trash",
+          "icon": "trash.png",
           "type": "app",
-          "appName": "background"
+          "appName": "trash"
         }
       },
       "files": {
         "item1": {
           "icon": "document.png",
-          "name": "item01.txt",
+          "name": "item01",
           "type": "file",
-          "link": "/hello"
+          "link": "/hello",
+          "ext": "txt"
         }
       }
     }
