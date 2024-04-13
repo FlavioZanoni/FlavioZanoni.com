@@ -5,6 +5,7 @@
   import { onDestroy, onMount } from "svelte"
 
   export let uuid: string
+  export let currentDir: string | undefined = "/"
 
   let term = new Terminal()
   const termBackend = new Term(term)
@@ -14,62 +15,11 @@
     fitAddon.fit()
   })
 
-  function playBeep() {
-    const context = new AudioContext()
-    const oscillator = context.createOscillator()
-    const gainNode = context.createGain()
-
-    oscillator.connect(gainNode)
-    gainNode.connect(context.destination)
-
-    gainNode.gain.value = 0.5
-    oscillator.frequency.value = 510
-    oscillator.type = "square"
-
-    oscillator.start(context.currentTime)
-    oscillator.stop(context.currentTime + 0.1)
-  }
-
   onMount(() => {
-    const termDiv = document.getElementById("terminal")
-    term.open(termDiv)
-
-    term.writeln("Welcome to the terminal!")
-    term.writeln("Type 'help' to get started.")
-
+    termBackend.setup(currentDir)
     term.loadAddon(fitAddon)
-    term.options.cursorBlink = true
-    term.onBell(() => {
-      playBeep()
-    })
-    term.options.fontFamily = "IBM"
-
-    term.onData((data) => {
-      switch (data) {
-        case "\r":
-          const lastLine = term.buffer.active.getLine(
-            term.buffer.active.cursorY
-          )
-          const lastLineText = lastLine.translateToString().trim()
-          if (lastLineText === "") {
-            term.writeln("")
-            break
-          }
-          termBackend.execCommand(lastLineText)
-          break
-        case "\x7f":
-          if (term.buffer.active.cursorX === 0) {
-            term.write("\x07") // trigger bell
-            break
-          }
-          term.write("\b \b")
-          break
-        default:
-          term.write(data)
-      }
-    })
-
     fitAddon.fit()
+
     observer.observe(document.getElementById(`window-${uuid}`))
   })
 

@@ -18,6 +18,7 @@ export interface Enviroment {
     items: EnviromentItem[]
   }
   openApps: OpenApp[]
+  PWD: string
   background: {
     fileName?: string
     base64?: string

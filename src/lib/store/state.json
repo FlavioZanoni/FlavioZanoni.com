@@ -42,6 +42,7 @@
       "base64": "",
       "userImages": []
     },
+    "PWD": "root",
     "openApps": []
   },
   "fileSystem": {
@@ -50,7 +51,7 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "Desktop",
+            "name": "desktop",
             "iNode": "2"
           }
         ]
