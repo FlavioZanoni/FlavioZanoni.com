@@ -83,6 +83,8 @@ const iNodeLookup = (dir: string) => {
       .split("/")
       .filter((dirName) => dirName !== "root")
 
+    console.log("path", path)
+
     path.forEach((dirName) => {
       if (!dirName) return
       if (isDirectoryBlockArray(currentINode.blocks)) {
@@ -188,39 +190,50 @@ export const cd = (dir: string): string => {
     throw new Error("missing directory operand")
   }
 
-  const currentPwd = pwd()
+  let currentPwd = pwd()
   const parent = iNodeLookup(currentPwd)
   let newPwd: string
 
-  if (currentPwd === "root" && dir === "..") {
-    return "root"
-  }
-
   osStore.update((state) => {
     const { iNodes } = state.fileSystem
-    const parentINode = iNodes[parent]
+    let parentINode = iNodes[parent]
     if (!parentINode) {
       throw new Error("parent not found")
     }
-    if (isDirectoryBlockArray(parentINode.blocks)) {
-      if (dir === "..") {
-        const path = currentPwd.split("/")
-        path.pop()
-        newPwd = path.join("/")
-        state.enviroment.PWD = newPwd
-        return state
-      }
 
-      const dirBlock = parentINode.blocks.find((block) => block.name === dir)
-      if (!dirBlock) {
-        throw new Error("directory not found")
-      }
-      newPwd = `${currentPwd}/${dir}`
-      state.enviroment.PWD = newPwd
+    if (isDirectoryBlockArray(parentINode.blocks)) {
+      const splitDir = dir.split("/")
+
+      splitDir.forEach((dir) => {
+        if (!dir) return
+        if (dir === ".." && currentPwd === "root") {
+          return
+        }
+        if (dir === "..") {
+          const path = currentPwd.split("/")
+          path.pop()
+          newPwd = path.join("/")
+          state.enviroment.PWD = newPwd
+          currentPwd = newPwd
+          return
+        }
+
+        const dirBlock = parentINode.blocks.find((block) => block.name === dir)
+        if (!dirBlock) {
+          throw new Error("directory not found")
+        }
+        if (isFileBlock(dirBlock)) {
+          throw new Error("not a directory")
+        } else {
+          parentINode = iNodes[dirBlock.iNode]
+        }
+        newPwd = `${currentPwd}/${dir}`
+        state.enviroment.PWD = newPwd
+        currentPwd = newPwd
+      })
     } else {
       throw new Error("parent is not a directory")
     }
-
     return state
   })
   return newPwd
