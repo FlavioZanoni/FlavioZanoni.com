@@ -87,24 +87,36 @@ export class Term {
       case "pwd":
         const curr = pwd()
         return this.term.writeln(curr)
+      case "ls":
+        let files = ls()
+        return this.term.writeln(files.join(" "))
       case "touch":
-        touch(args[0]) // 1 to create in root, need to get the current iNode directory
+        try {
+          touch(args[0])
+        } catch (e) {
+          return this.term.writeln(`touch: ${e.message || "Error"}`)
+        }
         return
       case "mkdir":
-        mkdir(args[0])
+        try {
+          mkdir(args[0])
+        } catch (e) {
+          return this.term.writeln(`mkdir: ${e.message || "Error"}`)
+        }
         return
-      case "ls":
-        let files = ls() // 1 to get the root directory
-        return this.term.writeln(files.join(" "))
       case "cd":
-        cd(args[0])
+        try {
+          cd(args[0])
+        } catch (e) {
+          return this.term.writeln(`cd: ${e.message || "Error"}`)
+        }
         return
       case "help":
         return this.term.writeln(
           `Available commands: ${availabeleCommands.join(", ")}`
         )
       default:
-        return this.term.writeln(`Command not found: ${command}`)
+        return this.term.writeln(`Command not found: ${command}, try 'help'`)
     }
   }
 }

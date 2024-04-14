@@ -102,6 +102,10 @@ const iNodeLookup = (dir: string) => {
 }
 
 export const touch = (name: string) => {
+  if (!name) {
+    throw new Error("missing file operand")
+  }
+
   const dir = pwd()
   const parent = iNodeLookup(dir)
 
@@ -112,7 +116,7 @@ export const touch = (name: string) => {
 
     const parentINode = iNodes[parent]
     if (!parentINode) {
-      throw new Error("Parent not found")
+      throw new Error("parent not found")
     }
     if (isDirectoryBlockArray(parentINode.blocks)) {
       parentINode.blocks.push({
@@ -120,7 +124,7 @@ export const touch = (name: string) => {
         iNode: iNode.toString(),
       })
     } else {
-      throw new Error("Parent is not a directory")
+      throw new Error("parent is not a directory")
     }
 
     iNodes[iNode] = {
@@ -146,6 +150,10 @@ export const touch = (name: string) => {
 }
 
 export const mkdir = (name: string) => {
+  if (!name) {
+    throw new Error("missing file operand")
+  }
+
   const dir = pwd()
   const parent = iNodeLookup(dir)
 
@@ -155,7 +163,7 @@ export const mkdir = (name: string) => {
 
     const parentINode = iNodes[parent]
     if (!parentINode) {
-      throw new Error("Parent not found")
+      throw new Error("parent not found")
     }
     if (isDirectoryBlockArray(parentINode.blocks)) {
       parentINode.blocks.push({
@@ -163,7 +171,7 @@ export const mkdir = (name: string) => {
         iNode: iNode.toString(),
       })
     } else {
-      throw new Error("Parent is not a directory")
+      throw new Error("parent is not a directory")
     }
 
     iNodes[iNode] = {
@@ -176,6 +184,10 @@ export const mkdir = (name: string) => {
 }
 
 export const cd = (dir: string): string => {
+  if (!dir) {
+    throw new Error("missing directory operand")
+  }
+
   const currentPwd = pwd()
   const parent = iNodeLookup(currentPwd)
   let newPwd: string
@@ -188,7 +200,7 @@ export const cd = (dir: string): string => {
     const { iNodes } = state.fileSystem
     const parentINode = iNodes[parent]
     if (!parentINode) {
-      throw new Error("Parent not found")
+      throw new Error("parent not found")
     }
     if (isDirectoryBlockArray(parentINode.blocks)) {
       if (dir === "..") {
@@ -201,12 +213,12 @@ export const cd = (dir: string): string => {
 
       const dirBlock = parentINode.blocks.find((block) => block.name === dir)
       if (!dirBlock) {
-        throw new Error("Directory not found")
+        throw new Error("directory not found")
       }
       newPwd = `${currentPwd}/${dir}`
       state.enviroment.PWD = newPwd
     } else {
-      throw new Error("Parent is not a directory")
+      throw new Error("parent is not a directory")
     }
 
     return state
@@ -221,13 +233,9 @@ export const ls = () => {
 
   osStore.subscribe((state) => {
     const parentINode = state.fileSystem.iNodes[parent]
-    if (!parentINode) {
-      throw new Error("Parent not found")
-    }
+
     if (isDirectoryBlockArray(parentINode.blocks)) {
       items = parentINode.blocks.map((block) => block.name)
-    } else {
-      throw new Error("Parent is not a directory")
     }
   })
 
