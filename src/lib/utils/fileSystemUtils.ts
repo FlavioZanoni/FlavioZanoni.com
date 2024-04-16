@@ -185,7 +185,7 @@ export const mkdir = (name: string) => {
   })
 }
 
-export const cd = (dir: string): string => {
+export const cd = (dir: string) => {
   if (!dir) {
     throw new Error("missing directory operand")
   }
@@ -236,7 +236,6 @@ export const cd = (dir: string): string => {
     }
     return state
   })
-  return newPwd
 }
 
 export const ls = () => {

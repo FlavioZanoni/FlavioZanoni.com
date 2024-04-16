@@ -33,23 +33,27 @@ export class Term {
   }
 
   public setup(dir: string) {
+    // need to set the PWD to the directory sent
+
     const termDiv = document.getElementById("terminal")
     this.term.open(termDiv)
 
     this.term.writeln("Welcome to the terminal!")
     this.term.writeln("Type 'help' to get started.")
-    //this.term.write(`\x1B[34m${dir == "/" && "▲"}≈\x1B[32m❯\x1B[0m `)
 
     this.term.options.cursorInactiveStyle = "block"
     this.term.options.cursorBlink = true
     this.term.options.fontFamily = "IBM"
     this.term.options.lineHeight = 1.4
+    this.term.write(`\x1B[34m⌂ ${pwd()}\x1B[32m ❯\x1B[0m `)
 
     this.term.onBell(() => {
       this.playBeep()
     })
 
     this.term.onData((data) => {
+      console.log(data)
+
       switch (data) {
         case "\r":
           const lastLine = this.term.buffer.active.getLine(
@@ -63,11 +67,31 @@ export class Term {
           this.execCommand(lastLineText)
           break
         case "\x7f":
-          if (this.term.buffer.active.cursorX === 0) {
+          if (this.term.buffer.active.cursorX === pwd().length + 5) {
+            // pwd + 5 is the length of the prompt decoration
             this.term.write("\x07") // trigger bell
             break
           }
           this.term.write("\b \b")
+          break
+
+        // implement arrowKeys later
+        case "\x1b[A":
+          this.term.write("")
+          break
+        case "\x1b[B":
+          this.term.write("")
+          break
+        case "\x1b[C":
+          this.term.write("")
+          break
+        case "\x1b[D":
+          this.term.write("")
+          break
+
+        // implement tab later
+        case "\t":
+          this.term.write("")
           break
         default:
           this.term.write(data)
@@ -75,48 +99,61 @@ export class Term {
     })
   }
 
+  public writeln(str: string) {
+    const currentPwd = pwd()
+    const emoji = currentPwd === "root" ? "⌂" : "☺"
+
+    this.term.write(`\x1B[34m${emoji} ${pwd()}\x1B[32m ❯\x1B[0m `)
+    this.term.writeln(str)
+    this.term.write(`\x1B[34m${emoji} ${pwd()}\x1B[32m ❯\x1B[0m `)
+  }
+
   public execCommand(str: string) {
-    const [command, ...args] = str.split(" ")
+    const [start, typed] = str.split("❯").map((str) => str.trim())
+    const [command, ...args] = typed.split(" ").map((arg) => arg.trim())
     this.term.writeln("")
 
     switch (command as (typeof availabeleCommands)[number]) {
       case "echo":
-        return this.term.writeln(args.join(" "))
+        return this.writeln(args.join(" "))
       case "clear":
         return this.term.clear()
       case "pwd":
         const curr = pwd()
-        return this.term.writeln(curr)
+        return this.writeln(curr)
       case "ls":
         let files = ls()
-        return this.term.writeln(files.join(" "))
+        return this.writeln(files.join(" "))
       case "touch":
         try {
           touch(args[0])
+          this.writeln("")
         } catch (e) {
-          return this.term.writeln(`touch: ${e.message || "Error"}`)
+          return this.writeln(`touch: ${e.message || "Error"}`)
         }
         return
       case "mkdir":
         try {
           mkdir(args[0])
+          this.writeln("")
         } catch (e) {
-          return this.term.writeln(`mkdir: ${e.message || "Error"}`)
+          return this.writeln(`mkdir: ${e.message || "Error"}`)
         }
         return
       case "cd":
         try {
           cd(args[0])
+          this.writeln("")
         } catch (e) {
-          return this.term.writeln(`cd: ${e.message || "Error"}`)
+          return this.writeln(`cd: ${e.message || "Error"}`)
         }
         return
       case "help":
-        return this.term.writeln(
+        return this.writeln(
           `Available commands: ${availabeleCommands.join(", ")}`
         )
       default:
-        return this.term.writeln(`Command not found: ${command}, try 'help'`)
+        return this.writeln(`Command not found: ${command}, try 'help'`)
     }
   }
 }

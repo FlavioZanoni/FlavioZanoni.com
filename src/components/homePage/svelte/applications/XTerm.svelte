@@ -5,7 +5,7 @@
   import { onDestroy, onMount } from "svelte"
 
   export let uuid: string
-  export let currentDir: string | undefined = "/"
+  export let currentDir: string | undefined = "root"
 
   let term = new Terminal()
   const termBackend = new Term(term)
