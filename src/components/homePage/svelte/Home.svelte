@@ -1,6 +1,6 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import type { HomeGridItem, OSStore } from "@lib/store/types"
+  import type { DirectoryBlock, HomeGridItem, OSStore } from "@lib/store/types"
   import { openApp } from "@lib/utils/enviromentUtils"
   import {
     getItemsInArrayByINode,
@@ -54,6 +54,40 @@
     ] as HomeGridItem[]
 
     itemsByINode = getItemsInArrayByINode(grid.filter((cell) => cell.iNode))
+  }
+
+  // watch changes in the file system to update UI
+  $: {
+    const desktopApps = $osStore.fileSystem.iNodes["2"]
+      .blocks as DirectoryBlock[]
+    const screenApps = $osStore.enviroment.homeGrid.items
+
+    const divergence = desktopApps.filter(
+      (app) => !screenApps.find((screenApp) => screenApp.iNode === app.iNode)
+    )
+    const homeGrid = $osStore.enviroment.homeGrid
+    if (divergence.length > 0) {
+      divergence.forEach((app) => {
+        const emptyCell = grid.find((cell) => cell.type === "empty")
+        if (emptyCell) {
+          homeGrid.items.push({
+            iNode: app.iNode,
+            pos: emptyCell.pos,
+            type: "file",
+          })
+          grid = grid.map((item) => {
+            if (item.pos === emptyCell.pos) {
+              return {
+                iNode: app.iNode,
+                pos: emptyCell.pos,
+                type: "location" in app ? "file" : "directory",
+              }
+            }
+            return item
+          })
+        }
+      })
+    }
   }
 
   const onDrop = (e: DragEvent, current: HomeGridItem) => {
@@ -178,18 +212,18 @@
       on:drop={(e) => onDrop(e, cell)}
       on:contextmenu={(e) => handleContextMenu(e, cell)}
     >
-      <div class="flex flex-col items-center justify-center">
+      <div class="flex flex-col items-center justify-center w-full h-full">
         {#if cell.type !== "empty"}
           {@const name = isFile
             ? currentItem.name + (currentItem.ext ? `.${currentItem.ext}` : "")
             : currentItem.name}
           <img
-            class="w-[80%]"
+            class="w-16 h-16"
             draggable="false"
             src={`/icons/${isFile ? currentItem.icon : "directory.png"}`}
             alt={currentItem.name}
           />
-          <p class="truncate">
+          <p class="truncate text-sm">
             {name || "‎"}
           </p>
         {/if}

@@ -28,6 +28,9 @@ export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
 
   const iNodeObj = iNodes[appId]
 
+  console.log("iNodeObj", iNodeObj)
+  console.log("appid", appId)
+
   if (!iNodeObj) {
     return
   }
@@ -133,7 +136,7 @@ export const touch = (name: string) => {
       type: "file",
       blocks: [
         {
-          name,
+          name: fileName,
           location: "files",
         },
       ],
