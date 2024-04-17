@@ -28,9 +28,6 @@ export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
 
   const iNodeObj = iNodes[appId]
 
-  console.log("iNodeObj", iNodeObj)
-  console.log("appid", appId)
-
   if (!iNodeObj) {
     return
   }
@@ -85,8 +82,6 @@ const iNodeLookup = (dir: string) => {
       .trim()
       .split("/")
       .filter((dirName) => dirName !== "root")
-
-    console.log("path", path)
 
     path.forEach((dirName) => {
       if (!dirName) return
