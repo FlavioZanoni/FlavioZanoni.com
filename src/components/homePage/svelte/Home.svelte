@@ -68,12 +68,11 @@
     const homeGrid = $osStore.enviroment.homeGrid
     if (divergence.length > 0) {
       divergence.forEach((app) => {
-        const emptyCell = grid.find((cell) => cell.type === "empty")
+        const emptyCell = grid.find((cell) => cell.iNode)
         if (emptyCell) {
           homeGrid.items.push({
             iNode: app.iNode,
             pos: emptyCell.pos,
-            type: "file",
           })
           grid = grid.map((item) => {
             if (item.pos === emptyCell.pos) {
@@ -128,7 +127,7 @@
 
   const handleContextMenu = (e: MouseEvent, cell: HomeGridItem) => {
     e.preventDefault()
-    if (cell.type !== "empty") return
+    if (!cell.iNode) return
 
     showContextMenu = true
     contextMenuX = e.clientX
@@ -195,12 +194,12 @@
     {@const currentItem = itemsByINode[cell.iNode]}
     {@const isFile = currentItem && "icon" in currentItem}
     <div
-      role={cell.type !== "empty" ? "button" : "cell"}
+      role={cell.iNode ? "button" : "cell"}
       class={`flex gap-2 items-center justify-center p-2 select-none`}
       style={`width: ${cellWidth}px; height: ${cellHeight}px;`}
-      draggable={cell.type !== "empty"}
+      draggable={!!cell.iNode}
       on:dblclick={() => {
-        if (cell.type === "empty") return
+        if (cell.iNode) return
         openApp(cell.iNode)
       }}
       on:dragstart={(e) => {
@@ -213,7 +212,7 @@
       on:contextmenu={(e) => handleContextMenu(e, cell)}
     >
       <div class="flex flex-col items-center justify-center w-full h-full">
-        {#if cell.type !== "empty"}
+        {#if cell.iNode}
           {@const name = isFile
             ? currentItem.name + (currentItem.ext ? `.${currentItem.ext}` : "")
             : currentItem.name}

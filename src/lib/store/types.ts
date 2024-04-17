@@ -73,7 +73,6 @@ export interface EnviromentItem {
 }
 
 export interface HomeGridItem extends EnviromentItem {
-  type: ItemType
   pos: Position
 }
 
