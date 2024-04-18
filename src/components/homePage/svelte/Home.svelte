@@ -127,7 +127,7 @@
 
   const handleContextMenu = (e: MouseEvent, cell: HomeGridItem) => {
     e.preventDefault()
-    if (!cell.iNode) return
+    if (cell.iNode) return
 
     showContextMenu = true
     contextMenuX = e.clientX
