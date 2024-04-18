@@ -56,7 +56,7 @@
     itemsByINode = getItemsInArrayByINode(grid.filter((cell) => cell.iNode))
   }
 
-  // watch changes in the file system to update UI
+  // watch changes in the fileSystem to update UI
   $: {
     const desktopApps = $osStore.fileSystem.iNodes["2"]
       .blocks as DirectoryBlock[]
@@ -199,7 +199,7 @@
       style={`width: ${cellWidth}px; height: ${cellHeight}px;`}
       draggable={!!cell.iNode}
       on:dblclick={() => {
-        if (cell.iNode) return
+        if (!cell.iNode) return
         openApp(cell.iNode)
       }}
       on:dragstart={(e) => {
