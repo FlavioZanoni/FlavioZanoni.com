@@ -2,10 +2,7 @@
   import { osStore } from "@lib/store"
   import type { DirectoryBlock, HomeGridItem, OSStore } from "@lib/store/types"
   import { openApp } from "@lib/utils/enviromentUtils"
-  import {
-    getItemsInArrayByINode,
-    type GetItemsInArrayByINode,
-  } from "@lib/utils/fileSystemUtils"
+  import { getItemByINode } from "@lib/utils/fileSystemUtils"
   import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
   import ContextMenu from "./ContextMenu.svelte"
@@ -40,7 +37,6 @@
   )
 
   let grid = [] as HomeGridItem[]
-  let itemsByINode: GetItemsInArrayByINode
   $: {
     // populate grid with state
     grid = [
@@ -52,8 +48,6 @@
         return cellState ? cellState : cell
       }),
     ] as HomeGridItem[]
-
-    itemsByINode = getItemsInArrayByINode(grid.filter((cell) => cell.iNode))
   }
 
   // watch changes in the fileSystem to update UI
@@ -68,7 +62,7 @@
     const homeGrid = $osStore.enviroment.homeGrid
     if (divergence.length > 0) {
       divergence.forEach((app) => {
-        const emptyCell = grid.find((cell) => cell.iNode)
+        const emptyCell = grid.find((cell) => !cell.iNode)
         if (emptyCell) {
           homeGrid.items.push({
             iNode: app.iNode,
@@ -191,11 +185,11 @@
           grid-template-rows: repeat(${gridRows}, 1fr);`}
 >
   {#each grid as cell}
-    {@const currentItem = itemsByINode[cell.iNode]}
+    {@const currentItem = getItemByINode(cell.iNode)}
     {@const isFile = currentItem && "icon" in currentItem}
     <div
       role={cell.iNode ? "button" : "cell"}
-      class={`flex gap-2 items-center justify-center p-2 select-none`}
+      class="{`flex gap-2 items-center justify-center p-2 select-none`}s"
       style={`width: ${cellWidth}px; height: ${cellHeight}px;`}
       draggable={!!cell.iNode}
       on:dblclick={() => {
