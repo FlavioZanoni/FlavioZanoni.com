@@ -40,10 +40,10 @@ export class Term {
     return `\x1B[34m${emoji} ${currentPwd}\x1B[32m ❯\x1B[0m `
   }
 
-  public setup(dir: string) {
+  public setup(dir: string, uuid: string) {
     // need to set the PWD to the directory sent
 
-    const termDiv = document.getElementById("terminal")
+    const termDiv = document.getElementById(`terminal-${uuid}`)
     this.term.open(termDiv)
 
     this.term.writeln("Welcome to the terminal!")

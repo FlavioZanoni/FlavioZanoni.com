@@ -16,7 +16,7 @@
   })
 
   onMount(() => {
-    termBackend.setup(currentDir)
+    termBackend.setup(currentDir, uuid)
     term.loadAddon(fitAddon)
     fitAddon.fit()
 
@@ -28,4 +28,4 @@
   })
 </script>
 
-<div class="w-full h-full bg-black pt-1" id="terminal"></div>
+<div class="w-full h-full bg-black pt-1" id={`terminal-${uuid}`}></div>
