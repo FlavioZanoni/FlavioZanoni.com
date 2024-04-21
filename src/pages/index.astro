@@ -15,10 +15,14 @@ import Layout from "../layouts/Layout.astro"
 </script>
 
 <Layout title="FZ-OS">
-  <main>
-    <Home client:only />
-  </main>
-  <Footer client:only />
+  <div id="home-content" class="crt">
+    <div class="scan-lines">
+      <main id="main">
+        <Home client:only />
+      </main>
+      <Footer client:only />
 
-  <WindowManager client:only />
+      <WindowManager client:only />
+    </div>
+  </div>
 </Layout>
