@@ -1,0 +1,17 @@
+---
+const { frontmatter } = Astro.props
+---
+
+<section class="flex flex-col gap-4 shadow-md bg-white">
+  <div class="w-full flex justify-between p-2">
+    <h1 class="text-lg">{frontmatter.title}</h1>
+    <div class="flex gap-4 text-sm">
+      <p>{frontmatter.start}</p>
+      <p>{frontmatter.end}</p>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <slot />
+  </div>
+</section>

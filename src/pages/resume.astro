@@ -1,0 +1,80 @@
+---
+const projects = await Astro.glob("./projects/*.mdx")
+import Layout from "../layouts/Layout.astro"
+---
+
+<Layout title="Resume">
+  <div class="p-8 gap-4 flex flex-col">
+    <section class="mb-8">
+      <h1 class="text-4xl font-bold mb-4 text-center">Flávio Zanoni</h1>
+      <h2 class="text-xl text-center">
+        Web developer, embedded developer and everything in between.
+      </h2>
+    </section>
+
+    <section class="flex flex-row gap-4 rounded-xl shadow-lg p-4">
+      <img class="rounded-lg" src="/me.jpg" alt="my profile picture" />
+      <div class="flex flex-col">
+        <div class="flex justify-between">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-bold">About me:</h2>
+            <div class="flex flex-row gap-2 items-center">
+              <img width="28px" src={"/original/br.png"} alt="Location" />
+              <span class="text-sm">Cascavel, Brazil</span>
+            </div>
+          </div>
+
+          <div class="flex flex-row gap-4">
+            <p>
+              <a
+                href="https://www.linkedin.com/in/flaviozanoni/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  width="24px"
+                  src={"/original/linkedin.webp"}
+                  alt="Linkedin"
+                />
+              </a>
+            </p>
+            <p>
+              <a
+                href="https://github.com/FlavioZanoni/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img width="24px" src={"/original/github.png"} alt="Github" />
+              </a>
+            </p>
+            <p>
+              <a href="mailto:flaviozgallon@gmail.com">
+                <img width="24px" src={"/original/mail.png"} alt="Email" />
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <p class="mt-10">
+          I am a Software Developer currently pursuing a degree in Software
+          Engineering, with an expected graduation date in 2025. My background
+          in Electronics Technician has fostered a keen interest in embedded
+          development and electronics. With {new Date().getFullYear() - 2021} years
+          of experience in the software development industry, I have contributed
+          to a diverse range of projects, spanning from web development to embedded
+          systems. I am continually seeking new opportunities to apply my skills
+          and expand my knowledge in this dynamic field.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Projects:</h2>
+      {
+        projects.map((project) => {
+          return <project.Content />
+        })
+      }
+    </section>
+  </div>
+</Layout>
