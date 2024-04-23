@@ -12,14 +12,11 @@ import Layout from "../layouts/Layout.astro"
       </h2>
     </section>
 
-    <section class="flex flex-row gap-4 rounded-xl shadow-lg p-4">
-      <img
-        class="rounded-lg w-64"
-        src="/me.jpg"
-        alt="my profile picture"
-        width="300px"
-      />
-      <div class="flex flex-col">
+    <section
+      class="flex md:flex-row md:items-start items-center flex-col gap-4 rounded-xl shadow-lg p-4"
+    >
+      <img class="rounded-lg w-64" src="/me.jpg" alt="my profile picture" />
+      <div class="flex flex-col gap-4">
         <div class="flex justify-between">
           <div class="flex flex-col gap-1">
             <h2 class="text-2xl font-bold">About me:</h2>
@@ -60,7 +57,7 @@ import Layout from "../layouts/Layout.astro"
           </div>
         </div>
 
-        <p class="mt-10">
+        <p>
           I am a Software Developer currently pursuing a degree in Software
           Engineering, with an expected graduation date in 2025. My background
           in Electronics Technician has fostered a keen interest in embedded
@@ -76,9 +73,11 @@ import Layout from "../layouts/Layout.astro"
     <section>
       <h2 class="text-2xl font-bold mb-4">Projects:</h2>
       {
-        projects.map((project) => {
-          return <project.Content />
-        })
+        projects
+          .sort((a, b) => a.frontmatter.order - b.frontmatter.order)
+          .map((project) => {
+            return <project.Content />
+          })
       }
     </section>
   </div>
