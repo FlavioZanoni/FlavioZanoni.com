@@ -2,16 +2,33 @@
 const { frontmatter } = Astro.props
 ---
 
-<section class="flex flex-col gap-4 shadow-md bg-white">
+<section class="flex flex-col gap-2 shadow-md bg-white p-4">
   <div class="w-full flex justify-between p-2">
-    <h1 class="text-lg">{frontmatter.title}</h1>
-    <div class="flex gap-4 text-sm">
+    <h1 class="text-lg font-semibold">{frontmatter.title}</h1>
+    <div class="flex gap-2 text-sm">
       <p>{frontmatter.start}</p>
+      <p>-</p>
       <p>{frontmatter.end}</p>
     </div>
   </div>
 
-  <div class="p-4">
+  <div class="p-4 pt-2">
     <slot />
   </div>
 </section>
+
+<style is:inline>
+  a {
+    color: darkcyan;
+  }
+
+  li {
+    padding: 4px;
+  }
+
+  img {
+    max-width: 350px;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

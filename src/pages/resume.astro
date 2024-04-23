@@ -13,14 +13,19 @@ import Layout from "../layouts/Layout.astro"
     </section>
 
     <section class="flex flex-row gap-4 rounded-xl shadow-lg p-4">
-      <img class="rounded-lg" src="/me.jpg" alt="my profile picture" />
+      <img
+        class="rounded-lg w-64"
+        src="/me.jpg"
+        alt="my profile picture"
+        width="300px"
+      />
       <div class="flex flex-col">
         <div class="flex justify-between">
           <div class="flex flex-col gap-1">
             <h2 class="text-2xl font-bold">About me:</h2>
             <div class="flex flex-row gap-2 items-center">
               <img width="28px" src={"/original/br.png"} alt="Location" />
-              <span class="text-sm">Cascavel, Brazil</span>
+              <span class="text-sm">Paraná, Brazil</span>
             </div>
           </div>
 
