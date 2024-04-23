@@ -123,9 +123,9 @@
       "files": {
         "item1": {
           "icon": "document.png",
-          "name": "item01",
+          "name": "Resume",
           "type": "file",
-          "link": "/hello",
+          "link": "/resume",
           "ext": "txt"
         }
       }
