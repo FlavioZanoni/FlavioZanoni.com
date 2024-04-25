@@ -45,7 +45,10 @@
       "userImages": []
     },
     "PWD": "root",
-    "openApps": []
+    "openApps": [],
+    "config": {
+      "crt": true
+    }
   },
   "fileSystem": {
     "iNodes": {

@@ -18,6 +18,13 @@
       return state
     })
   }
+
+  const toggleCRT = () => {
+    osStore.update((state) => {
+      state.enviroment.config.crt = !state.enviroment.config.crt
+      return state
+    })
+  }
 </script>
 
 <div
@@ -25,5 +32,5 @@
   style={`left: ${x}px; top: ${y}px;`}
 >
   <Button on:click={handleBackground} id={"button1"}>Change background</Button>
-  <Button id={"button2"}>My PC</Button>
+  <Button on:click={toggleCRT} id={"button2"}>Toggle CRT effect</Button>
 </div>

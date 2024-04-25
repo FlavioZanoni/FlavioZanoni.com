@@ -19,6 +19,9 @@ export interface Enviroment {
   }
   openApps: OpenApp[]
   PWD: string
+  config: {
+    crt: boolean
+  }
   background: {
     fileName?: string
     base64?: string
