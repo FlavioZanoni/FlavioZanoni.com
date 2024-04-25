@@ -1,6 +1,10 @@
 ---
 const projects = await Astro.glob("./projects/*.mdx")
+const workExperience = await Astro.glob("./workExperience/*.mdx")
+import dayjs from "dayjs"
+import isBefore from "dayjs/plugin/isSameOrBefore"
 import Layout from "../layouts/Layout.astro"
+dayjs.extend(isBefore)
 ---
 
 <Layout title="Resume">
@@ -68,6 +72,21 @@ import Layout from "../layouts/Layout.astro"
           and expand my knowledge in this dynamic field.
         </p>
       </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Work experience:</h2>
+      {
+        workExperience
+          .sort((a, b) =>
+            !dayjs(a.frontmatter.start).isBefore(dayjs(b.frontmatter.start))
+              ? -1
+              : 1
+          )
+          .map((project) => {
+            return <project.Content />
+          })
+      }
     </section>
 
     <section>
