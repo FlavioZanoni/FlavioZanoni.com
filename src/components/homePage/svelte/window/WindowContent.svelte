@@ -19,7 +19,12 @@
   </div>
 {:else if link}
   <div class="w-full h-full">
-    <iframe {title} class="w-full h-full" src={link} frameborder="0" />
+    <iframe
+      {title}
+      class="w-full h-full"
+      src={`${link}?isInOS=true`}
+      frameborder="0"
+    />
   </div>
 {:else if appName in appComponents}
   <svelte:component this={appComponents[appName]} {uuid} />

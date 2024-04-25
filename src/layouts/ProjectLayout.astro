@@ -6,7 +6,10 @@ const { frontmatter } = Astro.props
   <div class="w-full flex justify-between p-2">
     <div>
       <h1 class="text-lg font-semibold">{frontmatter.title}</h1>
-      <p class="text-sm ml-2">- {frontmatter.status}</p>
+      <p class="text-sm ml-2">
+        <span class="font-semibold">Status:</span>
+        {frontmatter.status}
+      </p>
     </div>
 
     <div class="flex gap-2 text-sm">
@@ -23,7 +26,7 @@ const { frontmatter } = Astro.props
 
 <style is:inline>
   a {
-    color: darkcyan;
+    color: #2aadad;
   }
 
   li {

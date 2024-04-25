@@ -62,7 +62,7 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "item01.txt",
+            "name": "resume.txt",
             "iNode": "3"
           },
           {
@@ -76,7 +76,7 @@
         "blocks": [
           {
             "location": "files",
-            "name": "item1"
+            "name": "resume"
           }
         ]
       },
@@ -121,7 +121,7 @@
         }
       },
       "files": {
-        "item1": {
+        "resume": {
           "icon": "document.png",
           "name": "Resume",
           "type": "file",

@@ -7,14 +7,28 @@ import Layout from "../layouts/Layout.astro"
 dayjs.extend(isBefore)
 ---
 
+<script>
+  const urlParams = new URLSearchParams(window.location.search)
+  const isInOs = urlParams.get("isInOS")
+
+  if (isInOs === "true") {
+    document.getElementById("osLink").innerHTML = `
+      <a href="/resume" target="_blank" class=" text-[#2aadad]">Hard to read inside the OS ? click here to view in another browser tab</a>
+    `
+  }
+</script>
+
 <Layout title="Resume">
   <div class="p-8 gap-4 flex flex-col">
-    <section class="mb-8">
-      <h1 class="text-4xl font-bold mb-4 text-center">Flávio Zanoni</h1>
-      <h2 class="text-xl text-center">
-        Web developer, embedded developer and everything in between.
-      </h2>
-    </section>
+    <div id="">
+      <section class="mb-8">
+        <h1 class="text-4xl font-bold mb-4 text-center">Flávio Zanoni</h1>
+        <h2 class="text-xl text-center">
+          Web developer, embedded developer and everything in between.
+        </h2>
+      </section>
+      <div id="osLink" class="text-center"></div>
+    </div>
 
     <section
       class="flex md:flex-row md:items-start items-center flex-col gap-4 rounded-xl shadow-lg p-4"
@@ -71,6 +85,39 @@ dayjs.extend(isBefore)
           systems. I am continually seeking new opportunities to apply my skills
           and expand my knowledge in this dynamic field.
         </p>
+
+        <div class="flex flex-col gap-2">
+          <h2 class="text-lg font-semibold">Skills:</h2>
+          <div class="flex flex-row flex-wrap gap-3 text-sm">
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >C/C++</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">GO</span>
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">Git</span>
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">SQL</span>
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >React</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >Docker</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >Linux</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >CI/CD</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >TypeScript</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >TailwindCSS</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >Node.js/Bun.js</span
+            >
+          </div>
+        </div>
       </div>
     </section>
 
@@ -78,11 +125,17 @@ dayjs.extend(isBefore)
       <h2 class="text-2xl font-bold mb-4">Work experience:</h2>
       {
         workExperience
-          .sort((a, b) =>
-            !dayjs(a.frontmatter.start).isBefore(dayjs(b.frontmatter.start))
-              ? -1
-              : 1
-          )
+          .sort((a, b) => {
+            const aEnd = `${a.frontmatter.end}-01`
+            const bEnd = `${b.frontmatter.end}-01`
+            if (a.frontmatter.end === "current") {
+              return -1
+            }
+            if (b.frontmatter.end === "current") {
+              return 1
+            }
+            return dayjs(aEnd).isBefore(dayjs(bEnd)) ? 1 : -1
+          })
           .map((project) => {
             return <project.Content />
           })
@@ -93,7 +146,17 @@ dayjs.extend(isBefore)
       <h2 class="text-2xl font-bold mb-4">Projects:</h2>
       {
         projects
-          .sort((a, b) => a.frontmatter.order - b.frontmatter.order)
+          .sort((a, b) => {
+            const aEnd = `${a.frontmatter.end}-01`
+            const bEnd = `${b.frontmatter.end}-01`
+            if (a.frontmatter.end === "current") {
+              return -1
+            }
+            if (b.frontmatter.end === "current") {
+              return 1
+            }
+            return dayjs(aEnd).isBefore(dayjs(bEnd)) ? 1 : -1
+          })
           .map((project) => {
             return <project.Content />
           })
