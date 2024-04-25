@@ -69,8 +69,16 @@
   }
 
   function handleMousemove(event: MouseEvent) {
+    if (event.clientX >= window.innerWidth || event.clientX <= 0) {
+      return
+    }
+    if (event.clientY >= window.innerHeight || event.clientY <= 0) {
+      return
+    }
+
     const dx = event.clientX - startX
     const dy = event.clientY - startY
+
     x = startLeft + dx
     y = startTop + dy
   }
