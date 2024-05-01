@@ -223,7 +223,7 @@
       <WindowContent
         {uuid}
         {isApp}
-        appName={isApp && item.appName}
+        appName={isApp && item.name}
         link={isApp && item.link}
         title={item.name}
       />

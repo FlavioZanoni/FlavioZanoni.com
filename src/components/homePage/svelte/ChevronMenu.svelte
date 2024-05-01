@@ -52,7 +52,7 @@
       <img
         loading="lazy"
         class="w-5"
-        src={crt ? "/icons/crt.png" : "/icons/no-crt.png"}
+        src={!crt ? "/icons/crt.png" : "/icons/no-crt.png"}
         alt="show crt effect"
       />
     </button>

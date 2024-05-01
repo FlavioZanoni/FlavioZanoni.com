@@ -1,4 +1,4 @@
-import { cd, ls, mkdir, pwd, touch } from "@lib/utils/fileSystemUtils"
+import { cd, ls, mkdir, mv, pwd, touch } from "@lib/utils/fileSystemUtils"
 import type { Terminal } from "@xterm/xterm"
 type TerminalType = InstanceType<typeof Terminal>
 
@@ -11,6 +11,7 @@ const availabeleCommands = [
   "ls",
   "pwd",
   "cd",
+  "mv",
 ] as const
 
 export class Term {
@@ -155,6 +156,12 @@ export class Term {
         return this.writeln(
           `Available commands: ${availabeleCommands.join(", ")}`
         )
+      case "mv":
+        try {
+          mv(args[0], args[1])
+        } catch (e) {
+          return this.writeln(`mv: ${e.message || "Error"}`)
+        }
       default:
         return this.writeln(`Command not found: ${command}, try 'help'`)
     }

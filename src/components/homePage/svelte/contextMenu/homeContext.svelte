@@ -1,9 +1,6 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import Button from "./Button.svelte"
-
-  export let x: number = 0
-  export let y: number = 0
+  import Button from "../Button.svelte"
 
   const handleBackground = () => {
     osStore.update((state) => {
@@ -27,10 +24,5 @@
   }
 </script>
 
-<div
-  class="bg-slate-200 border-2 border-slate-900 absolute flex flex-col w-[250px] h-fit divide-y-2 divide-slate-900"
-  style={`left: ${x}px; top: ${y}px;`}
->
-  <Button on:click={handleBackground} id={"button1"}>Change background</Button>
-  <Button on:click={toggleCRT} id={"button2"}>Toggle CRT effect</Button>
-</div>
+<Button on:click={handleBackground} id={"button1"}>Change background</Button>
+<Button on:click={toggleCRT} id={"button2"}>Toggle CRT effect</Button>

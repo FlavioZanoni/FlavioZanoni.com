@@ -34,15 +34,20 @@ export interface Enviroment {
 }
 
 export interface FileSystem {
-  iNodes: INode
+  iNodes: INodes
   disk: Disk
 }
 
-export interface INode {
+export interface INodes {
   [key: string]: {
     type: ItemType
     blocks: FileBlock[] | DirectoryBlock[]
   }
+}
+
+export type INode = {
+  type: ItemType
+  blocks: FileBlock[] | DirectoryBlock[]
 }
 
 type Block = {

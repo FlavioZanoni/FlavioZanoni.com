@@ -5,12 +5,13 @@ import type {
   Disk,
   EnviromentItem,
   FileBlock,
-  INode,
+  INodes,
 } from "@lib/store/types"
 
 function isFileBlock(block: FileBlock | DirectoryBlock): block is FileBlock {
   return "location" in block
 }
+
 function isDirectoryBlockArray(
   blocks: FileBlock[] | DirectoryBlock[]
 ): blocks is DirectoryBlock[] {
@@ -19,7 +20,7 @@ function isDirectoryBlockArray(
 
 export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
   let disk: Disk
-  let iNodes: INode
+  let iNodes: INodes
 
   osStore.subscribe((state) => {
     disk = state.fileSystem.disk
@@ -183,55 +184,161 @@ export const mkdir = (name: string) => {
   })
 }
 
+const handleDirNavigation = (
+  dir: string,
+  iNodes: INodes,
+  currentPwd: string,
+  newPwd: string = "",
+  getFile?: boolean
+) => {
+  const parent = iNodeLookup(currentPwd)
+  let parentINode = iNodes[parent]
+  if (!dir || dir === ".") return { newPwd, block: undefined }
+  if (dir === ".." && currentPwd === "root") {
+    return { newPwd: "root", block: undefined }
+  }
+  if (dir === "..") {
+    const path = currentPwd.split("/")
+    path.pop()
+    newPwd = path.join("/")
+    currentPwd = newPwd
+    return { newPwd, block: undefined }
+  }
+
+  const dirBlock = parentINode.blocks.find(
+    (block) => block.name === dir
+  ) as DirectoryBlock
+
+  if (!dirBlock) {
+    throw new Error("directory not found")
+  }
+
+  if (!getFile) {
+    if (iNodes[dirBlock.iNode].type == "file") {
+      throw new Error("not a directory")
+    } else {
+      parentINode = iNodes[dirBlock.iNode]
+    }
+  } else {
+    parentINode = iNodes[dirBlock.iNode]
+  }
+
+  newPwd = `${currentPwd}/${dir}`
+  currentPwd = newPwd
+
+  return { newPwd, block: dirBlock }
+}
+
 export const cd = (dir: string) => {
   if (!dir) {
     throw new Error("missing directory operand")
   }
 
   let currentPwd = pwd()
-  const parent = iNodeLookup(currentPwd)
   let newPwd: string
 
   osStore.update((state) => {
     const { iNodes } = state.fileSystem
-    let parentINode = iNodes[parent]
-    if (!parentINode) {
-      throw new Error("parent not found")
+    const splitDir = dir.split("/")
+
+    splitDir.forEach((dir) => {
+      const parent = iNodeLookup(currentPwd)
+      let parentINode = iNodes[parent]
+
+      const { newPwd: newCurrentPwd, block } = handleDirNavigation(
+        dir,
+        iNodes,
+        currentPwd,
+        newPwd
+      )
+
+      newPwd = newCurrentPwd
+      state.enviroment.PWD = newPwd
+      currentPwd = newPwd
+
+      if (!block) return
+
+      if (iNodes[block.iNode].type == "file") {
+        throw new Error("not a directory")
+      } else {
+        parentINode = iNodes[block.iNode]
+      }
+    })
+    return state
+  })
+}
+
+export const mv = (source: string, destination: string) => {
+  if (!source) {
+    throw new Error("missing directory operand")
+  }
+
+  let currentPwd = pwd()
+  let newPwd: string
+  let fileINode: string
+
+  const getSourceNode = (iNodes: INodes) => {
+    const splitDir = source.split("/")
+    let node: string
+    splitDir.forEach((dir) => {
+      const { newPwd: newCurrentPwd, block } = handleDirNavigation(
+        dir,
+        iNodes,
+        currentPwd,
+        newPwd,
+        true
+      )
+      newPwd = newCurrentPwd
+      currentPwd = newPwd
+
+      if (!block) return
+
+      if (iNodes[block.iNode].type == "file") {
+        node = block.iNode
+        return
+      }
+    })
+
+    return node
+  }
+
+  const moveToDest = (node: string, iNodes: INodes) => {
+    const splitDir = destination.split("/")
+    let itemName: string
+    splitDir.forEach((dir) => {
+      const { newPwd: newCurrentPwd, block } = handleDirNavigation(
+        dir,
+        iNodes,
+        currentPwd,
+        newPwd
+      )
+      newPwd = newCurrentPwd
+      currentPwd = newPwd
+
+      if (!block) return
+
+      console.log("bloc", block)
+      itemName = block.name
+    })
+
+    console.log("moving item", newPwd)
+    const whereToMove = iNodeLookup(newPwd)
+    console.log("where move", whereToMove)
+    const itemToMove: DirectoryBlock = {
+      name: iNodes[node].blocks[0].name, // needs investigation, this is not the best way because this block would only have the bits in a real FS
+      iNode: node,
     }
+    iNodes[whereToMove].blocks.push(itemToMove as any) //FIXME: dont really know, the type is correct with the | operator, but push changes it to an &
+  }
 
-    if (isDirectoryBlockArray(parentINode.blocks)) {
-      const splitDir = dir.split("/")
+  osStore.update((state) => {
+    const { iNodes } = state.fileSystem
 
-      splitDir.forEach((dir) => {
-        if (!dir) return
-        if (dir === ".." && currentPwd === "root") {
-          return
-        }
-        if (dir === "..") {
-          const path = currentPwd.split("/")
-          path.pop()
-          newPwd = path.join("/")
-          state.enviroment.PWD = newPwd
-          currentPwd = newPwd
-          return
-        }
+    fileINode = getSourceNode(iNodes)
+    currentPwd = pwd() // reset the pwd to use in the dest validation
+    moveToDest(fileINode, iNodes)
+    // remove from last place
 
-        const dirBlock = parentINode.blocks.find((block) => block.name === dir)
-        if (!dirBlock) {
-          throw new Error("directory not found")
-        }
-        if (isFileBlock(dirBlock)) {
-          throw new Error("not a directory")
-        } else {
-          parentINode = iNodes[dirBlock.iNode]
-        }
-        newPwd = `${currentPwd}/${dir}`
-        state.enviroment.PWD = newPwd
-        currentPwd = newPwd
-      })
-    } else {
-      throw new Error("parent is not a directory")
-    }
     return state
   })
 }

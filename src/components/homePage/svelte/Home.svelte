@@ -5,12 +5,15 @@
   import { getItemByINode } from "@lib/utils/fileSystemUtils"
   import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
-  import ContextMenu from "./ContextMenu.svelte"
+  import ContextMenu from "./contextMenu/ContextMenu.svelte"
+  import HomeAppContext from "./contextMenu/homeAppContext.svelte"
+  import HomeContext from "./contextMenu/homeContext.svelte"
 
+  let isEmpty = false
   let showContextMenu = false
   let contextMenuX = 0
   let contextMenuY = 0
-
+  let contextINode: string | null = null
   const taskbarRect = document
     .getElementById("taskbar")
     ?.getBoundingClientRect()
@@ -121,7 +124,13 @@
 
   const handleContextMenu = (e: MouseEvent, cell: HomeGridItem) => {
     e.preventDefault()
-    if (cell.iNode) return
+    if (cell.iNode) {
+      contextINode = cell.iNode
+      isEmpty = false
+    } else {
+      contextINode = null
+      isEmpty = true
+    }
 
     showContextMenu = true
     contextMenuX = e.clientX
@@ -205,18 +214,23 @@
       on:drop={(e) => onDrop(e, cell)}
       on:contextmenu={(e) => handleContextMenu(e, cell)}
     >
-      <div class="flex flex-col items-center justify-center w-full h-full">
+      <div class="flex flex-col items-center justify-center">
         {#if cell.iNode}
           {@const name = isFile
             ? currentItem.name + (currentItem.ext ? `.${currentItem.ext}` : "")
             : currentItem.name}
           <img
-            class="w-16 h-16"
             draggable="false"
             src={`/icons/${isFile ? currentItem.icon : "directory.png"}`}
             alt={currentItem.name}
           />
-          <p class="truncate text-sm">
+          <p
+            style={`
+              width: ${cellWidth - 4}px;
+              text-align: center;
+            `}
+            class="truncate text-sm"
+          >
             {name || "‎"}
           </p>
         {/if}
@@ -225,6 +239,12 @@
   {/each}
 
   {#if showContextMenu}
-    <ContextMenu x={contextMenuX} y={contextMenuY} />
+    <ContextMenu x={contextMenuX} y={contextMenuY}>
+      {#if isEmpty}
+        <HomeContext />
+      {:else}
+        <HomeAppContext iNode={contextINode} />
+      {/if}
+    </ContextMenu>
   {/if}
 </div>
