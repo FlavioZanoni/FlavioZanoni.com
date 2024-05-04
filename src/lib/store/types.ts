@@ -82,6 +82,8 @@ export interface EnviromentItem {
 
 export interface HomeGridItem extends EnviromentItem {
   pos: Position
+  type: "file" | "directory" | "empty"
+  name?: string
 }
 
 export type ItemType = "directory" | "file" | "app" | "empty"
@@ -90,7 +92,6 @@ export interface DefaultItem {
   icon: string
   name: string
   type: ItemType
-  ext?: string
   link?: string
   appName?: string
   content?: string

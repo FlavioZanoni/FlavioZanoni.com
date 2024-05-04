@@ -30,7 +30,7 @@ export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
 
   const iNodeObj = iNodes[appId]
 
-  if (!iNodeObj) {
+  if (!iNodeObj || !iNodeObj.blocks[0]) {
     return
   }
 

@@ -8,7 +8,8 @@
             "x": 0,
             "y": 0
           },
-          "type": "file"
+          "type": "file",
+          "name": "term"
         },
         {
           "iNode": "3",
@@ -16,7 +17,8 @@
             "x": 0,
             "y": 1
           },
-          "type": "file"
+          "type": "file",
+          "name": "resume.txt"
         },
         {
           "iNode": "6",
@@ -24,7 +26,17 @@
             "x": 0,
             "y": 2
           },
-          "type": "file"
+          "type": "file",
+          "name": "marcospauloramosimagens.png"
+        },
+        {
+          "iNode": "7",
+          "pos": {
+            "x": 0,
+            "y": 3
+          },
+          "type": "directory",
+          "name": "directory"
         }
       ],
       "size": {
@@ -128,12 +140,7 @@
       },
       "7": {
         "type": "directory",
-        "blocks": [
-          {
-            "location": "apps",
-            "name": "directory"
-          }
-        ]
+        "blocks": []
       }
     },
     "disk": {
@@ -152,27 +159,20 @@
           "name": "trash",
           "icon": "trash.png",
           "type": "app"
-        },
-        "directory": {
-          "name": "directory",
-          "icon": "directory.png",
-          "type": "app"
         }
       },
       "files": {
         "resume": {
           "icon": "document.png",
-          "name": "Resume",
+          "name": "Resume.txt",
           "type": "file",
-          "link": "/resume",
-          "ext": "txt"
+          "link": "/resume"
         },
         "marcosPicture": {
           "icon": "picture.png",
-          "name": "marcospauloramosimagens",
+          "name": "marcospauloramosimagens.png",
           "type": "file",
-          "link": "/images/marcospauloramos.png",
-          "ext": "txt"
+          "link": "/images/marcospauloramos.png"
         }
       }
     }

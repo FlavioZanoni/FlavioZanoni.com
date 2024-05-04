@@ -2,7 +2,7 @@
   import { osStore } from "@lib/store"
   import type { DirectoryBlock, HomeGridItem, OSStore } from "@lib/store/types"
   import { openApp } from "@lib/utils/enviromentUtils"
-  import { getItemByINode } from "@lib/utils/fileSystemUtils"
+  import { getItemByINode, mv } from "@lib/utils/fileSystemUtils"
   import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
   import ContextMenu from "./contextMenu/ContextMenu.svelte"
@@ -35,6 +35,7 @@
         iNode: null,
         pos: { x, y },
         type: "empty",
+        name: null,
       }
     }
   )
@@ -74,6 +75,7 @@
           return {
             pos: appToRemove.pos,
             iNode: null,
+            type: "empty",
           }
         }
         return item
@@ -82,14 +84,23 @@
 
     const addItems = (diff: DirectoryBlock[]) => {
       diff.forEach((app) => {
+        const desktopBlocks = $osStore.fileSystem.iNodes[2]
+          .blocks as DirectoryBlock[]
+        const appInDesktop = desktopBlocks.find(
+          (block) => block.iNode === app.iNode
+        )
+
         const emptyCell = grid.find((cell) => !cell.iNode)
         if (emptyCell) {
           homeGrid.items.push({
             iNode: app.iNode,
             pos: emptyCell.pos,
+            name: appInDesktop.name,
+            type: "location" in app ? "file" : "directory",
           })
           grid = grid.map((item) => {
             if (item.pos === emptyCell.pos) {
+              console.log("inapp,", app)
               return {
                 iNode: app.iNode,
                 pos: emptyCell.pos,
@@ -124,6 +135,7 @@
 
     osStore.update((state) => {
       const homeGrid = state.enviroment.homeGrid
+      const { iNodes } = state.fileSystem
 
       const itemToUpdate = homeGrid.items.find(
         (item) => item.iNode === data.iNode
@@ -131,6 +143,13 @@
       const itemToMove = homeGrid.items.find(
         (item) => item.iNode === current.iNode
       )
+
+      if (iNodes[itemToMove?.iNode]?.type === "directory") {
+        const toUpdate = iNodes[itemToUpdate.iNode].blocks[0]
+        mv(`./desktop/${toUpdate.name}`, `./desktop/${itemToMove.name}`)
+
+        return state
+      }
 
       if (itemToUpdate) {
         itemToUpdate.pos = current.pos
@@ -246,13 +265,10 @@
     >
       <div class="flex flex-col items-center justify-center">
         {#if cell.iNode}
-          {@const name = isFile
-            ? currentItem.name + (currentItem.ext ? `.${currentItem.ext}` : "")
-            : currentItem.name}
           <img
             draggable="false"
             src={`/icons/${isFile ? currentItem.icon : "directory.png"}`}
-            alt={currentItem.name}
+            alt={cell.name}
           />
           <p
             style={`
@@ -261,7 +277,7 @@
             `}
             class="truncate text-sm"
           >
-            {name || "‎"}
+            {cell.name || "‎"}
           </p>
         {/if}
       </div>
