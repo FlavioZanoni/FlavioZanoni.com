@@ -5,6 +5,7 @@ import type {
   Disk,
   EnviromentItem,
   FileBlock,
+  INode,
   INodes,
 } from "@lib/store/types"
 
@@ -191,8 +192,8 @@ const handleDirNavigation = (
   newPwd: string = "",
   getFile?: boolean
 ) => {
-  const parent = iNodeLookup(currentPwd)
-  let parentINode = iNodes[parent]
+  const parentINode = iNodeLookup(currentPwd)
+  let parent = iNodes[parentINode]
   if (!dir || dir === ".") return { newPwd, block: undefined }
   if (dir === ".." && currentPwd === "root") {
     return { newPwd: "root", block: undefined }
@@ -205,28 +206,27 @@ const handleDirNavigation = (
     return { newPwd, block: undefined }
   }
 
-  const dirBlock = parentINode.blocks.find(
+  const dirBlock = parent.blocks.find(
     (block) => block.name === dir
   ) as DirectoryBlock
 
   if (!dirBlock) {
-    throw new Error("directory not found")
+    if (getFile) {
+      throw new Error(`file ${dir} not found`)
+    }
+    throw new Error(`directory ${dir} not found`)
   }
 
   if (!getFile) {
     if (iNodes[dirBlock.iNode].type == "file") {
-      throw new Error("not a directory")
-    } else {
-      parentINode = iNodes[dirBlock.iNode]
+      throw new Error(`${dir} is not a directory`)
     }
-  } else {
-    parentINode = iNodes[dirBlock.iNode]
   }
 
   newPwd = `${currentPwd}/${dir}`
   currentPwd = newPwd
 
-  return { newPwd, block: dirBlock }
+  return { newPwd, block: dirBlock, parent, parentINode }
 }
 
 export const cd = (dir: string) => {
@@ -272,27 +272,32 @@ export const mv = (source: string, destination: string) => {
   if (!source) {
     throw new Error("missing directory operand")
   }
+  if (!destination) {
+    throw new Error("missing destination operand")
+  }
 
   let currentPwd = pwd()
   let newPwd: string
   let fileINode: string
-
+  let srcINode: string
+  let parent: INode
   const getSourceNode = (iNodes: INodes) => {
     const splitDir = source.split("/")
     let node: string
     splitDir.forEach((dir) => {
-      const { newPwd: newCurrentPwd, block } = handleDirNavigation(
-        dir,
-        iNodes,
-        currentPwd,
-        newPwd,
-        true
-      )
+      const {
+        newPwd: newCurrentPwd,
+        block,
+        parent: currentParent,
+        parentINode,
+      } = handleDirNavigation(dir, iNodes, currentPwd, newPwd, true)
       newPwd = newCurrentPwd
       currentPwd = newPwd
 
       if (!block) return
 
+      parent = currentParent
+      srcINode = parentINode
       if (iNodes[block.iNode].type == "file") {
         node = block.iNode
         return
@@ -304,7 +309,6 @@ export const mv = (source: string, destination: string) => {
 
   const moveToDest = (node: string, iNodes: INodes) => {
     const splitDir = destination.split("/")
-    let itemName: string
     splitDir.forEach((dir) => {
       const { newPwd: newCurrentPwd, block } = handleDirNavigation(
         dir,
@@ -316,16 +320,14 @@ export const mv = (source: string, destination: string) => {
       currentPwd = newPwd
 
       if (!block) return
-
-      console.log("bloc", block)
-      itemName = block.name
     })
+    const itemName = parent.blocks.find(
+      (item: DirectoryBlock) => item.iNode === node
+    ).name
 
-    console.log("moving item", newPwd)
     const whereToMove = iNodeLookup(newPwd)
-    console.log("where move", whereToMove)
     const itemToMove: DirectoryBlock = {
-      name: iNodes[node].blocks[0].name, // needs investigation, this is not the best way because this block would only have the bits in a real FS
+      name: itemName,
       iNode: node,
     }
     iNodes[whereToMove].blocks.push(itemToMove as any) //FIXME: dont really know, the type is correct with the | operator, but push changes it to an &
@@ -338,6 +340,10 @@ export const mv = (source: string, destination: string) => {
     currentPwd = pwd() // reset the pwd to use in the dest validation
     moveToDest(fileINode, iNodes)
     // remove from last place
+    const filtered = iNodes[srcINode].blocks.filter(
+      (item: DirectoryBlock) => item.iNode !== fileINode
+    ) as FileBlock[] | DirectoryBlock[]
+    state.fileSystem.iNodes[srcINode].blocks = filtered
 
     return state
   })

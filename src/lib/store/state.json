@@ -52,7 +52,7 @@
       "base64": "",
       "userImages": []
     },
-    "PWD": "root",
+    "PWD": "root/desktop",
     "openApps": [],
     "config": {
       "crt": true
@@ -66,6 +66,10 @@
           {
             "name": "desktop",
             "iNode": "2"
+          },
+          {
+            "name": "a",
+            "iNode": "7"
           }
         ]
       },
@@ -79,6 +83,10 @@
           {
             "name": "term",
             "iNode": "5"
+          },
+          {
+            "name": "marcosPicture",
+            "iNode": "6"
           }
         ]
       },
@@ -117,6 +125,10 @@
             "name": "marcosPicture"
           }
         ]
+      },
+      "7": {
+        "type": "directory",
+        "blocks": []
       }
     },
     "disk": {

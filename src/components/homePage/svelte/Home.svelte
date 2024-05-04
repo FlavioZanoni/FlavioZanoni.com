@@ -54,17 +54,34 @@
   }
 
   // watch changes in the fileSystem to update UI
+  // if there is extra on filesystem, must be added, if extra on homegrid it must be removed
   $: {
-    const desktopApps = $osStore.fileSystem.iNodes["2"]
+    const desktopApps = $osStore.fileSystem.iNodes["2"] // desktop iNode
       .blocks as DirectoryBlock[]
     const screenApps = $osStore.enviroment.homeGrid.items
+    let homeGrid = $osStore.enviroment.homeGrid
 
-    const divergence = desktopApps.filter(
-      (app) => !screenApps.find((screenApp) => screenApp.iNode === app.iNode)
-    )
-    const homeGrid = $osStore.enviroment.homeGrid
-    if (divergence.length > 0) {
-      divergence.forEach((app) => {
+    const removeItems = (diff: HomeGridItem[]) => {
+      homeGrid.items = homeGrid.items.filter((item) => {
+        return !diff.some((app) => app.iNode === item.iNode)
+      })
+
+      grid = grid.map((item) => {
+        // if this is giving more than 1 app, then you are just to move one copy of it
+        const appToRemove = diff.filter((app) => app.iNode === item.iNode)[0]
+
+        if (appToRemove) {
+          return {
+            pos: appToRemove.pos,
+            iNode: null,
+          }
+        }
+        return item
+      })
+    }
+
+    const addItems = (diff: DirectoryBlock[]) => {
+      diff.forEach((app) => {
         const emptyCell = grid.find((cell) => !cell.iNode)
         if (emptyCell) {
           homeGrid.items.push({
@@ -83,6 +100,19 @@
           })
         }
       })
+    }
+
+    if (desktopApps.length >= screenApps.length) {
+      const diff = desktopApps.filter(
+        (app) => !screenApps.some((screenApp) => screenApp.iNode === app.iNode)
+      )
+      addItems(diff)
+    } else {
+      const diff = screenApps.filter(
+        (app) =>
+          !desktopApps.some((desktopApp) => desktopApp.iNode === app.iNode)
+      )
+      removeItems(diff)
     }
   }
 

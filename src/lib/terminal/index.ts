@@ -152,16 +152,18 @@ export class Term {
           return this.writeln(`cd: ${e.message || "Error"}`)
         }
         return
+      case "mv":
+        try {
+          mv(args[0], args[1])
+          this.term.write(this.getDecorationString())
+        } catch (e) {
+          return this.writeln(`mv: ${e.message || "Error"}`)
+        }
+        return
       case "help":
         return this.writeln(
           `Available commands: ${availabeleCommands.join(", ")}`
         )
-      case "mv":
-        try {
-          mv(args[0], args[1])
-        } catch (e) {
-          return this.writeln(`mv: ${e.message || "Error"}`)
-        }
       default:
         return this.writeln(`Command not found: ${command}, try 'help'`)
     }
