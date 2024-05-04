@@ -291,10 +291,10 @@ export const mv = (source: string, destination: string) => {
         parent: currentParent,
         parentINode,
       } = handleDirNavigation(dir, iNodes, currentPwd, newPwd, true)
+      if (!block) return
+
       newPwd = newCurrentPwd
       currentPwd = newPwd
-
-      if (!block) return
 
       parent = currentParent
       srcINode = parentINode
@@ -316,10 +316,10 @@ export const mv = (source: string, destination: string) => {
         currentPwd,
         newPwd
       )
+      if (!block) return
+
       newPwd = newCurrentPwd
       currentPwd = newPwd
-
-      if (!block) return
     })
     const itemName = parent.blocks.find(
       (item: DirectoryBlock) => item.iNode === node

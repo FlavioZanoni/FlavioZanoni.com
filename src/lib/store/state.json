@@ -52,7 +52,7 @@
       "base64": "",
       "userImages": []
     },
-    "PWD": "root/desktop",
+    "PWD": "root",
     "openApps": [],
     "config": {
       "crt": true
@@ -66,10 +66,6 @@
           {
             "name": "desktop",
             "iNode": "2"
-          },
-          {
-            "name": "a",
-            "iNode": "7"
           }
         ]
       },
@@ -87,6 +83,10 @@
           {
             "name": "marcosPicture",
             "iNode": "6"
+          },
+          {
+            "name": "directory",
+            "iNode": "7"
           }
         ]
       },
@@ -128,7 +128,12 @@
       },
       "7": {
         "type": "directory",
-        "blocks": []
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "directory"
+          }
+        ]
       }
     },
     "disk": {
@@ -146,6 +151,11 @@
         "trash": {
           "name": "trash",
           "icon": "trash.png",
+          "type": "app"
+        },
+        "directory": {
+          "name": "directory",
+          "icon": "directory.png",
           "type": "app"
         }
       },
