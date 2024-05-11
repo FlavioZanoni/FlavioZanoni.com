@@ -27,11 +27,11 @@ import Layout from "../layouts/RetroLayout.astro"
   <div id="home-content" class="crt">
     <div id="scan" class="scan-lines">
       <main id="main">
-        <Home client:only />
+        <Home client:only="svelte" />
       </main>
-      <Footer client:only />
+      <Footer client:only="svelte" />
 
-      <WindowManager client:only />
+      <WindowManager client:only="svelte" />
     </div>
   </div>
 </Layout>

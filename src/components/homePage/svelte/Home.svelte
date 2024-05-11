@@ -146,7 +146,7 @@
 
       if (iNodes[itemToMove?.iNode]?.type === "directory") {
         const toUpdate = iNodes[itemToUpdate.iNode].blocks[0]
-        mv(`./desktop/${toUpdate.name}`, `./desktop/${itemToMove.name}`)
+        mv(`./${toUpdate.name}`, `./${itemToMove.name}`, "root/desktop")
 
         return state
       }

@@ -1,4 +1,4 @@
-import { cd, ls, mkdir, mv, pwd, touch } from "@lib/utils/fileSystemUtils"
+import { cd, ls, mkdir, mv, touch } from "@lib/utils/fileSystemUtils"
 import type { Terminal } from "@xterm/xterm"
 type TerminalType = InstanceType<typeof Terminal>
 
@@ -17,6 +17,7 @@ const availabeleCommands = [
 export class Term {
   constructor(public term: TerminalType) {}
 
+  private pwd = "root"
   private wrotedLines = 0
 
   private playBeep() {
@@ -36,13 +37,13 @@ export class Term {
   }
 
   private getDecorationString() {
-    const currentPwd = pwd()
+    const currentPwd = this.pwd
     const emoji = currentPwd === "root" ? "⌂" : "☺"
     return `\x1B[34m${emoji} ${currentPwd}\x1B[32m ❯\x1B[0m `
   }
 
   public setup(dir: string, uuid: string) {
-    // need to set the PWD to the directory sent
+    this.setPwd(dir)
 
     const termDiv = document.getElementById(`terminal-${uuid}`)
     this.term.open(termDiv)
@@ -66,7 +67,7 @@ export class Term {
         case "\r":
           const lastLine = this.term.buffer.active.getLine(this.wrotedLines)
           const lastLineText = lastLine.translateToString().trim()
-          if (lastLineText.length === pwd().length + 4) {
+          if (lastLineText.length === this.pwd.length + 4) {
             this.writeln("")
             break
           }
@@ -74,7 +75,7 @@ export class Term {
           break
         case "\x7f":
           // pwd + 5 is the length of the prompt decoration
-          if (this.term.buffer.active.cursorX === pwd().length + 5) {
+          if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
             this.term.write("\x07") // trigger bell
             break
           }
@@ -105,6 +106,15 @@ export class Term {
     this.wrotedLines++
   }
 
+  public getPwd() {
+    return this.pwd
+  }
+
+  //needs to be arrow fn or bind this in the constructor
+  public setPwd = (newPwd: string) => {
+    this.pwd = newPwd
+  }
+
   public execCommand(str: string) {
     const [_, typed] = str.split("❯")
     const [command, ...args] = typed
@@ -123,14 +133,13 @@ export class Term {
         this.wrotedLines = 1
         return this.term.write(this.getDecorationString())
       case "pwd":
-        const curr = pwd()
-        return this.writeln(curr)
+        return this.writeln(this.pwd)
       case "ls":
-        let files = ls()
+        let files = ls(this.pwd)
         return this.writeln(files.join(" "))
       case "touch":
         try {
-          touch(args[0])
+          touch(args[0], this.pwd)
           this.term.write(this.getDecorationString())
         } catch (e) {
           return this.writeln(`touch: ${e.message || "Error"}`)
@@ -138,7 +147,7 @@ export class Term {
         return
       case "mkdir":
         try {
-          mkdir(args[0])
+          mkdir(args[0], this.pwd)
           this.term.write(this.getDecorationString())
         } catch (e) {
           return this.writeln(`mkdir: ${e.message || "Error"}`)
@@ -146,7 +155,7 @@ export class Term {
         return
       case "cd":
         try {
-          cd(args[0])
+          cd(args[0], this.pwd, this.setPwd)
           this.term.write(this.getDecorationString())
         } catch (e) {
           return this.writeln(`cd: ${e.message || "Error"}`)
@@ -154,7 +163,7 @@ export class Term {
         return
       case "mv":
         try {
-          mv(args[0], args[1])
+          mv(args[0], args[1], this.pwd)
           this.term.write(this.getDecorationString())
         } catch (e) {
           return this.writeln(`mv: ${e.message || "Error"}`)

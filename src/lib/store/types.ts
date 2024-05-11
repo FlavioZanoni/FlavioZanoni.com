@@ -18,7 +18,6 @@ export interface Enviroment {
     items: EnviromentItem[]
   }
   openApps: OpenApp[]
-  PWD: string
   config: {
     crt: boolean
   }

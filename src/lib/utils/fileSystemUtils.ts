@@ -58,16 +58,6 @@ export const getItemsInArrayByINode = (
   return items
 }
 
-export const pwd = () => {
-  let pwd: string
-
-  osStore.subscribe((state) => {
-    pwd = state.enviroment.PWD
-  })
-
-  return pwd
-}
-
 const iNodeLookup = (dir: string) => {
   const startINode = 1 // my root directory
   let iNode: string
@@ -103,12 +93,12 @@ const iNodeLookup = (dir: string) => {
   return iNode
 }
 
-export const touch = (name: string) => {
+export const touch = (name: string, pwd: string) => {
   if (!name) {
     throw new Error("missing file operand")
   }
 
-  const dir = pwd()
+  const dir = pwd
   const parent = iNodeLookup(dir)
 
   osStore.update((state) => {
@@ -151,12 +141,12 @@ export const touch = (name: string) => {
   })
 }
 
-export const mkdir = (name: string) => {
+export const mkdir = (name: string, pwd: string) => {
   if (!name) {
     throw new Error("missing file operand")
   }
 
-  const dir = pwd()
+  const dir = pwd
   const parent = iNodeLookup(dir)
 
   osStore.update((state) => {
@@ -229,12 +219,18 @@ const handleDirNavigation = (
   return { newPwd, block: dirBlock, parent, parentINode }
 }
 
-export const cd = (dir: string) => {
+export const cd = (
+  dir: string,
+  pwd: string,
+  setPwd: (newPwd: string) => void
+) => {
   if (!dir) {
     throw new Error("missing directory operand")
   }
 
-  let currentPwd = pwd()
+  console.log("pwd on cd", pwd)
+
+  let currentPwd = pwd
   let newPwd: string
 
   osStore.update((state) => {
@@ -253,7 +249,7 @@ export const cd = (dir: string) => {
       )
 
       newPwd = newCurrentPwd
-      state.enviroment.PWD = newPwd
+      setPwd(newPwd)
       currentPwd = newPwd
 
       if (!block) return
@@ -268,7 +264,7 @@ export const cd = (dir: string) => {
   })
 }
 
-export const mv = (source: string, destination: string) => {
+export const mv = (source: string, destination: string, pwd: string) => {
   if (!source) {
     throw new Error("missing directory operand")
   }
@@ -276,7 +272,7 @@ export const mv = (source: string, destination: string) => {
     throw new Error("missing destination operand")
   }
 
-  let currentPwd = pwd()
+  let currentPwd = pwd
   let newPwd: string
   let fileINode: string
   let srcINode: string
@@ -337,7 +333,7 @@ export const mv = (source: string, destination: string) => {
     const { iNodes } = state.fileSystem
 
     fileINode = getSourceNode(iNodes)
-    currentPwd = pwd() // reset the pwd to use in the dest validation
+    currentPwd = pwd // reset the pwd to use in the dest validation
     moveToDest(fileINode, iNodes)
     // remove from last place
     const filtered = iNodes[srcINode].blocks.filter(
@@ -349,8 +345,8 @@ export const mv = (source: string, destination: string) => {
   })
 }
 
-export const ls = () => {
-  const currentPwd = pwd()
+export const ls = (pwd: string) => {
+  const currentPwd = pwd
   const parent = iNodeLookup(currentPwd)
   let items: string[]
 
