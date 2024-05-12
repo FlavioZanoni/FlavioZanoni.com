@@ -12,9 +12,8 @@
   const appComponents = {
     term: XTerm,
     background: Background,
+    fileExplorer: FileExplorer,
   }
-
-  console.log(isDirectory)
 </script>
 
 {#if isDirectory}

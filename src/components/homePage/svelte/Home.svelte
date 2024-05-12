@@ -100,7 +100,6 @@
           })
           grid = grid.map((item) => {
             if (item.pos === emptyCell.pos) {
-              console.log("inapp,", app)
               return {
                 iNode: app.iNode,
                 pos: emptyCell.pos,

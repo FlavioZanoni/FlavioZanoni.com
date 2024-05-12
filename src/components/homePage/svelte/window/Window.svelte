@@ -246,7 +246,7 @@
         {uuid}
         {iNode}
         isDirectory={isDirectory(item)}
-        appName={item.name}
+        appName={isDirectory(item) ? item.name : item.appName || item.name}
         link={!isDirectory(item) && item.link}
         title={item.name}
       />

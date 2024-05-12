@@ -50,6 +50,11 @@
           "iNode": "3",
           "type": "file",
           "name": "resume.txt"
+        },
+        {
+          "iNode": "8",
+          "type": "app",
+          "name": "File explorer"
         }
       ]
     },
@@ -142,6 +147,15 @@
       "7": {
         "type": "directory",
         "blocks": []
+      },
+      "8": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "fileExplorer"
+          }
+        ]
       }
     },
     "disk": {
@@ -159,6 +173,12 @@
         "trash": {
           "name": "trash",
           "icon": "trash.png",
+          "type": "app"
+        },
+        "fileExplorer": {
+          "name": "File explorer",
+          "appName": "fileExplorer",
+          "icon": "directory.png",
           "type": "app"
         }
       },

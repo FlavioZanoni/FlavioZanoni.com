@@ -1,10 +1,6 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import {
-    getItemByINode,
-    getItemInDiskByFile,
-    isFileBlock,
-  } from "@lib/utils/fileSystemUtils"
+  import { getItemByINode, isFileBlock } from "@lib/utils/fileSystemUtils"
   import type {
     DefaultItem,
     DirectoryBlock,
@@ -15,8 +11,8 @@
   import { openApp } from "@lib/utils/enviromentUtils"
   type Dir = { name: string; hasChildren: boolean; iNode: string }
 
-  export let iNode: string
-  export let name: string
+  export let iNode: string = "1"
+  export let name: string = "root"
 
   interface DefaultItemWithId extends DefaultItem {
     id: string
@@ -57,7 +53,7 @@
 </script>
 
 <div class="flex flex-row w-full h-full">
-  <div class="w-1/4 border-r pl-1 border-gray-500 overflow-x-scroll">
+  <div class="w-1/4 border-r pl-1 border-gray-500 overflow-auto">
     <FileTree
       iNode={iNodes[1]}
       dirName="root"
