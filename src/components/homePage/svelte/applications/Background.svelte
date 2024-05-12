@@ -157,7 +157,7 @@
     </div>
 
     <div>
-      {#if $osStore.enviroment.background.userImages.length > 0}
+      {#if $osStore.enviroment.background.userImages.length}
         <div class="flex flex-col gap-2">
           <h2 class="text-xl font-medium">Your images:</h2>
           <div class="flex flex-wrap gap-4">

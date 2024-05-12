@@ -21,6 +21,7 @@ TODO:
   - [ x ] the windows should have a title
   - [ x ] the windows should have a z-index
   - [ x ] the windows should have a shadow
+  - [ x ] implement a directory app
 
   - window content
     - the window component will be the multi-page handler, it can basically render anything, from astro islands to .md files

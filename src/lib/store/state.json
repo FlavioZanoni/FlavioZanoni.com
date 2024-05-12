@@ -47,7 +47,9 @@
     "taskbar": {
       "items": [
         {
-          "iNode": "3"
+          "iNode": "3",
+          "type": "file",
+          "name": "resume.txt"
         }
       ]
     },
@@ -84,7 +86,7 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "resume.txt",
+            "name": "resume",
             "iNode": "3"
           },
           {
@@ -163,7 +165,7 @@
       "files": {
         "resume": {
           "icon": "document.png",
-          "name": "Resume.txt",
+          "name": "resume.txt",
           "type": "file",
           "link": "/resume"
         },

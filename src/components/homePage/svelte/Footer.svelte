@@ -92,6 +92,7 @@
           on:click={() => {
             osStore.update((state) => {
               state.enviroment.openApps.push({
+                name: item.name,
                 iNode: item.iNode,
                 isMinimized: false,
                 isMaximized: false,
@@ -107,7 +108,6 @@
 
     {#if $osStore.enviroment.openApps}
       {#each $osStore.enviroment.openApps as item}
-        {@const currentItem = openAppsByINode[item.iNode]}
         <Button
           id={item.uuid}
           on:click={() => {
@@ -120,7 +120,7 @@
                 !state.enviroment.openApps[currentItem].isMinimized
               return state
             })
-          }}>{currentItem.name}</Button
+          }}>{item.name}</Button
         >
       {/each}
     {/if}

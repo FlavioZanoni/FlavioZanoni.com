@@ -9,7 +9,9 @@ import type {
   INodes,
 } from "@lib/store/types"
 
-function isFileBlock(block: FileBlock | DirectoryBlock): block is FileBlock {
+export function isFileBlock(
+  block: FileBlock | DirectoryBlock
+): block is FileBlock {
   return "location" in block
 }
 
@@ -19,7 +21,7 @@ function isDirectoryBlockArray(
   return blocks.length === 0 || "iNode" in blocks[0]
 }
 
-export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
+export const getItemByINode = (appId: string): DefaultItem | null => {
   let disk: Disk
   let iNodes: INodes
 
@@ -31,12 +33,10 @@ export const getItemByINode = (appId: string): DefaultItem | DirectoryBlock => {
   const iNodeObj = iNodes[appId]
 
   if (!iNodeObj || !iNodeObj.blocks[0]) {
-    return
+    return null
   }
 
-  if (!isFileBlock(iNodeObj.blocks[0])) {
-    return iNodeObj.blocks[0]
-  } else {
+  if (isFileBlock(iNodeObj.blocks[0])) {
     const block = iNodeObj.blocks[0]
     return disk[block.location][block.name]
   }

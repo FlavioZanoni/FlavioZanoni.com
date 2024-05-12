@@ -77,12 +77,12 @@ export type Size = {
 
 export interface EnviromentItem {
   iNode?: string
+  name?: string
 }
 
 export interface HomeGridItem extends EnviromentItem {
   pos: Position
   type: "file" | "directory" | "empty"
-  name?: string
 }
 
 export type ItemType = "directory" | "file" | "app" | "empty"
@@ -99,6 +99,7 @@ export interface DefaultItem {
 export interface OpenApp {
   iNode: string
   uuid: string
+  name: string
   isMaximized: boolean
   isMinimized: boolean
   isFocused: boolean

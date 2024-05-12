@@ -1,22 +1,24 @@
 <script lang="ts">
   import Background from "../applications/Background.svelte"
   import XTerm from "../applications/XTerm.svelte"
+  import FileExplorer from "../applications/FileExplorer.svelte"
   export let appName: string
+  export let iNode: string
   export let uuid: string
   export let link: string
-  export let isApp: boolean = false
+  export let isDirectory: boolean = false
   export let title: string
 
   const appComponents = {
     term: XTerm,
     background: Background,
   }
+
+  console.log(isDirectory)
 </script>
 
-{#if !isApp}
-  <div>
-    <h1>folder handler</h1>
-  </div>
+{#if isDirectory}
+  <FileExplorer name={appName} {iNode} />
 {:else if link}
   <div class="w-full h-full">
     <iframe

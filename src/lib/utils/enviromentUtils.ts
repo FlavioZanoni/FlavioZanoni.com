@@ -1,8 +1,16 @@
 import { osStore } from "../store"
-import type { OSStore, Position, Size } from "../store/types"
+import type {
+  DirectoryBlock,
+  FileBlock,
+  OSStore,
+  Position,
+  Size,
+} from "../store/types"
+import { isFileBlock } from "./fileSystemUtils"
 
 export const openApp = (appId: string) => {
   let newItem = {
+    name: null,
     isMinimized: false,
     isMaximized: false,
     isFocused: true,
@@ -15,6 +23,22 @@ export const openApp = (appId: string) => {
   }
 
   osStore.update((state) => {
+    const { iNodes } = state.fileSystem
+
+    let parent: FileBlock | DirectoryBlock
+    for (const item in iNodes) {
+      parent = iNodes[item].blocks.find((block: FileBlock | DirectoryBlock) => {
+        if (!isFileBlock(block)) {
+          return block.iNode === appId
+        }
+
+        return false
+      })
+
+      if (parent) break
+    }
+
+    item.name = parent.name
     state.enviroment.openApps.push(item)
 
     return state

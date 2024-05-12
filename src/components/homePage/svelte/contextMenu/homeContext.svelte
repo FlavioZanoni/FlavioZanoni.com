@@ -5,6 +5,7 @@
   const handleBackground = () => {
     osStore.update((state) => {
       state.enviroment.openApps.push({
+        name: "background",
         iNode: "4",
         uuid: crypto.randomUUID().toString(),
         isFocused: true,

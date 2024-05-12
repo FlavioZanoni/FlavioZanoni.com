@@ -1,6 +1,6 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import type { Position, Size } from "@lib/store/types"
+  import type { DefaultItem, OpenApp, Position, Size } from "@lib/store/types"
   import {
     closeApp,
     focusApp,
@@ -17,11 +17,21 @@
   export let lastPos: Position | undefined = undefined
   export let lastSize: Size | undefined = undefined
 
-  const item = getItemByINode(iNode)
-  const isApp = "type" in item
+  // as the directoryBlock does not contain the info needed, we get it from the "openApps" variable and its type will be "OpenApp"
+  // doing this instead of getting both from the oppenApps because oppenApps does not contain the content, icon, and link...
+  function isDirectory(item: DefaultItem | OpenApp): item is OpenApp {
+    return "isMinimized" in item
+  }
 
-  let defaultWidth = 550
-  let defaultHeight = 400
+  let item: DefaultItem | OpenApp = getItemByINode(iNode)
+  if (!item) {
+    item = $osStore.enviroment.openApps.find((item) => (item.iNode = iNode))
+  }
+
+  let defaultWidth = 600
+  let defaultHeight = 450
+  let minWidth = 450
+  let minHeight = 300
   const defaultX = window.innerWidth / 2 - defaultWidth / 2
   const defaultY = window.innerHeight / 2 - defaultHeight / 2
 
@@ -122,8 +132,20 @@
     dx = event.clientX - startResizeX
     dy = event.clientY - startResizeY
 
-    width = startWidth + dx
-    height = startHeight + dy
+    let newHeight = startHeight + dy
+    let newWidth = startWidth + dx
+
+    if (newHeight < minHeight) {
+      height = minHeight
+    } else {
+      height = startHeight + dy
+    }
+
+    if (newWidth < minWidth) {
+      width = minWidth
+    } else {
+      width = startWidth + dx
+    }
   }
 
   function handleMouseupResize() {
@@ -162,7 +184,7 @@
   }}
 >
   <div
-    class="flex flex-col border-2 border-slate-900 min-h-[40px] min-w-[100px]"
+    class={`flex flex-col border-2 border-slate-900 min-h-[${minHeight}px] min-w-[${minWidth}px]`}
     style="width: {width}px; height: {height}px;"
   >
     <div
@@ -173,11 +195,11 @@
     >
       <div class="flex gap-1 items-center px-1">
         <img
-          src={`icons/${isApp ? item.icon : "directory.png"}`}
+          src={`icons/${!isDirectory(item) ? item.icon : "directory.png"}`}
           alt={item.name}
           class="w-4 h-4 border border-slate-500 p-[1px]"
         />
-        <h1 class="select-none">{item.name}</h1>
+        <h1 class="select-none">{isDirectory ? "File explorer" : item.name}</h1>
       </div>
       <div class="flex gap-2 items-center px-1 select-none">
         <button
@@ -222,9 +244,10 @@
     <div class="w-full bg-white" style="height: calc({height}px - 40px);">
       <WindowContent
         {uuid}
-        {isApp}
-        appName={isApp && item.name}
-        link={isApp && item.link}
+        {iNode}
+        isDirectory={isDirectory(item)}
+        appName={item.name}
+        link={!isDirectory(item) && item.link}
         title={item.name}
       />
     </div>
