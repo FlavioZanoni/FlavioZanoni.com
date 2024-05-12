@@ -1,52 +1,102 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import { isFileBlock } from "@lib/utils/fileSystemUtils"
-  import type { DefaultItem, DirectoryBlock, FileBlock } from "@lib/store/types"
-  type Dir = { name: string; hasChildren: boolean }
+  import {
+    getItemByINode,
+    getItemInDiskByFile,
+    isFileBlock,
+  } from "@lib/utils/fileSystemUtils"
+  import type {
+    DefaultItem,
+    DirectoryBlock,
+    FileBlock,
+    INodes,
+  } from "@lib/store/types"
+  import FileTree from "./FileTree.svelte"
+  import { openApp } from "@lib/utils/enviromentUtils"
+  type Dir = { name: string; hasChildren: boolean; iNode: string }
 
   export let iNode: string
   export let name: string
 
+  interface DefaultItemWithId extends DefaultItem {
+    id: string
+  }
+
+  let currentINode = iNode
+  let currentName = name
+  let iNodes: INodes = $osStore.fileSystem.iNodes
   let directories: Dir[] = []
-  let files: DefaultItem[] = []
+  let files: DefaultItemWithId[] = []
 
   $: {
-    const { iNodes } = $osStore.fileSystem
-    let blocks = $osStore.fileSystem.iNodes[iNode].blocks
+    directories = []
+    files = []
+    iNodes = $osStore.fileSystem.iNodes
+    let blocks = $osStore.fileSystem.iNodes[currentINode].blocks
 
     blocks.forEach((block: FileBlock | DirectoryBlock) => {
-      if (isFileBlock(block)) {
-        files.push($osStore.fileSystem.disk[block.location][block.name])
-      } else {
-        directories.push({
-          hasChildren: iNodes[block.iNode].blocks.length > 0,
-          name: block.name,
-        })
+      if (!isFileBlock(block)) {
+        let item = getItemByINode(block.iNode)
+        if (item) {
+          files.push({ ...item, ...{ id: block.iNode } })
+        } else {
+          directories.push({
+            hasChildren: iNodes[block.iNode].blocks.length > 0,
+            name: block.name,
+            iNode: block.iNode,
+          })
+        }
       }
     })
+  }
+
+  function updateCurrentDir(iNode: string, name: string) {
+    currentINode = iNode
+    currentName = name
   }
 </script>
 
 <div class="flex flex-row w-full h-full">
-  <div class="w-1/5 border-r border-gray-500">
-    <h1>directory tree</h1>
+  <div class="w-1/4 border-r pl-1 border-gray-500 overflow-x-scroll">
+    <FileTree
+      iNode={iNodes[1]}
+      dirName="root"
+      iNodeKey={"1"}
+      {updateCurrentDir}
+      currentOpen={currentINode}
+    />
   </div>
   <div class="flex flex-col justify-between h-full w-full">
     <div
       class="flex flex-row justify-between gap-4 p-1 border-b border-gray-500"
     >
       <h2>
-        Showing contents of: {name}
+        Showing contents of: {currentName}
       </h2>
     </div>
 
     <div class="h-full">
       {#if files.length || directories.length}
         {#each directories as directory}
-          <p>{directory.name}</p>
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            class="flex gap-1 items-center cursor-pointer"
+            on:click={() => updateCurrentDir(directory.iNode, directory.name)}
+          >
+            <img width="18" height="18" src={`/icons/directory.png`} alt="" />
+            <p>{directory.name}</p>
+          </div>
         {/each}
         {#each files as file}
-          <p>{file.name}</p>
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            on:dblclick={() => openApp(file?.id)}
+            class="flex gap-1 items-center cursor-pointer"
+          >
+            <img width="18" height="18" src={`/icons/${file.icon}`} alt="" />
+            <p>{file.name}</p>
+          </div>
         {/each}
       {:else}
         <p class="text-center mt-10">This directory is empty</p>

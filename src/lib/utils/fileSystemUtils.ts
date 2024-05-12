@@ -42,6 +42,15 @@ export const getItemByINode = (appId: string): DefaultItem | null => {
   }
 }
 
+export const getItemInDiskByFile = (file: FileBlock): DefaultItem | null => {
+  let item: DefaultItem | null = null
+  osStore.subscribe((state) => {
+    item = state.fileSystem.disk[file.location][file.name]
+  })
+
+  return item
+}
+
 export type GetItemsInArrayByINode = {
   [key: string]: DefaultItem | DirectoryBlock
 }
@@ -59,7 +68,7 @@ export const getItemsInArrayByINode = (
 }
 
 const iNodeLookup = (dir: string) => {
-  const startINode = 1 // my root directory
+  const startINode = 1 // the root directory
   let iNode: string
 
   if (dir === "root") {
@@ -227,8 +236,6 @@ export const cd = (
   if (!dir) {
     throw new Error("missing directory operand")
   }
-
-  console.log("pwd on cd", pwd)
 
   let currentPwd = pwd
   let newPwd: string
