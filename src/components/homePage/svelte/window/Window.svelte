@@ -200,7 +200,7 @@
           class="w-4 h-4 border border-slate-500 p-[1px]"
         />
         <h1 class="select-none">
-          {isDirectory(item) ? "File explorer" : item.appName || item.name}
+          {isDirectory(item) ? "File explorer" : item.name}
         </h1>
       </div>
       <div class="flex gap-2 items-center px-1 select-none">

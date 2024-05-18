@@ -270,11 +270,8 @@
             alt={cell.name}
           />
           <p
-            style={`
-              width: ${cellWidth - 4}px;
-              text-align: center;
-            `}
-            class="truncate text-sm"
+            style={` width: ${cellWidth - 8}px; `}
+            class="truncate text-sm text-center max-w-[115px]"
           >
             {cell.name || "‎"}
           </p>
