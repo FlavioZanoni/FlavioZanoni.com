@@ -1,10 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte"
 
-  export let variant: "primary" | "text" | "danger" | "secondary" = "primary"
+  export let variant: "primary" | "tertiary" | "danger" | "secondary" =
+    "primary"
   export let type: "button" | "submit" | "reset" = "button"
   export let customCss: string = ""
-  export let id: string
+  export let id: string = crypto.randomUUID()
+  export let disabled: boolean = false
 
   const defaultStyle =
     "flex flex-row items-center justify-center gap-2 text-center px-2"
@@ -21,8 +23,9 @@
     case "danger":
       style = "bg-red-400 text-white"
       break
-    case "secondary":
-      style = "bg-primary-10 text-white"
+    case "tertiary":
+      style =
+        "border-2 border-b-slate-900 border-l-slate-900 border-t-slate-200 border-r-slate-200 text-black px-2"
       break
     default:
       style = "bg-primary-50"
@@ -37,6 +40,7 @@
 <button
   {type}
   {id}
+  {disabled}
   class="{defaultStyle} {style} {customCss}"
   on:click={handleClick}
 >

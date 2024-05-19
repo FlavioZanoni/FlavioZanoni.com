@@ -27,6 +27,8 @@
       frameborder="0"
     />
   </div>
+{:else if appName === "recycleBin"}
+  <FileExplorer name={"recycleBin"} iNode={"10"} />
 {:else if appName in appComponents}
   <svelte:component this={appComponents[appName]} {uuid} />
 {:else}

@@ -25,5 +25,5 @@
   }
 </script>
 
-<Button on:click={handleBackground} id={"button1"}>Change background</Button>
-<Button on:click={toggleCRT} id={"button2"}>Toggle CRT effect</Button>
+<Button on:click={handleBackground}>Change background</Button>
+<Button on:click={toggleCRT}>Toggle CRT effect</Button>

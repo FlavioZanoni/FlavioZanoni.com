@@ -37,6 +37,15 @@
           },
           "type": "directory",
           "name": "directory"
+        },
+        {
+          "iNode": "9",
+          "pos": {
+            "x": 0,
+            "y": 4
+          },
+          "type": "app",
+          "name": "Recycle bin"
         }
       ],
       "size": {
@@ -61,7 +70,9 @@
     "menu": {
       "items": [
         {
-          "iNode": "3"
+          "iNode": "3",
+          "type": "file",
+          "name": "resume.txt"
         }
       ]
     },
@@ -84,6 +95,10 @@
           {
             "name": "desktop",
             "iNode": "2"
+          },
+          {
+            "name": "recycleBin",
+            "iNode": "10"
           }
         ]
       },
@@ -91,7 +106,7 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "resume",
+            "name": "resume.txt",
             "iNode": "3"
           },
           {
@@ -99,12 +114,16 @@
             "iNode": "5"
           },
           {
-            "name": "marcosPicture",
+            "name": "marcospauloramosimagens.png",
             "iNode": "6"
           },
           {
             "name": "directory",
             "iNode": "7"
+          },
+          {
+            "name": "recycleBin",
+            "iNode": "9"
           }
         ]
       },
@@ -113,12 +132,12 @@
         "blocks": [
           {
             "location": "files",
-            "name": "resume"
+            "name": "resume.txt"
           }
         ]
       },
       "4": {
-        "type": "file",
+        "type": "app",
         "blocks": [
           {
             "location": "apps",
@@ -127,7 +146,7 @@
         ]
       },
       "5": {
-        "type": "file",
+        "type": "app",
         "blocks": [
           {
             "location": "apps",
@@ -140,7 +159,7 @@
         "blocks": [
           {
             "location": "files",
-            "name": "marcosPicture"
+            "name": "marcospauloramosimagens.png"
           }
         ]
       },
@@ -156,6 +175,19 @@
             "name": "fileExplorer"
           }
         ]
+      },
+      "9": {
+        "type": "app",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "recycleBin"
+          }
+        ]
+      },
+      "10": {
+        "type": "directory",
+        "blocks": []
       }
     },
     "disk": {
@@ -180,16 +212,22 @@
           "appName": "fileExplorer",
           "icon": "directory.png",
           "type": "app"
+        },
+        "recycleBin": {
+          "name": "Recycle bin",
+          "appName": "recycleBin",
+          "icon": "trash.png",
+          "type": "app"
         }
       },
       "files": {
-        "resume": {
+        "resume.txt": {
           "icon": "document.png",
           "name": "resume.txt",
           "type": "file",
           "link": "/resume"
         },
-        "marcosPicture": {
+        "marcospauloramosimagens.png": {
           "icon": "picture.png",
           "name": "marcospauloramosimagens.png",
           "type": "file",

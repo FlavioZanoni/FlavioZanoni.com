@@ -9,6 +9,7 @@
   } from "@lib/store/types"
   import FileTree from "./FileTree.svelte"
   import { openApp } from "@lib/utils/enviromentUtils"
+  import Button from "../Button.svelte"
   type Dir = { name: string; hasChildren: boolean; iNode: string }
 
   export let iNode: string = "1"
@@ -66,9 +67,15 @@
     <div
       class="flex flex-row justify-between gap-4 p-1 border-b border-gray-500"
     >
-      <h2>
-        Showing contents of: {currentName}
-      </h2>
+      {#if currentName === "recycleBin"}
+        <h2>Recycle Bin</h2>
+      {:else}
+        <h2>
+          Showing contents of: {currentName}
+        </h2>
+      {/if}
+
+      <Button variant={"tertiary"}>Empty bin</Button>
     </div>
 
     <div class="h-full">
@@ -94,6 +101,8 @@
             <p>{file.name}</p>
           </div>
         {/each}
+      {:else if currentName === "recycleBin"}
+        <p class="text-center mt-10">Recycle bin is empty</p>
       {:else}
         <p class="text-center mt-10">This directory is empty</p>
       {/if}

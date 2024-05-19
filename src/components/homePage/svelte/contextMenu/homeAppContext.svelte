@@ -1,12 +1,33 @@
 <script lang="ts">
+  import { getItemByINode, isFileBlock, mv } from "@lib/utils/fileSystemUtils"
   import Button from "../Button.svelte"
+  import { osStore } from "@lib/store"
+  import type { DirectoryBlock, FileBlock } from "@lib/store/types"
 
   export let iNode: string
 
   const moveToRecycleBin = () => {
-    console.log("Move to Recycle bin", iNode)
+    let iNodes = $osStore.fileSystem.iNodes
+    if (iNodes[iNode].type !== "directory") {
+      let item = getItemByINode(iNode)
+      mv(`./${item.name}`, `../recycleBin`, "root/desktop")
+      return
+    }
+
+    $osStore.fileSystem.iNodes["2"].blocks.forEach(
+      (item: FileBlock | DirectoryBlock) => {
+        if (isFileBlock(item)) return
+        if (item.iNode === iNode) {
+          mv(`./${item.name}`, `../recycleBin`, "root/desktop")
+        }
+      }
+    )
   }
+
+  console.log(getItemByINode(iNode)?.name)
 </script>
 
-<Button on:click={moveToRecycleBin} id={"button1"}>Move to Recycle bin</Button>
-<Button on:click={() => {}} id={"button2"}>Toggle CRT effect</Button>
+<Button
+  disabled={getItemByINode(iNode)?.appName === "recycleBin"}
+  on:click={moveToRecycleBin}>Move to Recycle bin</Button
+>

@@ -75,17 +75,17 @@ export type Size = {
   height: number
 }
 
+export type ItemType = "directory" | "file" | "app" | "empty"
+
 export interface EnviromentItem {
   iNode?: string
   name?: string
+  type: ItemType
 }
 
 export interface HomeGridItem extends EnviromentItem {
   pos: Position
-  type: "file" | "directory" | "empty"
 }
-
-export type ItemType = "directory" | "file" | "app" | "empty"
 
 export interface DefaultItem {
   icon: string

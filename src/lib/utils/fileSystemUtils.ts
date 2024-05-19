@@ -67,7 +67,7 @@ export const getItemsInArrayByINode = (
   return items
 }
 
-const iNodeLookup = (dir: string) => {
+export const iNodeLookup = (dir: string) => {
   const startINode = 1 // the root directory
   let iNode: string
 
@@ -113,7 +113,6 @@ export const touch = (name: string, pwd: string) => {
   osStore.update((state) => {
     const { disk, iNodes } = state.fileSystem
     const iNode = Object.keys(iNodes).length + 1
-    const [fileName, ext] = name.split(".")
 
     const parentINode = iNodes[parent]
     if (!parentINode) {
@@ -132,18 +131,17 @@ export const touch = (name: string, pwd: string) => {
       type: "file",
       blocks: [
         {
-          name: fileName,
+          name: name,
           location: "files",
         },
       ],
     }
 
-    disk.files[fileName] = {
-      name: fileName,
+    disk.files[name] = {
+      name: name,
       type: "file",
       content: "",
       icon: "document.png",
-      ext,
     }
 
     return state
@@ -188,21 +186,18 @@ const handleDirNavigation = (
   dir: string,
   iNodes: INodes,
   currentPwd: string,
-  newPwd: string = "",
   getFile?: boolean
 ) => {
   const parentINode = iNodeLookup(currentPwd)
   let parent = iNodes[parentINode]
-  if (!dir || dir === ".") return { newPwd, block: undefined }
+  if (!dir || dir === ".") return { newPwd: currentPwd, block: undefined }
   if (dir === ".." && currentPwd === "root") {
     return { newPwd: "root", block: undefined }
   }
   if (dir === "..") {
     const path = currentPwd.split("/")
     path.pop()
-    newPwd = path.join("/")
-    currentPwd = newPwd
-    return { newPwd, block: undefined }
+    return { newPwd: path.join("/"), block: undefined }
   }
 
   const dirBlock = parent.blocks.find(
@@ -222,10 +217,12 @@ const handleDirNavigation = (
     }
   }
 
-  newPwd = `${currentPwd}/${dir}`
-  currentPwd = newPwd
-
-  return { newPwd, block: dirBlock, parent, parentINode }
+  return {
+    newPwd: `${currentPwd}/${dir}`,
+    block: dirBlock,
+    parent,
+    parentINode,
+  }
 }
 
 export const cd = (
@@ -238,7 +235,6 @@ export const cd = (
   }
 
   let currentPwd = pwd
-  let newPwd: string
 
   osStore.update((state) => {
     const { iNodes } = state.fileSystem
@@ -251,13 +247,10 @@ export const cd = (
       const { newPwd: newCurrentPwd, block } = handleDirNavigation(
         dir,
         iNodes,
-        currentPwd,
-        newPwd
+        currentPwd
       )
-
-      newPwd = newCurrentPwd
-      setPwd(newPwd)
-      currentPwd = newPwd
+      setPwd(newCurrentPwd)
+      currentPwd = newCurrentPwd
 
       if (!block) return
 
@@ -280,7 +273,6 @@ export const mv = (source: string, destination: string, pwd: string) => {
   }
 
   let currentPwd = pwd
-  let newPwd: string
   let fileINode: string
   let srcINode: string
   let parent: INode
@@ -293,18 +285,15 @@ export const mv = (source: string, destination: string, pwd: string) => {
         block,
         parent: currentParent,
         parentINode,
-      } = handleDirNavigation(dir, iNodes, currentPwd, newPwd, true)
+      } = handleDirNavigation(dir, iNodes, currentPwd, true)
       if (!block) return
 
-      newPwd = newCurrentPwd
-      currentPwd = newPwd
-
+      currentPwd = newCurrentPwd
+      console.log("currentPArent", currentParent)
       parent = currentParent
       srcINode = parentINode
-      if (iNodes[block.iNode].type == "file") {
-        node = block.iNode
-        return
-      }
+      node = block.iNode
+      return
     })
 
     return node
@@ -313,22 +302,19 @@ export const mv = (source: string, destination: string, pwd: string) => {
   const moveToDest = (node: string, iNodes: INodes) => {
     const splitDir = destination.split("/")
     splitDir.forEach((dir) => {
-      const { newPwd: newCurrentPwd, block } = handleDirNavigation(
+      const { newPwd: newCurrentPwd } = handleDirNavigation(
         dir,
         iNodes,
-        currentPwd,
-        newPwd
+        currentPwd
       )
-      if (!block) return
-
-      newPwd = newCurrentPwd
-      currentPwd = newPwd
+      currentPwd = newCurrentPwd
     })
+
+    console.log("parent", parent)
     const itemName = parent.blocks.find(
       (item: DirectoryBlock) => item.iNode === node
     ).name
-
-    const whereToMove = iNodeLookup(newPwd)
+    const whereToMove = iNodeLookup(currentPwd)
     const itemToMove: DirectoryBlock = {
       name: itemName,
       iNode: node,

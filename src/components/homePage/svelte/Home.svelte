@@ -1,8 +1,13 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import type { DirectoryBlock, HomeGridItem, OSStore } from "@lib/store/types"
+  import type {
+    DirectoryBlock,
+    FileBlock,
+    HomeGridItem,
+    OSStore,
+  } from "@lib/store/types"
   import { openApp } from "@lib/utils/enviromentUtils"
-  import { getItemByINode, mv } from "@lib/utils/fileSystemUtils"
+  import { getItemByINode, isFileBlock, mv } from "@lib/utils/fileSystemUtils"
   import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
   import ContextMenu from "./contextMenu/ContextMenu.svelte"
@@ -143,13 +148,34 @@
         (item) => item.iNode === current.iNode
       )
 
-      if (iNodes[itemToMove?.iNode]?.type === "directory") {
-        const toUpdate = iNodes[itemToUpdate.iNode].blocks[0]
-        mv(`./${toUpdate.name}`, `./${itemToMove.name}`, "root/desktop")
+      if (itemToMove) {
+        let itemToMoveNode = iNodes[itemToMove.iNode]
+        console.log(itemToMoveNode)
+        if (itemToMoveNode.type === "directory") {
+          const toUpdate = iNodes[itemToUpdate.iNode].blocks[0]
+          mv(`./${toUpdate.name}`, `./${itemToMove.name}`, "root/desktop")
 
-        return state
+          return state
+        }
+
+        if (itemToMoveNode.blocks[0].name === "recycleBin") {
+          let current = iNodes[itemToUpdate.iNode]
+          if (current.type !== "directory") {
+            const toUpdate = current.blocks[0]
+            mv(`./${toUpdate.name}`, `../recycleBin`, "root/desktop")
+            return state
+          }
+
+          iNodes["2"].blocks.forEach((item: FileBlock | DirectoryBlock) => {
+            if (isFileBlock(item)) return
+            if (item.iNode === itemToUpdate.iNode) {
+              mv(`./${item.name}`, `../recycleBin`, "root/desktop")
+            }
+          })
+
+          return state
+        }
       }
-
       if (itemToUpdate) {
         itemToUpdate.pos = current.pos
       }
