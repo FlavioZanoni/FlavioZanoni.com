@@ -6,7 +6,7 @@
           "iNode": "5",
           "pos": {
             "x": 0,
-            "y": 0
+            "y": 5
           },
           "type": "file",
           "name": "term"
@@ -21,10 +21,19 @@
           "name": "resume.txt"
         },
         {
-          "iNode": "6",
+          "iNode": "11",
           "pos": {
             "x": 0,
             "y": 2
+          },
+          "type": "file",
+          "name": "projects.txt"
+        },
+        {
+          "iNode": "6",
+          "pos": {
+            "x": 0,
+            "y": 3
           },
           "type": "file",
           "name": "marcospauloramosimagens.png"
@@ -33,7 +42,7 @@
           "iNode": "7",
           "pos": {
             "x": 0,
-            "y": 3
+            "y": 4
           },
           "type": "directory",
           "name": "directory"
@@ -42,7 +51,7 @@
           "iNode": "9",
           "pos": {
             "x": 0,
-            "y": 4
+            "y": 0
           },
           "type": "app",
           "name": "Recycle bin"
@@ -124,6 +133,10 @@
           {
             "name": "recycleBin",
             "iNode": "9"
+          },
+          {
+            "name": "projects.txt",
+            "iNode": "11"
           }
         ]
       },
@@ -188,6 +201,15 @@
       "10": {
         "type": "directory",
         "blocks": []
+      },
+      "11": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "files",
+            "name": "projects.txt"
+          }
+        ]
       }
     },
     "disk": {
@@ -232,6 +254,12 @@
           "name": "marcospauloramosimagens.png",
           "type": "file",
           "link": "/images/marcospauloramos.png"
+        },
+        "projects.txt": {
+          "icon": "document.png",
+          "name": "projects.txt",
+          "type": "file",
+          "link": "/projects"
         }
       }
     }

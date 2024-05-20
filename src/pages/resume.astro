@@ -1,5 +1,4 @@
 ---
-const projects = await Astro.glob("./projects/*.mdx")
 const workExperience = await Astro.glob("./workExperience/*.mdx")
 import dayjs from "dayjs"
 import isBefore from "dayjs/plugin/isSameOrBefore"
@@ -97,19 +96,17 @@ dayjs.extend(isBefore)
           I am a Software Developer currently pursuing a degree in Software
           Engineering, with an expected graduation date in 2025. My background
           in Electronics Technician has fostered a keen interest in embedded
-          development and electronics. With {new Date().getFullYear() - 2021} years
-          of experience in the software development industry, I have contributed
-          to a diverse range of projects, spanning from web development to embedded
-          systems. I am continually seeking new opportunities to apply my skills
-          and expand my knowledge in this dynamic field.
+          development and electronics. With {new Date().getFullYear() - 2021}+
+          years of experience in the software development industry, I have
+          contributed to a diverse range of projects, spanning from web
+          development to embedded systems. I am continually seeking new
+          opportunities to apply my skills and expand my knowledge in this
+          dynamic field.
         </p>
 
         <div class="flex flex-col gap-2">
           <h2 class="text-lg font-semibold">Skills:</h2>
           <div class="flex flex-row flex-wrap gap-3 text-sm">
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >C/C++</span
-            >
             <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">GO</span>
             <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">Git</span>
             <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">SQL</span>
@@ -121,6 +118,9 @@ dayjs.extend(isBefore)
             >
             <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
               >Linux</span
+            >
+            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
+              >C/C++</span
             >
             <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
               >CI/CD</span
@@ -140,7 +140,7 @@ dayjs.extend(isBefore)
     </section>
 
     <section>
-      <h2 class="text-2xl font-bold mb-4">Work experience:</h2>
+      <h2 class="text-2xl font-bold mb-4 text-center p-4">Work experience:</h2>
       {
         workExperience
           .sort((a, b) => {
