@@ -1,0 +1,50 @@
+---
+const projects = await Astro.glob("./projects/*.mdx")
+import dayjs from "dayjs"
+import isBefore from "dayjs/plugin/isSameOrBefore"
+import Layout from "../layouts/Layout.astro"
+dayjs.extend(isBefore)
+---
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search)
+  const isInOs = urlParams.get("isInOS")
+
+  if (isInOs === "true") {
+    document.getElementById("osLink").innerHTML = `
+      <a href="/resume" target="_blank" class=" text-[#2aadad]">Hard to read inside the OS ? click here to view in another browser tab</a>
+    `
+  }
+</script>
+
+<Layout title="Resume">
+  <div class="p-8 gap-4 flex flex-col">
+    <div id="">
+      <section class="mb-8">
+        <h1 class="text-4xl font-bold mb-4 text-center">Project Showcase</h1>
+        <h2 class="text-xl text-center">List with my top projects</h2>
+      </section>
+      <div id="osLink" class="text-center"></div>
+    </div>
+
+    <section>
+      {
+        projects
+          .sort((a, b) => {
+            const aEnd = `${a.frontmatter.end}-01`
+            const bEnd = `${b.frontmatter.end}-01`
+            if (a.frontmatter.end === "current") {
+              return -1
+            }
+            if (b.frontmatter.end === "current") {
+              return 1
+            }
+            return dayjs(aEnd).isBefore(dayjs(bEnd)) ? 1 : -1
+          })
+          .map((project) => {
+            return <project.Content />
+          })
+      }
+    </section>
+  </div>
+</Layout>
