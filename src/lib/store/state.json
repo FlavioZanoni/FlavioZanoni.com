@@ -224,11 +224,6 @@
           "icon": "document.png",
           "type": "app"
         },
-        "trash": {
-          "name": "trash",
-          "icon": "trash.png",
-          "type": "app"
-        },
         "fileExplorer": {
           "name": "File explorer",
           "appName": "fileExplorer",

@@ -69,13 +69,12 @@
     >
       {#if currentName === "recycleBin"}
         <h2>Recycle Bin</h2>
+        <Button variant={"tertiary"}>Empty bin</Button>
       {:else}
         <h2>
           Showing contents of: {currentName}
         </h2>
       {/if}
-
-      <Button variant={"tertiary"}>Empty bin</Button>
     </div>
 
     <div class="h-full">

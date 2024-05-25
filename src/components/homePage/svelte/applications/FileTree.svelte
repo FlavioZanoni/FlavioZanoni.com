@@ -18,6 +18,7 @@
   let isExpanded = false
   let iNodes: INodes
   let blocks = iNode.blocks as DirectoryBlock[]
+  let trashIcon: string = null
 
   const recursiveCheck = (blocks: DirectoryBlock[] | FileBlock[]) => {
     return !!blocks.find((item) => {
@@ -32,7 +33,7 @@
     isExpanded = false
     iNodes = $osStore.fileSystem.iNodes
     blocks = iNode.blocks as DirectoryBlock[]
-
+    trashIcon = $osStore.fileSystem.disk.apps["recycleBin"].icon
     if (iNodeKey === currentOpen) {
       isExpanded = true
     }
@@ -71,7 +72,7 @@
           height="20"
           class="w-5 h-5"
           src={dirName === "recycleBin"
-            ? "/icons/trash.png"
+            ? `/icons/${trashIcon}`
             : `/icons/directory.png`}
         />
         <p>{dirName === "recycleBin" ? "Recycle bin" : dirName}</p>
