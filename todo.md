@@ -6,6 +6,7 @@ TODO:
   - [ x ] bottom bar with the start menu, hour, and chevron drawer with the linkedin and github icons
   - [ x ] add a button on the context menu to remove CRT styles (too much of it can be jarring)
   - [ ] context menu of the items should have a "delete" option (moves it to the trash ?)
+  - [ ] icon on the taskbar
 
 - virtual state:
 

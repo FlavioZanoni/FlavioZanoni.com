@@ -1,6 +1,7 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
   import {
+    getItemByINode,
     getItemsInArrayByINode,
     type GetItemsInArrayByINode,
   } from "@lib/utils/fileSystemUtils"
@@ -47,14 +48,6 @@
   let hasMenuListener = false
   let hasChevronListener = false
 
-  let taskBarItemsByINode: GetItemsInArrayByINode
-  let openAppsByINode: GetItemsInArrayByINode
-  $: {
-    const env = $osStore.enviroment
-    openAppsByINode = getItemsInArrayByINode(env.openApps)
-    taskBarItemsByINode = getItemsInArrayByINode(env.taskbar.items)
-  }
-
   $: {
     if (showMenu) {
       hasMenuListener = true
@@ -76,7 +69,7 @@
   id="taskbar"
   class="flex min-h-10 justify-between w-full items-center bg-slate-400 border-t border-r border-slate-900 select-none"
 >
-  <section id="start" class="flex divide-x divide-slate-900 gap-1">
+  <section id="start" class="flex divide-x divide-slate-900">
     <Button
       on:click={() => {
         showMenu = !showMenu
@@ -86,7 +79,7 @@
     >
     {#if $osStore.enviroment.taskbar.items}
       {#each $osStore.enviroment.taskbar.items as item (item.iNode)}
-        {@const currentItem = taskBarItemsByINode[item.iNode]}
+        {@const currentItem = getItemByINode(item.iNode)}
         <Button
           id={item.iNode}
           on:click={() => {
@@ -101,15 +94,24 @@
               })
               return state
             })
-          }}>{currentItem.name}</Button
+          }}
         >
+          <img
+            src={`/icons/${currentItem.icon}`}
+            alt={currentItem.name}
+            class="w-5 h-5"
+          />
+          <span>{currentItem.name}</span>
+        </Button>
       {/each}
     {/if}
 
     {#if $osStore.enviroment.openApps}
       {#each $osStore.enviroment.openApps as item}
+        {@const currentItem = getItemByINode(item.iNode)}
         <Button
           id={item.uuid}
+          customCss="bg-gray-300"
           on:click={() => {
             osStore.update((state) => {
               const currentItem = state.enviroment.openApps.findIndex(
@@ -120,7 +122,15 @@
                 !state.enviroment.openApps[currentItem].isMinimized
               return state
             })
-          }}>{item.name}</Button
+          }}
+        >
+          <img
+            src={`/icons/${currentItem.icon}`}
+            alt={currentItem.name}
+            class="w-5 h-5"
+          />
+
+          <span>{item.name}</span></Button
         >
       {/each}
     {/if}
