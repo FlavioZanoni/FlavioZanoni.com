@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/FlavioZanoni/FlavioZanoni.com/main/public/favicon/android-chrome-512x512.png" alt="Logo" height=355>
+  <a href="https://flavio-zanoni.vercel.app"><img src="https://raw.githubusercontent.com/FlavioZanoni/FlavioZanoni.com/main/public/favicon/android-chrome-512x512.png" alt="Logo" height=355></a>
 </p>
 <h1 align="center">FZ-OS</h1>
 
