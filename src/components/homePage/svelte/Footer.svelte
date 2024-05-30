@@ -97,7 +97,7 @@
           }}
         >
           <img
-            src={`/icons/${currentItem.icon}`}
+            src={`/icons/${currentItem?.icon ?? "/directory.png"}`}
             alt={currentItem.name}
             class="w-5 h-5"
           />
@@ -125,8 +125,8 @@
           }}
         >
           <img
-            src={`/icons/${currentItem.icon}`}
-            alt={currentItem.name}
+            src={`/icons/${currentItem?.icon ?? "/directory.png"}`}
+            alt={item.name}
             class="w-5 h-5"
           />
 
