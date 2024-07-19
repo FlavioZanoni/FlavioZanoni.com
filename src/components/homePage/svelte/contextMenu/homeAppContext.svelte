@@ -24,10 +24,11 @@
     )
   }
 
-  console.log(getItemByINode(iNode)?.name)
+  const emptyRecycleBin = () => {}
 </script>
 
-<Button
-  disabled={getItemByINode(iNode)?.appName === "recycleBin"}
-  on:click={moveToRecycleBin}>Move to Recycle bin</Button
->
+{#if getItemByINode(iNode)?.appName !== "recycleBin"}
+  <Button on:click={moveToRecycleBin}>Move to Recycle bin</Button>
+{:else}
+  <Button on:click={emptyRecycleBin}>Empty Recycle Bin</Button>
+{/if}

@@ -1,4 +1,5 @@
 import { cd, ls, mkdir, mv, touch } from "@lib/utils/fileSystemUtils"
+import { FitAddon } from "@xterm/addon-fit"
 import type { Terminal } from "@xterm/xterm"
 type TerminalType = InstanceType<typeof Terminal>
 
@@ -18,7 +19,8 @@ export class Term {
   constructor(public term: TerminalType) {}
 
   private pwd = "root"
-  private wrotedLines = 0
+  private writtenLines = 0
+  private fitAddon: FitAddon
 
   private playBeep() {
     const context = new AudioContext()
@@ -50,8 +52,6 @@ export class Term {
 
     this.term.writeln("Welcome to the terminal!")
     this.term.writeln("Type 'help' to get started.")
-    this.wrotedLines = 2
-
     this.term.options.cursorInactiveStyle = "block"
     this.term.options.cursorBlink = true
     this.term.options.fontFamily = "IBM"
@@ -62,10 +62,14 @@ export class Term {
       this.playBeep()
     })
 
+    this.term.onLineFeed(() => {
+      this.writtenLines++
+    })
+
     this.term.onData((data) => {
       switch (data) {
         case "\r":
-          const lastLine = this.term.buffer.active.getLine(this.wrotedLines)
+          const lastLine = this.term.buffer.active.getLine(this.writtenLines)
           const lastLineText = lastLine.translateToString().trim()
           if (lastLineText.length === this.pwd.length + 4) {
             this.writeln("")
@@ -103,7 +107,6 @@ export class Term {
   public writeln(str: string) {
     this.term.writeln(str)
     this.term.write(this.getDecorationString())
-    this.wrotedLines++
   }
 
   public getPwd() {
@@ -115,6 +118,19 @@ export class Term {
     this.pwd = newPwd
   }
 
+  public loadFitAddon = () => {
+    this.fitAddon = new FitAddon()
+    this.term.loadAddon(this.fitAddon)
+  }
+
+  public fit = () => {
+    if (this.fitAddon === undefined) {
+      throw new Error("fitAddont is not loaded")
+    }
+
+    this.fitAddon.fit()
+  }
+
   public execCommand(str: string) {
     const [_, typed] = str.split("❯")
     const [command, ...args] = typed
@@ -123,14 +139,12 @@ export class Term {
       .map((arg) => arg.trim())
 
     this.term.writeln("")
-    this.wrotedLines++
-
     switch (command as (typeof availabeleCommands)[number]) {
       case "echo":
         return this.writeln(args.join(" "))
       case "clear":
         this.term.clear()
-        this.wrotedLines = 1
+        this.writtenLines = 0
         return this.term.write(this.getDecorationString())
       case "pwd":
         return this.writeln(this.pwd)

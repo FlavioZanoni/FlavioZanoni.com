@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Term } from "@lib/terminal"
-  import { FitAddon } from "@xterm/addon-fit"
   import { Terminal } from "@xterm/xterm"
   import { onDestroy, onMount } from "svelte"
 
@@ -9,16 +8,15 @@
 
   let term = new Terminal()
   const termBackend = new Term(term)
-  const fitAddon = new FitAddon()
 
   let observer = new ResizeObserver((_) => {
-    fitAddon.fit()
+    termBackend.fit()
   })
 
   onMount(() => {
     termBackend.setup(currentDir, uuid)
-    term.loadAddon(fitAddon)
-    fitAddon.fit()
+    termBackend.loadFitAddon()
+    termBackend.fit()
 
     observer.observe(document.getElementById(`window-${uuid}`))
   })
