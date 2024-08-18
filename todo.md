@@ -21,16 +21,18 @@
   - [x] the windows should have a z-index
   - [x] the windows should have a shadow
 
-- apps
+- apps:
   - [x] implement a directory app
   - [ ] copy of ms paint
   - [ ] calendar
 
+- filesystem:
+  - [ ] create bin dir or apps dir to store the apps iNode (today they need to be in root or in another folder to open, they need a place to be registered on the fs)
+  
 - terminal:
   - [ ] implement rm command
   - [ ] implement a text editor
   - [ ] pipe and redirects (maybe?)
-  - [ ]
 
 - bugs:
   - [ ] correctly use the terminal buffer instead of linecount
@@ -38,5 +40,5 @@
 - misc:
   - [ ] boot sequence
   - [ ] shutdown sequence
-  - [ ] highlight app on focus on the taskbar
+  - [x] highlight app on focus on the taskbar
   - [ ] organize default apps on state.json

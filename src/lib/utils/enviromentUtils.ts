@@ -13,7 +13,7 @@ export const openApp = (appId: string) => {
     name: null,
     isMinimized: false,
     isMaximized: false,
-    isFocused: true,
+    isFocused: false,
     uuid: crypto.randomUUID().toString(),
   }
 
@@ -40,9 +40,10 @@ export const openApp = (appId: string) => {
 
     item.name = parent.name
     state.enviroment.openApps.push(item)
-
     return state
   })
+  // unfocus other apps and focus this one
+  focusApp(item.uuid)
 }
 
 export const closeApp = (appUuid: string) => {

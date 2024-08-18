@@ -180,7 +180,7 @@
     ? 50
     : 10};"
   on:click={() => {
-    if (!isFocused) focusApp(uuid)
+    focusApp(uuid)
   }}
 >
   <div

@@ -1,13 +1,10 @@
 <script lang="ts">
   import { osStore } from "@lib/store"
-  import {
-    getItemByINode,
-    getItemsInArrayByINode,
-    type GetItemsInArrayByINode,
-  } from "@lib/utils/fileSystemUtils"
+  import { getItemByINode } from "@lib/utils/fileSystemUtils"
   import Button from "./Button.svelte"
   import ChevronMenu from "./ChevronMenu.svelte"
   import Menu from "./Menu.svelte"
+  import { openApp } from "@lib/utils/enviromentUtils"
 
   let clock = "00:00:00"
   let showMenu = false
@@ -80,22 +77,7 @@
     {#if $osStore.enviroment.taskbar.items}
       {#each $osStore.enviroment.taskbar.items as item (item.iNode)}
         {@const currentItem = getItemByINode(item.iNode)}
-        <Button
-          id={item.iNode}
-          on:click={() => {
-            osStore.update((state) => {
-              state.enviroment.openApps.push({
-                name: item.name,
-                iNode: item.iNode,
-                isMinimized: false,
-                isMaximized: false,
-                isFocused: true,
-                uuid: crypto.randomUUID(),
-              })
-              return state
-            })
-          }}
-        >
+        <Button id={item.iNode} on:click={() => openApp(item.iNode)}>
           <img
             src={`/icons/${currentItem?.icon ?? "/directory.png"}`}
             alt={currentItem.name}
@@ -111,7 +93,7 @@
         {@const currentItem = getItemByINode(item.iNode)}
         <Button
           id={item.uuid}
-          customCss="bg-gray-300"
+          customCss={item.isFocused ? "bg-gray-100" : "bg-gray-300"}
           on:click={() => {
             osStore.update((state) => {
               const currentItem = state.enviroment.openApps.findIndex(

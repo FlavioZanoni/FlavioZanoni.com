@@ -108,6 +108,10 @@
           {
             "name": "recycleBin",
             "iNode": "10"
+          },
+          {
+            "name": "File Explorer",
+            "iNode": "8"
           }
         ]
       },
