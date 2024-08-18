@@ -22,6 +22,10 @@ Every feature can change at anytime and change any other parts of the code.
 - The base of the project is made with [Astro](https://astro.build) witch will allow me try out any framework that i want to test, like React, Preact, Svelte, etc.
 - The core "OS" part of the project is made with [Svelte](https://svelte.dev) just because i wanted to learn it, and i think it's a great framework.
 
+## Roadmap
+
+A very basic feature/bugs planning can be found [here](https://github.com/FlavioZanoni/FlavioZanoni.com/blob/main/todo.md)
+
 ## Forks and PRs
 
 - I will generally do not accept PRs, but if you want to fork it, feel free to do so.

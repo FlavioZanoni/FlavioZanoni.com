@@ -23,7 +23,7 @@
 
 - apps:
   - [x] implement a directory app
-  - [ ] copy of ms paint
+  - [ ] copy of ms paint [#1](https://github.com/FlavioZanoni/FlavioZanoni.com/issues/1)
   - [ ] calendar
 
 - filesystem:
