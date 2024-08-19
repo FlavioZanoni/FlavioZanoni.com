@@ -14,7 +14,7 @@
 
   switch (variant) {
     case "primary":
-      style = "bg-transparent hover:bg-slate-300"
+      style = "hover:bg-slate-300"
       break
     case "secondary":
       style =
@@ -41,7 +41,7 @@
   {type}
   {id}
   {disabled}
-  class="{defaultStyle} {style} {customCss}"
+  class="{customCss} {defaultStyle} {style}"
   on:click={handleClick}
 >
   <slot />
