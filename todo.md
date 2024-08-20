@@ -44,3 +44,5 @@
   - [ ] shutdown sequence
   - [x] highlight app on focus on the taskbar
   - [ ] organize default apps on state.json
+  - [ ] populate the menu popup
+  - [ ] change mouse cursor to a lower res one
