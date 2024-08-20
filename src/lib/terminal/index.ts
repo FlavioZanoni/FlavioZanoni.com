@@ -56,9 +56,9 @@ export class Term {
     this.term.write(this.currentCommand.slice(insertPosition));
 
     // Move the cursor back to the correct position
-    const moveLeft2 = this.currentCommand.length - insertPosition - 1;
-    if (moveLeft2 > 0) {
-      this.term.write(`\x1b[${moveLeft2}D`);
+    const moveLeft = this.currentCommand.length - insertPosition - 1;
+    if (moveLeft > 0) {
+      this.term.write(`\x1b[${moveLeft}D`);
     }
   }
 
