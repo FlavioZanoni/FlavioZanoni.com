@@ -258,7 +258,7 @@
       <div
         role="toolbar"
         tabindex="0"
-        class="w-10 h-full flex justify-end items-end hover:cursor-nw-resize text-gray-500"
+        class="w-10 h-full flex justify-end items-end cursor-resize text-gray-500"
         on:mousedown={handleMousedownResize}
         on:mouseup={handleMouseupResize}
       >

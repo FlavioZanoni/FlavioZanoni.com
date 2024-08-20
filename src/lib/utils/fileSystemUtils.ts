@@ -310,7 +310,6 @@ export const mv = (source: string, destination: string, pwd: string) => {
       currentPwd = newCurrentPwd
     })
 
-    console.log("parent", parent)
     const itemName = parent.blocks.find(
       (item: DirectoryBlock) => item.iNode === node
     ).name

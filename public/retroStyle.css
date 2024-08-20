@@ -15,8 +15,25 @@ img {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
+
 .xterm-viewport {
   overflow-y: hidden !important;
+}
+
+body {
+  cursor: url("/cursors/arrow.png"), auto;
+}
+
+body a,
+body button,
+body input,
+body [role="button"],
+body .pointer-cursor {
+  cursor: url('/cursors/hand.png'), pointer;
+}
+
+.cursor-resize {
+  cursor: url('/cursors/resize-nwse.png'), pointer;
 }
 
 /*

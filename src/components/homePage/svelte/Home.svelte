@@ -273,7 +273,7 @@
     {@const isFile = currentItem && "icon" in currentItem}
     <div
       role={cell.iNode ? "button" : "cell"}
-      class="{`flex gap-2 items-center justify-center p-2 select-none`}s"
+      class="flex gap-2 items-center justify-center p-1 select-none"
       style={`width: ${cellWidth}px; height: ${cellHeight}px;`}
       draggable={!!cell.iNode}
       on:dblclick={() => {
