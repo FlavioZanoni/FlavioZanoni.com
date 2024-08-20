@@ -49,7 +49,6 @@ export class Term {
     const insertPosition = this.term.buffer.active.cursorX - this.pwd.length - 5;
     this.commandArr.splice(insertPosition, 0, data);
     this.currentCommand = this.commandArr.join("");
-    console.log("currentCommand", this.currentCommand);
 
     // Clear the line from the current cursor position
     this.term.write("\x1b[K");
@@ -77,8 +76,6 @@ export class Term {
 
     // Clear the rest of the line from the current cursor position
     this.term.write("\x1b[K");
-
-    // Write the rest of the command, starting from the delete position
     this.term.write(this.currentCommand.slice(deletePosition));
 
     // Move the cursor back to the correct position
@@ -111,7 +108,6 @@ export class Term {
       switch (data) {
         // enter
         case "\r":
-          console.log("currentCommand", this.currentCommand)
           this.execCommand(this.currentCommand)
           this.currentCommand = ""
           break
@@ -189,7 +185,7 @@ export class Term {
       .map((arg) => arg.trim())
 
     this.term.writeln("")
-    switch (str as (typeof availabeleCommands)[number]) {
+    switch (command as (typeof availabeleCommands)[number]) {
       case "echo":
         return this.writeln(args.join(" "))
       case "clear":
@@ -237,7 +233,7 @@ export class Term {
           `Available commands: ${availabeleCommands.join(", ")}`
         )
       default:
-        return this.writeln(`Command not found: ${command}, try 'help'`)
+        return this.writeln(`Command not found: '${command}', try 'help'`)
     }
   }
 }
