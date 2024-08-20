@@ -6,7 +6,7 @@
     osStore.update((state) => {
       state.enviroment.openApps.push({
         name: "background",
-        iNode: "4",
+        iNode: "9",
         uuid: crypto.randomUUID().toString(),
         isFocused: true,
         isMinimized: false,
