@@ -16,11 +16,12 @@ const availabeleCommands = [
 ] as const
 
 export class Term {
-  constructor(public term: TerminalType) {}
+  constructor(public term: TerminalType) { }
 
   private pwd = "root"
-  private writtenLines = 0
   private fitAddon: FitAddon
+  private currentCommand = ""
+  private commandArr: Array<string | undefined> = []
 
   private playBeep() {
     const context = new AudioContext()
@@ -44,6 +45,49 @@ export class Term {
     return `\x1B[34m${emoji} ${currentPwd}\x1B[32m ❯\x1B[0m `
   }
 
+  private handleInput(data: string) {
+    const insertPosition = this.term.buffer.active.cursorX - this.pwd.length - 5;
+    this.commandArr.splice(insertPosition, 0, data);
+    this.currentCommand = this.commandArr.join("");
+    console.log("currentCommand", this.currentCommand);
+
+    // Clear the line from the current cursor position
+    this.term.write("\x1b[K");
+    this.term.write(this.currentCommand.slice(insertPosition));
+
+    // Move the cursor back to the correct position
+    const moveLeft2 = this.currentCommand.length - insertPosition - 1;
+    if (moveLeft2 > 0) {
+      this.term.write(`\x1b[${moveLeft2}D`);
+    }
+  }
+
+  private handleBackspace() {
+    // pwd + 5 is the length of the prompt decoration
+    if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
+      this.term.write("\x07") // trigger bell
+      return
+    }
+
+    let deletePosition = this.term.buffer.active.cursorX - this.pwd.length - 6;
+    this.commandArr.splice(deletePosition, 1);
+    this.currentCommand = this.commandArr.join("")
+    // Move the cursor back one position
+    this.term.write("\b");
+
+    // Clear the rest of the line from the current cursor position
+    this.term.write("\x1b[K");
+
+    // Write the rest of the command, starting from the delete position
+    this.term.write(this.currentCommand.slice(deletePosition));
+
+    // Move the cursor back to the correct position
+    let moveLeft = this.currentCommand.length - deletePosition;
+    if (moveLeft > 0) {
+      this.term.write(`\x1b[${moveLeft}D`);
+    }
+  }
+
   public setup(dir: string, uuid: string) {
     this.setPwd(dir)
 
@@ -62,44 +106,51 @@ export class Term {
       this.playBeep()
     })
 
-    this.term.onLineFeed(() => {
-      this.writtenLines++
-    })
-
     this.term.onData((data) => {
+      this.commandArr = this.currentCommand.split("")
       switch (data) {
+        // enter
         case "\r":
-          const lastLine = this.term.buffer.active.getLine(this.writtenLines)
-          const lastLineText = lastLine.translateToString().trim()
-          if (lastLineText.length === this.pwd.length + 4) {
-            this.writeln("")
-            break
-          }
-          this.execCommand(lastLineText)
+          console.log("currentCommand", this.currentCommand)
+          this.execCommand(this.currentCommand)
+          this.currentCommand = ""
           break
+        // backspace
         case "\x7f":
-          // pwd + 5 is the length of the prompt decoration
-          if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
-            this.term.write("\x07") // trigger bell
-            break
-          }
-          this.term.write("\b \b")
+          this.handleBackspace()
           break
 
-        // implement arrowKeys later
+        // up arrow
         case "\x1b[A":
           this.term.write("")
           break
+        // down arrow
         case "\x1b[B":
           this.term.write("")
           break
 
+        //left arrow 
+        case "\x1b[D":
+          if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
+            this.term.write("\x07") // trigger bell
+            break
+          }
+          this.term.write("\b")
+          break
+        //right arrow
+        case "\x1b[C":
+          if (this.term.buffer.active.cursorX === this.currentCommand.length + this.pwd.length + 5) {
+            this.term.write("\x07") // trigger bell
+            break
+          }
+          this.term.write("\x1b[C")
+          break
         // implement tab later
         case "\t":
           this.term.write("")
           break
         default:
-          this.term.write(data)
+          this.handleInput(data)
       }
     })
   }
@@ -132,19 +183,17 @@ export class Term {
   }
 
   public execCommand(str: string) {
-    const [_, typed] = str.split("❯")
-    const [command, ...args] = typed
+    const [command, ...args] = str
       .trim()
       .split(" ")
       .map((arg) => arg.trim())
 
     this.term.writeln("")
-    switch (command as (typeof availabeleCommands)[number]) {
+    switch (str as (typeof availabeleCommands)[number]) {
       case "echo":
         return this.writeln(args.join(" "))
       case "clear":
         this.term.clear()
-        this.writtenLines = 0
         return this.term.write(this.getDecorationString())
       case "pwd":
         return this.writeln(this.pwd)

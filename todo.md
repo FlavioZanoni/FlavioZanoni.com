@@ -28,14 +28,16 @@
 
 - filesystem:
   - [ ] create bin dir or apps dir to store the apps iNode (today they need to be in root or in another folder to open, they need a place to be registered on the fs)
-  
+
 - terminal:
   - [ ] implement rm command
   - [ ] implement a text editor
   - [ ] pipe and redirects (maybe?)
+  - [ ] terminal history
+  - [ ] terminal autocomplete
 
 - bugs:
-  - [ ] correctly use the terminal buffer instead of linecount
+  - [x] correctly use the terminal buffer instead of linecount
 
 - misc:
   - [ ] boot sequence
