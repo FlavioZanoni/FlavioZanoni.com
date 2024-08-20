@@ -75,14 +75,17 @@
             ? `/icons/${trashIcon}`
             : `/icons/directory.png`}
         />
-        <p>{dirName === "recycleBin" ? "Recycle bin" : dirName}</p>
+        <p class="truncate">
+          {dirName === "recycleBin" ? "Recycle bin" : dirName}
+        </p>
       </div>
     </div>
   </div>
 
   {#if isExpanded}
     {#each blocks as block}
-      <!-- {@const item = getItemByINode(block.iNode)}
+      <!-- this is to show the apps in the tree
+      {@const item = getItemByINode(block.iNode)}
       {#if item}
         <div
           class="flex gap-1 items-center"

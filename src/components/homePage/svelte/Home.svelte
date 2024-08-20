@@ -159,6 +159,7 @@
         }
 
         if (itemToMoveNode.blocks[0].name === "recycleBin") {
+          console.log("here buddy")
           let current = iNodes[itemToUpdate.iNode]
           if (current.type !== "directory") {
             const toUpdate = current.blocks[0]
@@ -296,7 +297,8 @@
             alt={cell.name}
           />
           <p
-            style={` width: ${cellWidth - 8}px; `}
+            draggable="false"
+            style={`width: ${cellWidth - 8}px;`}
             class="truncate text-sm text-center max-w-[115px]"
           >
             {cell.name || "‎"}

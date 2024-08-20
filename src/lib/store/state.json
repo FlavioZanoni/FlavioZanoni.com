@@ -6,13 +6,13 @@
           "iNode": "5",
           "pos": {
             "x": 0,
-            "y": 5
+            "y": 0
           },
-          "type": "file",
-          "name": "term"
+          "type": "app",
+          "name": "Recycle bin"
         },
         {
-          "iNode": "3",
+          "iNode": "8",
           "pos": {
             "x": 0,
             "y": 1
@@ -21,7 +21,7 @@
           "name": "resume.txt"
         },
         {
-          "iNode": "11",
+          "iNode": "13",
           "pos": {
             "x": 0,
             "y": 2
@@ -30,31 +30,22 @@
           "name": "projects.txt"
         },
         {
-          "iNode": "6",
+          "iNode": "12",
           "pos": {
             "x": 0,
             "y": 3
-          },
-          "type": "file",
-          "name": "marcospauloramosimagens.png"
-        },
-        {
-          "iNode": "7",
-          "pos": {
-            "x": 0,
-            "y": 4
           },
           "type": "directory",
           "name": "directory"
         },
         {
-          "iNode": "9",
+          "iNode": "10",
           "pos": {
             "x": 0,
-            "y": 0
+            "y": 4
           },
           "type": "app",
-          "name": "Recycle bin"
+          "name": "term"
         }
       ],
       "size": {
@@ -65,12 +56,12 @@
     "taskbar": {
       "items": [
         {
-          "iNode": "3",
+          "iNode": "8",
           "type": "file",
           "name": "resume.txt"
         },
         {
-          "iNode": "8",
+          "iNode": "4",
           "type": "app",
           "name": "File explorer"
         }
@@ -79,9 +70,19 @@
     "menu": {
       "items": [
         {
-          "iNode": "3",
+          "iNode": "8",
           "type": "file",
           "name": "resume.txt"
+        },
+        {
+          "iNode": "4",
+          "type": "app",
+          "name": "File explorer"
+        },
+        {
+          "iNode": "7",
+          "type": "app",
+          "name": "This Computer"
         }
       ]
     },
@@ -102,16 +103,16 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "desktop",
+            "name": "home",
             "iNode": "2"
           },
           {
-            "name": "recycleBin",
-            "iNode": "10"
+            "name": "bin",
+            "iNode": "3"
           },
           {
-            "name": "File Explorer",
-            "iNode": "8"
+            "name": "recycleBin",
+            "iNode": "6"
           }
         ]
       },
@@ -119,72 +120,45 @@
         "type": "directory",
         "blocks": [
           {
-            "name": "resume.txt",
-            "iNode": "3"
-          },
-          {
-            "name": "term",
+            "name": "recycleBin",
             "iNode": "5"
           },
           {
-            "name": "marcospauloramosimagens.png",
-            "iNode": "6"
+            "name": "resume.txt",
+            "iNode": "8"
+          },
+          {
+            "name": "term",
+            "iNode": "10"
           },
           {
             "name": "directory",
-            "iNode": "7"
-          },
-          {
-            "name": "recycleBin",
-            "iNode": "9"
+            "iNode": "12"
           },
           {
             "name": "projects.txt",
-            "iNode": "11"
+            "iNode": "13"
           }
         ]
       },
       "3": {
-        "type": "file",
+        "type": "directory",
         "blocks": [
           {
-            "location": "files",
-            "name": "resume.txt"
+            "name": "recycleBin",
+            "iNode": "5"
+          },
+          {
+            "name": "File Explorer",
+            "iNode": "4"
+          },
+          {
+            "name": "This Computer",
+            "iNode": "7"
           }
         ]
       },
       "4": {
-        "type": "app",
-        "blocks": [
-          {
-            "location": "apps",
-            "name": "background"
-          }
-        ]
-      },
-      "5": {
-        "type": "app",
-        "blocks": [
-          {
-            "location": "apps",
-            "name": "term"
-          }
-        ]
-      },
-      "6": {
-        "type": "file",
-        "blocks": [
-          {
-            "location": "files",
-            "name": "marcospauloramosimagens.png"
-          }
-        ]
-      },
-      "7": {
-        "type": "directory",
-        "blocks": []
-      },
-      "8": {
         "type": "file",
         "blocks": [
           {
@@ -193,7 +167,7 @@
           }
         ]
       },
-      "9": {
+      "5": {
         "type": "app",
         "blocks": [
           {
@@ -202,11 +176,65 @@
           }
         ]
       },
-      "10": {
+      "6": {
         "type": "directory",
         "blocks": []
       },
+      "7":{
+        "type": "app",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "thisComputer"
+          }
+        ]
+      },
+      "8": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "files",
+            "name": "resume.txt"
+          }
+        ]
+      },
+      "9": {
+        "type": "app",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "background"
+          }
+        ]
+      },
+      "10": {
+        "type": "app",
+        "blocks": [
+          {
+            "location": "apps",
+            "name": "term"
+          }
+        ]
+      },
       "11": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "files",
+            "name": "marcospauloramosimagens.png"
+          }
+        ]
+      },
+      "12": {
+        "type": "directory",
+        "blocks": [
+          {
+            "name": "marcospauloramosimagens.png",
+            "iNode": "11"
+          }
+        ]
+      },
+      "13": {
         "type": "file",
         "blocks": [
           {
@@ -238,6 +266,12 @@
           "name": "Recycle bin",
           "appName": "recycleBin",
           "icon": "trash.png",
+          "type": "app"
+        },
+        "thisComputer": {
+          "name": "This Computer",
+          "appName": "thisComputer",
+          "icon": "crt.png",
           "type": "app"
         }
       },

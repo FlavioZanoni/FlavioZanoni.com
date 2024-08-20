@@ -41,7 +41,7 @@
   {type}
   {id}
   {disabled}
-  class="{customCss} {defaultStyle} {style}"
+  class="{defaultStyle} {style} {customCss} "
   on:click={handleClick}
 >
   <slot />

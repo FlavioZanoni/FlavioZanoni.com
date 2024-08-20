@@ -7,7 +7,7 @@ export const osStore = writable<OSStore>(jsonState as unknown as OSStore)
 osStore.subscribe((value) => {
   console.log(value)
 
-  if (value.fileSystem.iNodes["10"].blocks.length) {
+  if (value.fileSystem.iNodes["6"].blocks.length) {
     if (value.fileSystem.disk.apps["recycleBin"].icon !== "trash.png") return
 
     value.fileSystem.disk.apps["recycleBin"].icon = "trash-full.png"
