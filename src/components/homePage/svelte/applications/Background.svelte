@@ -57,7 +57,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 p-4 w-full h-full overflow-y-scroll">
+<div class="flex flex-col gap-4 p-4 w-full h-full overflow-y-auto">
   <h1 class="text-2xl font-bold">Choose a background</h1>
 
   <div class="flex flex-col gap-4">

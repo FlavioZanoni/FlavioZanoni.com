@@ -25,7 +25,7 @@
   - [x] implement a directory app
   - [ ] copy of ms paint [#1](https://github.com/FlavioZanoni/FlavioZanoni.com/issues/1)
   - [ ] calendar
-  - [ ] This Computer
+  - [x] This Computer
 
 - filesystem:
   - [x] create bin dir or apps dir to store the apps iNode (today they need to be in root or in another folder to open, they need a place to be registered on the fs)
@@ -36,6 +36,7 @@
   - [ ] pipe and redirects (maybe?)
   - [ ] terminal history
   - [ ] terminal autocomplete
+  - [ ] neofetch/fastfetch
 
 - bugs:
   - [x] correctly use the terminal buffer instead of linecount
@@ -47,3 +48,4 @@
   - [x] organize default apps on state.json
   - [x] populate the menu popup
   - [x] change mouse cursor to a lower res one
+  - [ ] auto-open windows with url param

@@ -2,6 +2,7 @@
   import Background from "../applications/Background.svelte"
   import XTerm from "../applications/XTerm.svelte"
   import FileExplorer from "../applications/FileExplorer.svelte"
+  import ThisComputer from "../applications/ThisComputer.svelte"
   export let appName: string
   export let iNode: string
   export let uuid: string
@@ -13,6 +14,7 @@
     term: XTerm,
     background: Background,
     fileExplorer: FileExplorer,
+    thisComputer: ThisComputer,
   }
 </script>
 
