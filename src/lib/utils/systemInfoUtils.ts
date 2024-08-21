@@ -14,6 +14,8 @@ export const getSystemInfo = (): SystemInfo => {
   const info = {
     os: "FZ-OS",
     osVersion: pkgJson.version,
+    // the type definition is not up to date
+    //@ts-expect-error 
     memory: navigator.deviceMemory,
     cores: navigator.hardwareConcurrency,
     browser: navigator.userAgent,
