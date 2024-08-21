@@ -9,11 +9,13 @@
     type MediaDevicesInfo,
   } from "@lib/utils/systemInfoUtils"
   import Background from "./Background.svelte"
+  import OSState from "./OSState.svelte"
 
   let tab = "default"
 
   const components = {
     Background: Background,
+    "OS State": OSState,
   }
 
   let storageInfo: StorageInfo | undefined
@@ -27,7 +29,6 @@
       storageInfo = info
     })
     getMediaDevicesInfo().then((info) => {
-      console.log(info)
       devicesInfo = info
     })
   }

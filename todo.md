@@ -12,7 +12,7 @@
   - [x] the virtual state should have the default state and can be modified on the fly by the user (he can make watherver he wants, (move and delete files))
   - [x] the virtual state should be saved in the local storage
   - [x] the virtual state should be loaded from the local storage
-  - [ ] window to save current state and load from file, also an "reset" button that "factory reset" the app
+  - [x] window to save current state and load from file, also an "reset" button that "factory reset" the app
 
 - windows:
   - [x] the windows should be draggable and resizable

@@ -150,27 +150,25 @@
 
       if (itemToMove) {
         let itemToMoveNode = iNodes[itemToMove.iNode]
-        console.log(itemToMoveNode)
         if (itemToMoveNode.type === "directory") {
           const toUpdate = iNodes[itemToUpdate.iNode].blocks[0]
-          mv(`./${toUpdate.name}`, `./${itemToMove.name}`, "root/desktop")
+          mv(`./${toUpdate.name}`, `./${itemToMove.name}`, "root/home")
 
           return state
         }
 
         if (itemToMoveNode.blocks[0].name === "recycleBin") {
-          console.log("here buddy")
           let current = iNodes[itemToUpdate.iNode]
           if (current.type !== "directory") {
             const toUpdate = current.blocks[0]
-            mv(`./${toUpdate.name}`, `../recycleBin`, "root/desktop")
+            mv(`./${toUpdate.name}`, `../recycleBin`, "root/home")
             return state
           }
 
           iNodes["2"].blocks.forEach((item: FileBlock | DirectoryBlock) => {
             if (isFileBlock(item)) return
             if (item.iNode === itemToUpdate.iNode) {
-              mv(`./${item.name}`, `../recycleBin`, "root/desktop")
+              mv(`./${item.name}`, `../recycleBin`, "root/home")
             }
           })
 
