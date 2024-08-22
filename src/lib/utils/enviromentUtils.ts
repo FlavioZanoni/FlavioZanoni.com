@@ -64,15 +64,16 @@ export const openAppByName = (appName: string) => {
     for (const item in iNodes) {
       parent = iNodes[item].blocks.find((block: FileBlock | DirectoryBlock) => {
         if (!isFileBlock(block)) {
-          newItem.iNode = block.iNode
-          return block.name === appName
+          if (block.name === appName) {
+            newItem.iNode = block.iNode
+            return true
+          }
         }
         return false
       })
 
       if (parent) break
     }
-
     if (newItem.iNode) {
       newItem.name = parent.name
       state.enviroment.openApps.push(newItem)
