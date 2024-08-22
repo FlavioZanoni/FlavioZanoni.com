@@ -6,7 +6,7 @@
     HomeGridItem,
     OSStore,
   } from "@lib/store/types"
-  import { openApp } from "@lib/utils/enviromentUtils"
+  import { openApp, openAppByName } from "@lib/utils/enviromentUtils"
   import { getItemByINode, isFileBlock, mv } from "@lib/utils/fileSystemUtils"
   import { saveCurrentOSStore } from "@lib/utils/storeUtils"
   import { onDestroy, onMount } from "svelte"
@@ -239,6 +239,12 @@
 
     if (store) {
       osStore.set(store)
+    }
+
+    let hash = new URL(window.location.href).hash
+
+    if (hash) {
+      openAppByName(hash.substring(1, hash.length))
     }
 
     window.addEventListener("click", () => {

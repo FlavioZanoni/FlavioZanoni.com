@@ -49,4 +49,4 @@
   - [x] organize default apps on state.json
   - [x] populate the menu popup
   - [x] change mouse cursor to a lower res one
-  - [ ] auto-open windows with url param
+  - [x] auto-open windows with url param

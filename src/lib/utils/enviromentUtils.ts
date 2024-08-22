@@ -46,6 +46,45 @@ export const openApp = (appId: string) => {
   focusApp(item.uuid)
 }
 
+export const openAppByName = (appName: string) => {
+  if (!appName) return
+  let newItem = {
+    iNode: null,
+    name: null,
+    isMinimized: false,
+    isMaximized: false,
+    isFocused: false,
+    uuid: crypto.randomUUID().toString(),
+  }
+
+  osStore.update((state) => {
+    const { iNodes } = state.fileSystem
+
+    let parent: FileBlock | DirectoryBlock
+    for (const item in iNodes) {
+      parent = iNodes[item].blocks.find((block: FileBlock | DirectoryBlock) => {
+        if (!isFileBlock(block)) {
+          newItem.iNode = block.iNode
+          return block.name === appName
+        }
+        return false
+      })
+
+      if (parent) break
+    }
+
+    if (newItem.iNode) {
+      newItem.name = parent.name
+      state.enviroment.openApps.push(newItem)
+    }
+    return state
+  })
+
+  if (!newItem.iNode) return
+  // unfocus other apps and focus this one
+  focusApp(newItem.uuid)
+}
+
 export const closeApp = (appUuid: string) => {
   osStore.update((state) => {
     state.enviroment.openApps = state.enviroment.openApps.filter(
