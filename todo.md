@@ -20,6 +20,7 @@
   - [x] the windows should have a title
   - [x] the windows should have a z-index
   - [x] the windows should have a shadow
+  - [ ] move width/heigth/min to the state
 
 - apps:
   - [x] implement a directory app
@@ -36,7 +37,7 @@
   - [ ] pipe and redirects (maybe?)
   - [ ] terminal history
   - [ ] terminal autocomplete
-  - [ ] neofetch/fastfetch
+  - [x] neofetch/fastfetch
 
 - bugs:
   - [x] correctly use the terminal buffer instead of linecount

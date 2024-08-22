@@ -7,6 +7,7 @@
     getMediaDevicesInfo,
     type StorageInfo,
     type MediaDevicesInfo,
+    type SystemInfo,
   } from "@lib/utils/systemInfoUtils"
   import Background from "./Background.svelte"
   import OSState from "./OSState.svelte"
@@ -20,7 +21,7 @@
 
   let storageInfo: StorageInfo | undefined
   let devicesInfo: MediaDevicesInfo | undefined
-  const sysInfo = getSystemInfo()
+  let sysInfo: SystemInfo | undefined
   const networkInfo = getNetworkInfo()
   const screenInfo = getScreenInfo()
 
@@ -30,6 +31,9 @@
     })
     getMediaDevicesInfo().then((info) => {
       devicesInfo = info
+    })
+    getSystemInfo().then((info) => {
+      sysInfo = info
     })
   }
 </script>
@@ -66,29 +70,44 @@
           <div class="ml-3">
             <div class="flex justify-between">
               <p>OS:</p>
-              <p>{sysInfo.os} - {sysInfo.osVersion}</p>
+              <p>{sysInfo?.os} - {sysInfo?.osVersion}</p>
             </div>
             <div class="flex justify-between">
               <p>Memory:</p>
-              <p>{sysInfo.memory} GB</p>
+              <p>{sysInfo?.memory} GB</p>
             </div>
             <div class="flex justify-between">
               <p>CPU:</p>
-              <p>{sysInfo.cores} Cores</p>
+              <p>{sysInfo?.cores} Cores</p>
             </div>
-            <div class="flex flex-col gap-2">
-              <div class="flex justify-between">
-                <p>Platform:</p>
-                <p>{sysInfo.platform}</p>
-              </div>
-              <div class="flex justify-between">
-                <p>Language:</p>
-                <p>{sysInfo.language}</p>
-              </div>
-              <div class="flex justify-between gap-1">
-                <p>Browser:</p>
-                <p>{sysInfo.browser}</p>
-              </div>
+            <div class="flex justify-between">
+              <p>Platform:</p>
+              <p>{sysInfo?.platform}</p>
+            </div>
+            <div>
+              <p>Battery:</p>
+              {#if sysInfo?.battery?.level}
+                <div class="ml-3">
+                  <div class="flex justify-between">
+                    <p>Level:</p>
+                    <p>{sysInfo?.battery?.level * 100}%</p>
+                  </div>
+                  <div class="flex justify-between">
+                    <p>Charging:</p>
+                    <p>{sysInfo?.battery?.charging ? "Yes" : "No"}</p>
+                  </div>
+                </div>
+              {:else}
+                <p>N/A</p>
+              {/if}
+            </div>
+            <div class="flex justify-between">
+              <p>Language:</p>
+              <p>{sysInfo?.language}</p>
+            </div>
+            <div class="flex justify-between gap-1">
+              <p>Browser:</p>
+              <p>{sysInfo?.browser}</p>
             </div>
           </div>
         </div>

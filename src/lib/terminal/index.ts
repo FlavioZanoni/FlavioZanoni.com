@@ -236,8 +236,9 @@ export class Term {
           `Available commands: ${availabeleCommands.join(", ")}`
         )
       case "neofetch":
-        neofetch(this.term)
-        this.term.write(this.getDecorationString())
+        neofetch(this.term).then(() => {
+          this.term.write(this.getDecorationString())
+        })
         return
       default:
         return this.writeln(`Command not found: '${command}', try 'help'`)

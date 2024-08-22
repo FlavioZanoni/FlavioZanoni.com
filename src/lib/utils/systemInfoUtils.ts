@@ -8,9 +8,10 @@ export type SystemInfo = {
   browser: string
   language: string
   platform: string
+  //@ts-expect-error 
+  battery: BatteryManager
 }
-
-export const getSystemInfo = (): SystemInfo => {
+export const getSystemInfo = async (): Promise<SystemInfo> => {
   const info = {
     os: "FZ-OS",
     osVersion: pkgJson.version,
@@ -21,6 +22,8 @@ export const getSystemInfo = (): SystemInfo => {
     browser: navigator.userAgent,
     language: navigator.language,
     platform: navigator.platform,
+    //@ts-expect-error 
+    battery: await navigator.getBattery()
   }
   return info
 }

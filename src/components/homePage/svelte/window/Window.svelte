@@ -28,8 +28,8 @@
     item = $osStore.enviroment.openApps.find((item) => (item.iNode = iNode))
   }
 
-  let defaultWidth = 600
-  let defaultHeight = 450
+  let defaultWidth = 700
+  let defaultHeight = 550
   let minWidth = 450
   let minHeight = 300
   const defaultX = window.innerWidth / 2 - defaultWidth / 2
