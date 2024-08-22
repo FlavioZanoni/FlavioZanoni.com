@@ -25,8 +25,12 @@ export class Term {
   private fitAddon: FitAddon
   private currentCommand = ""
   private commandArr: Array<string | undefined> = []
+  private lastBeep = 0
 
   private playBeep() {
+    if (Date.now() - this.lastBeep < 183) {
+      return 0
+    }
     const context = new AudioContext()
     const oscillator = context.createOscillator()
     const gainNode = context.createGain()
@@ -40,6 +44,7 @@ export class Term {
 
     oscillator.start(context.currentTime)
     oscillator.stop(context.currentTime + 0.1)
+    this.lastBeep = Date.now()
   }
 
   private getDecorationString() {
@@ -67,6 +72,9 @@ export class Term {
   private handleBackspace() {
     // pwd + 5 is the length of the prompt decoration
     if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
+      console.log("triggered")
+      console.log(this.term.buffer.active.cursorX)
+      console.log(this.pwd.length + 5)
       this.term.write("\x07") // trigger bell
       return
     }

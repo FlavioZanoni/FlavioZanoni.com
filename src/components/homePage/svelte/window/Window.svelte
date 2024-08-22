@@ -28,6 +28,7 @@
     item = $osStore.enviroment.openApps.find((item) => (item.iNode = iNode))
   }
 
+  //TODO: move this to the state
   let defaultWidth = 700
   let defaultHeight = 550
   let minWidth = 450
