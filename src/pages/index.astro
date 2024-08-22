@@ -8,9 +8,12 @@ import Layout from "../layouts/RetroLayout.astro"
 
 <script>
   import { osStore } from "@lib/store"
+  // preloading the ascii art
+  import { getASCIIArt } from "@lib/utils/getASCIIArt"
   /*  if (localStorage.getItem("FZOSStore")) {
     osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
   } // this will be part of a loading sequence */
+
 
   osStore.subscribe((value) => {
     if (value.enviroment.config.crt) {

@@ -1,8 +1,10 @@
 import { cd, ls, mkdir, mv, touch } from "@lib/utils/fileSystemUtils"
 import { FitAddon } from "@xterm/addon-fit"
 import type { Terminal } from "@xterm/xterm"
+import { neofetch } from "./commands/neofetch"
 type TerminalType = InstanceType<typeof Terminal>
 
+//TODO: do better lmao, probably use a dict
 const availabeleCommands = [
   "echo",
   "clear",
@@ -13,6 +15,7 @@ const availabeleCommands = [
   "pwd",
   "cd",
   "mv",
+  "neofetch",
 ] as const
 
 export class Term {
@@ -232,6 +235,10 @@ export class Term {
         return this.writeln(
           `Available commands: ${availabeleCommands.join(", ")}`
         )
+      case "neofetch":
+        neofetch(this.term)
+        this.term.write(this.getDecorationString())
+        return
       default:
         return this.writeln(`Command not found: '${command}', try 'help'`)
     }

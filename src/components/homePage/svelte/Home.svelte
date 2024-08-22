@@ -13,7 +13,17 @@
   import ContextMenu from "./contextMenu/ContextMenu.svelte"
   import HomeAppContext from "./contextMenu/homeAppContext.svelte"
   import HomeContext from "./contextMenu/homeContext.svelte"
+  import { getASCIIArt } from "@lib/utils/getASCIIArt"
 
+  console.log(
+    "%c Wellcome",
+    "color: green; font-weight: bold; font-size: 20px;"
+  )
+  console.log(getASCIIArt())
+  console.log(
+    "%c   ---- FZ-OS ----",
+    "color: green; blue; font-weight: bold; font-style: italic; font-size: 20px;"
+  )
   let isEmpty = false
   let showContextMenu = false
   let contextMenuX = 0
