@@ -6,7 +6,7 @@
   - [x] add a button on the context menu to remove CRT styles (too much of it can be jarring)
   - [x] context menu of the items should have a "delete" option (moves it to the trash ?)
   - [x] icon on the taskbar
-  - [ ] welcome window (maybe?)
+  - [x] welcome window
 
 - virtual state:
   - [x] the virtual state should have the default state and can be modified on the fly by the user (he can make watherver he wants, (move and delete files))

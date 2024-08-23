@@ -4,6 +4,23 @@ import dayjs from "dayjs"
 import isBefore from "dayjs/plugin/isSameOrBefore"
 import Layout from "../layouts/Layout.astro"
 dayjs.extend(isBefore)
+
+const skills = [
+  "React",
+  "Nextjs",
+  "Svelte",
+  "Astro",
+  "Git",
+  "TailwindCSS",
+  "Typescript",
+  "Node.js/Bun.js",
+  "SQL",
+  "GO",
+  "C/C++",
+  "Docker",
+  "Linux",
+  "CI/CD",
+]
 ---
 
 <script>
@@ -107,34 +124,14 @@ dayjs.extend(isBefore)
         <div class="flex flex-col gap-2">
           <h2 class="text-lg font-semibold">Skills:</h2>
           <div class="flex flex-row flex-wrap gap-3 text-sm">
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">GO</span>
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">Git</span>
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">SQL</span>
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >React</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >Docker</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >Linux</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >C/C++</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >CI/CD</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >TypeScript</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >TailwindCSS</span
-            >
-            <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg"
-              >Node.js/Bun.js</span
-            >
-          </div>
+            {skills.map((skill)=>{
+              return (
+                <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">
+                  {skill}
+                </span>
+              )
+            })}
+           </div>
         </div>
       </div>
     </section>

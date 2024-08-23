@@ -55,6 +55,20 @@
       return state
     })
   }
+
+  const solidColors = [
+    "#ef4444",
+    "#22c55e",
+    "#3b82f6",
+    "#eab308",
+    "#ec4899",
+    "#a855f7",
+    "#6366f1",
+    "#06b6d4",
+    "#6b7280",
+    "#ffffff",
+    "#000000",
+  ]
 </script>
 
 <div class="flex flex-col gap-4 p-4 w-full h-full overflow-y-auto">
@@ -64,54 +78,13 @@
     <div class="flex flex-col gap-2">
       <h2 class="text-xl font-mediumw-full">Solid colors:</h2>
       <div class="flex flex-wrap gap-4">
-        <button
-          on:click={() => handleColor("#ef4444")}
-          class="w-10 h-10 bg-red-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#22c55e")}
-          class="w-10 h-10 bg-green-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#3b82f6")}
-          class="w-10 h-10 bg-blue-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#eab308")}
-          class="w-10 h-10 bg-yellow-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#ec4899")}
-          class="w-10 h-10 bg-pink-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#a855f7")}
-          class="w-10 h-10 bg-purple-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#6366f1")}
-          class="w-10 h-10 bg-indigo-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#06b6d4")}
-          class="w-10 h-10 bg-cyan-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#6b7280")}
-          class="w-10 h-10 bg-gray-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#64748b")}
-          class="w-10 h-10 bg-slate-500"
-        ></button>
-        <button
-          on:click={() => handleColor("#ffffff")}
-          class="w-10 h-10 border border-slate-200 bg-white"
-        ></button>
-        <button
-          on:click={() => handleColor("#000000")}
-          class="w-10 h-10 bg-black"
-        ></button>
+        {#each solidColors as color}
+          <button
+            on:click={() => handleColor(color)}
+            class={`w-10 h-10 border border-slate-200`}
+            style={`background-color:${color}`}
+          ></button>
+        {/each}
       </div>
     </div>
 

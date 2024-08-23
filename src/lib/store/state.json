@@ -46,6 +46,15 @@
           },
           "type": "app",
           "name": "term"
+        },
+        {
+          "iNode": "14",
+          "pos": {
+            "x": 1,
+            "y": 0
+          },
+          "type": "file",
+          "name": "welcome.txt"
         }
       ],
       "size": {
@@ -138,6 +147,10 @@
           {
             "name": "projects.txt",
             "iNode": "13"
+          },
+          {
+            "name": "welcome.txt",
+            "iNode": "14"
           }
         ]
       },
@@ -242,6 +255,15 @@
             "name": "projects.txt"
           }
         ]
+      },
+      "14": {
+        "type": "file",
+        "blocks": [
+          {
+            "location": "files",
+            "name": "welcome.txt"
+          }
+        ]
       }
     },
     "disk": {
@@ -293,6 +315,12 @@
           "name": "projects.txt",
           "type": "file",
           "link": "/projects"
+        },
+        "welcome.txt": {
+          "icon": "document.png",
+          "name": "welcome.txt",
+          "type": "file",
+          "link": "/welcome"
         }
       }
     }

@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/Layout.astro"
+const readme = await Astro.glob("../../README.md")
+---
+
+<script>
+  document.querySelectorAll("a").forEach((item)=>{
+    item.target="_blank"
+  })
+</script>
+
+<Layout title="Welcome">
+  <div class="flex flex-col gap-2 p-4">
+  <h1 class="text-center mt-1 -mb-10">Welcome! </h1>
+  {readme.map((item)=>{
+    return (<item.Content/>)
+    })}
+  </div>
+</Layout>
+
+<style is:inline>
+  a {
+    color: #2aadad;
+  }
+
+  li {
+    padding: 4px;
+    margin-left: 1rem;
+  }
+
+  img {
+    max-width: 350px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  h1 {
+    font-weight: bold;
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  p, pre {
+    margin-left: 1rem;
+  }
+</style>
