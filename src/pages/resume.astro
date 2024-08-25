@@ -124,14 +124,16 @@ const skills = [
         <div class="flex flex-col gap-2">
           <h2 class="text-lg font-semibold">Skills:</h2>
           <div class="flex flex-row flex-wrap gap-3 text-sm">
-            {skills.map((skill)=>{
-              return (
-                <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">
-                  {skill}
-                </span>
-              )
-            })}
-           </div>
+            {
+              skills.map((skill) => {
+                return (
+                  <span class="bg-[#2aadad] text-white p-2 py-1 rounded-lg">
+                    {skill}
+                  </span>
+                )
+              })
+            }
+          </div>
         </div>
       </div>
     </section>
