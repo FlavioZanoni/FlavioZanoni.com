@@ -4,6 +4,7 @@ import Home from "@homePage/svelte/Home.svelte"
 import WindowManager from "@homePage/svelte/window/WindowManager.svelte"
 import "@xterm/xterm/css/xterm.css"
 import Layout from "../layouts/RetroLayout.astro"
+import Boot from "@components/boot/Boot.astro"
 ---
 
 <script>
@@ -13,7 +14,6 @@ import Layout from "../layouts/RetroLayout.astro"
   /*  if (localStorage.getItem("FZOSStore")) {
     osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
   } // this will be part of a loading sequence */
-
 
   osStore.subscribe((value) => {
     if (value.enviroment.config.crt) {
@@ -27,6 +27,7 @@ import Layout from "../layouts/RetroLayout.astro"
 </script>
 
 <Layout title="FZ-OS">
+  <Boot />
   <div id="home-content" class="crt">
     <div id="scan" class="scan-lines">
       <main id="main">

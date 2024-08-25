@@ -1,0 +1,100 @@
+---
+const bootSequenceText = [
+  "Starting kernel...",
+  "Loading essential modules...",
+  "Configuring loopback interface...",
+  "Starting virtual console setup...",
+  "Setting up network interfaces...",
+  "Loading thermal modules...",
+  "Enabling power management...",
+  "Detecting connected devices...",
+  "Setting system clock...",
+  "Mounting /boot...",
+  "Mounting /home...",
+  "Scanning for new hardware...",
+  "Starting local file systems...",
+  "Loading Virtual File System...",
+  "Checking battery status...",
+  "Starting multi-user target...",
+  "Generating kernel entropy pool...",
+  "Loading saved state...",
+  "Running initial boot scripts...",
+  "Enabling swap space...",
+  "Restoring previous session...",
+  "Initializing USB subsystem...",
+  "Loading input driver...",
+  "Starting systemd-modules-load.service...",
+  "Creating temporary files...",
+  "Mounting kernel filesystems...",
+  "Initializing random seed...",
+  "Loading system profile...",
+  "Bringing up loopback interface...",
+  "Starting dhcpcd daemon...",
+  "Updating package cache...",
+  "Starting kernel crash dump...",
+  "Configuring virtual memory...",
+  "Starting process accounting...",
+  "Mounting network filesystems...",
+  "Checking for orphaned processes...",
+  "Initializing virtual machine support...",
+  "Running udev events...",
+  "Preparing to load graphical environment...",
+  "Loading graphical session...",
+  "Configuring display resolution...",
+  "Launching desktop icons...",
+  "Checking disk quotas...",
+  "Verifying hardware status...",
+  "Performing final system checks...",
+  "FZ-OS is ready to use.",
+]
+---
+
+<div
+  id="boot"
+  class="w-screen h-screen z-[100] absolute overflow-auto bg-[radial-gradient(circle,#070807,#000)] scrollbar-hide"
+>
+  <div
+    id="text-container"
+    class="items-start flex flex-col gap-2 text-sm p-10 text-white"
+  >
+  </div>
+</div>
+
+<script define:vars={{ bootSequenceText }} defer>
+  const bootSequence = document.querySelector("#text-container")
+  const bootDiv = document.querySelector("#boot")
+
+  function deleteBootDiv() {
+    // make text disappear, make div fade out fast
+    bootSequence.innerHTML = ""
+    bootDiv.style.transition = "opacity 0.5s"
+    bootDiv.style.opacity = 0
+    setTimeout(() => {
+      bootDiv.style.display = "none"
+    }, 500)
+  }
+  bootSequenceText.forEach((text, index) => {
+    setTimeout(
+      () => {
+        bootSequence.innerHTML += `<p> [<span class="text-green-400"> ✓ </span>] ${text}</p>`
+        bootDiv.scrollTop = bootDiv.scrollHeight
+        if (index === bootSequenceText.length - 1) {
+          setTimeout(deleteBootDiv, Math.random() * 817)
+        }
+      },
+      Math.random() * 197 * index - 1
+    )
+  })
+</script>
+<style>
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>

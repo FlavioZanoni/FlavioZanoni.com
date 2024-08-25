@@ -20,6 +20,7 @@
     "astro": "^4.14.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.10",
+    "prettier-plugin-astro": "^0.14.1",
     "sharp": "^0.33.3",
     "svelte": "^4.2.12",
     "tailwindcss": "^3.4.3",

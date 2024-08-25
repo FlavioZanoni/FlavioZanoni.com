@@ -43,7 +43,7 @@
   - [x] correctly use the terminal buffer instead of linecount
 
 - misc:
-  - [ ] boot sequence
+  - [x] boot sequence
   - [ ] shutdown sequence
   - [x] highlight app on focus on the taskbar
   - [x] organize default apps on state.json
