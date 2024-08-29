@@ -289,7 +289,6 @@ export const mv = (source: string, destination: string, pwd: string) => {
       if (!block) return
 
       currentPwd = newCurrentPwd
-      console.log("currentPArent", currentParent)
       parent = currentParent
       srcINode = parentINode
       node = block.iNode

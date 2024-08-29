@@ -72,9 +72,6 @@ export class Term {
   private handleBackspace() {
     // pwd + 5 is the length of the prompt decoration
     if (this.term.buffer.active.cursorX === this.pwd.length + 5) {
-      console.log("triggered")
-      console.log(this.term.buffer.active.cursorX)
-      console.log(this.pwd.length + 5)
       this.term.write("\x07") // trigger bell
       return
     }
