@@ -5,7 +5,7 @@
 
 ## Motivation
 
-Needed a website to be my resume and portifolio, allways wanted to make a game portifolio, but it does not match with all the tecnologies that I work on, so why not make a old OS like website with folders and files that link to my projects and resume, as well as games if I want to make any
+Needed a website to be my resume and portifolio, always wanted to make a game portifolio, but it does not match with all the tecnologies that I work on, so why not make a old OS like website with folders and files that link to my projects and resume, as well as games if I want to make any
 
 ## Disclaimer
 
