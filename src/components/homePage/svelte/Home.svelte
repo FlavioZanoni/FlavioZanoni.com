@@ -250,7 +250,7 @@
     })
 
     homeGrid = document.getElementById("home-grid")
-    if (process.env.NODE_ENV !== "development") {
+    if (import.meta.env.PROD) {
       console.log("unloading")
       window.addEventListener("beforeunload", handleBeforeUnload)
     }

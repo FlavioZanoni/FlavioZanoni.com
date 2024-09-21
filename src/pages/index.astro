@@ -12,10 +12,7 @@ import Boot from "@components/boot/Boot.astro"
   // preloading the ascii art to show on console
   import "@lib/utils/getASCIIArt"
 
-  if (
-    localStorage.getItem("FZOSStore") &&
-    process.env.NODE_ENV !== "development"
-  ) {
+  if (localStorage.getItem("FZOSStore") && import.meta.env.PROD) {
     osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
   }
   osStore.subscribe((value) => {
@@ -30,7 +27,7 @@ import Boot from "@components/boot/Boot.astro"
 </script>
 
 <Layout title="FZ-OS">
-  {process.env.NODE_ENV !== "development" && <Boot />}
+  {import.meta.env.PROD && <Boot />}
   <div id="home-content" class="crt">
     <div id="scan" class="scan-lines">
       <main id="main">
