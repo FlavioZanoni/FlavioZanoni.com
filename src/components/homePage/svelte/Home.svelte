@@ -15,10 +15,7 @@
   import HomeContext from "./contextMenu/homeContext.svelte"
   import { getASCIIArt } from "@lib/utils/getASCIIArt"
 
-  console.log(
-    "%c Wellcome",
-    "color: green; font-weight: bold; font-size: 20px;"
-  )
+  console.log("%c Welcome", "color: green; font-weight: bold; font-size: 20px;")
   console.log(getASCIIArt())
   console.log(
     "%c   ---- FZ-OS ----",
@@ -72,7 +69,7 @@
   // watch changes in the fileSystem to update UI
   // if there is extra on filesystem, must be added, if extra on homegrid it must be removed
   $: {
-    const desktopApps = $osStore.fileSystem.iNodes["2"] // desktop iNode
+    const desktopApps = $osStore.fileSystem.iNodes["2"] // home iNode
       .blocks as DirectoryBlock[]
     const screenApps = $osStore.enviroment.homeGrid.items
     let homeGrid = $osStore.enviroment.homeGrid
@@ -119,6 +116,7 @@
                 iNode: app.iNode,
                 pos: emptyCell.pos,
                 type: "location" in app ? "file" : "directory",
+                name: appInDesktop.name,
               }
             }
             return item
@@ -252,7 +250,10 @@
     })
 
     homeGrid = document.getElementById("home-grid")
-    //window.addEventListener("beforeunload", handleBeforeUnload)
+    if (process.env.NODE_ENV !== "development") {
+      console.log("unloading")
+      window.addEventListener("beforeunload", handleBeforeUnload)
+    }
   })
 
   $: {

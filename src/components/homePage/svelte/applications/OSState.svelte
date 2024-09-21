@@ -5,6 +5,14 @@
   import type { OSStore } from "@lib/store/types"
   import { loadOSState } from "@lib/utils/storeUtils"
 
+  const fetchState = async () => {
+    const res = await fetch(
+      "https://raw.githubusercontent.com/FlavioZanoni/frav.in/refs/heads/main/src/lib/store/state.json"
+    )
+    const data = await res.json()
+    return data
+  }
+
   function handleUploadState(e) {
     const file = (e.target as HTMLInputElement).files[0]
     if (!file) return
@@ -23,8 +31,9 @@
     reader.readAsText(file)
   }
 
-  function restoreDefault() {
-    loadOSState(jsonState as unknown as OSStore)
+  async function restoreDefault() {
+    const state = await fetchState()
+    loadOSState(state as unknown as OSStore)
   }
 
   function applyChanges() {

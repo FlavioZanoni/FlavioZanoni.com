@@ -9,11 +9,15 @@ import Boot from "@components/boot/Boot.astro"
 
 <script>
   import { osStore } from "@lib/store"
-  // preloading the ascii art
-  /*  if (localStorage.getItem("FZOSStore")) {
-    osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
-  } // this will be part of a loading sequence */
+  // preloading the ascii art to show on console
+  import "@lib/utils/getASCIIArt"
 
+  if (
+    localStorage.getItem("FZOSStore") &&
+    process.env.NODE_ENV !== "development"
+  ) {
+    osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
+  }
   osStore.subscribe((value) => {
     if (value.enviroment.config.crt) {
       document.getElementById("home-content").classList.add("crt")
@@ -26,7 +30,7 @@ import Boot from "@components/boot/Boot.astro"
 </script>
 
 <Layout title="FZ-OS">
-  <Boot />
+  {process.env.NODE_ENV !== "development" && <Boot />}
   <div id="home-content" class="crt">
     <div id="scan" class="scan-lines">
       <main id="main">
