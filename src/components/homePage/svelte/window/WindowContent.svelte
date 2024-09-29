@@ -3,6 +3,8 @@
   import XTerm from "../applications/XTerm.svelte"
   import FileExplorer from "../applications/FileExplorer.svelte"
   import ThisComputer from "../applications/ThisComputer.svelte"
+  import { RECYCLE_BIN_INODE } from "@lib/store"
+
   export let appName: string
   export let iNode: string
   export let uuid: string
@@ -16,6 +18,8 @@
     fileExplorer: FileExplorer,
     thisComputer: ThisComputer,
   }
+
+  console.log("appName", appName)
 </script>
 
 {#if isDirectory}
@@ -30,7 +34,7 @@
     />
   </div>
 {:else if appName === "recycleBin"}
-  <FileExplorer name={"recycleBin"} iNode={"10"} />
+  <FileExplorer name={"recycleBin"} iNode={RECYCLE_BIN_INODE} />
 {:else if appName in appComponents}
   <svelte:component this={appComponents[appName]} {uuid} />
 {:else}

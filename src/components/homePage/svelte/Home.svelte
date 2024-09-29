@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { osStore } from "@lib/store"
+  import { HOME_INODE, osStore } from "@lib/store"
   import type {
     DirectoryBlock,
     FileBlock,
@@ -69,7 +69,7 @@
   // watch changes in the fileSystem to update UI
   // if there is extra on filesystem, must be added, if extra on homegrid it must be removed
   $: {
-    const desktopApps = $osStore.fileSystem.iNodes["2"] // home iNode
+    const desktopApps = $osStore.fileSystem.iNodes[HOME_INODE]
       .blocks as DirectoryBlock[]
     const screenApps = $osStore.enviroment.homeGrid.items
     let homeGrid = $osStore.enviroment.homeGrid
@@ -96,7 +96,7 @@
 
     const addItems = (diff: DirectoryBlock[]) => {
       diff.forEach((app) => {
-        const desktopBlocks = $osStore.fileSystem.iNodes[2]
+        const desktopBlocks = $osStore.fileSystem.iNodes[HOME_INODE]
           .blocks as DirectoryBlock[]
         const appInDesktop = desktopBlocks.find(
           (block) => block.iNode === app.iNode
