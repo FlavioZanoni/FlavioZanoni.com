@@ -13,7 +13,7 @@ import Boot from "@components/boot/Boot.astro"
   import "@lib/utils/getASCIIArt"
 
   if (localStorage.getItem("FZOSStore") && import.meta.env.PROD) {
-    osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
+    osStore.update(() => JSON.parse(localStorage.getItem("FZOSStore")))
   }
   osStore.subscribe((value) => {
     if (value.enviroment.config.crt) {

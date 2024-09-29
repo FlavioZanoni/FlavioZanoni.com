@@ -18,8 +18,6 @@
     fileExplorer: FileExplorer,
     thisComputer: ThisComputer,
   }
-
-  console.log("appName", appName)
 </script>
 
 {#if isDirectory}
