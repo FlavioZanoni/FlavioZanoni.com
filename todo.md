@@ -41,6 +41,8 @@
 
 - bugs:
   - [x] correctly use the terminal buffer instead of linecount
+  - [ ] home recycle bin app is not oppening the correct path
+  - [ ] disable CRT effect is not working
 
 - misc:
   - [x] boot sequence
