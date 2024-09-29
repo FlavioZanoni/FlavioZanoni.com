@@ -13,19 +13,15 @@ import Boot from "@components/boot/Boot.astro"
   import "@lib/utils/getASCIIArt"
 
   if (localStorage.getItem("FZOSStore") && import.meta.env.PROD) {
-    osStore.update(JSON.parse(localStorage.getItem("FZOSStore")))
+    osStore.update(() => JSON.parse(localStorage.getItem("FZOSStore")))
   }
   osStore.subscribe((value) => {
     if (value.enviroment.config.crt) {
       document.getElementById("home-content").classList.add("crt")
       document.getElementById("scan").classList.add("scan-lines")
     } else {
-      console.log("removing crt")
       document.getElementById("home-content").classList.remove("crt")
       document.getElementById("scan").classList.remove("scan-lines")
-
-      console.log(document.getElementById("home-content").classList)
-      console.log(document.getElementById("scan").classList)
     }
   })
 </script>
